@@ -23,7 +23,7 @@ const announceSchema = mongoose.Schema({
     description: String,
     media: [String],
     accessibility: Boolean,
-
+    placeRanking: Number
 });
 
 const Announce = mongoose.model('announces', announceSchema);
