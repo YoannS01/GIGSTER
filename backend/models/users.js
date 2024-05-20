@@ -43,3 +43,7 @@ const userSchema = mongoose.Schema({
     updatedAt: Date,
     profilePicture: String,
 })
+
+const User = mongoose.model('users', userSchema)
+
+module.exports = User
