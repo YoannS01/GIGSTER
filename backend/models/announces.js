@@ -11,6 +11,11 @@ const availableDateSchema = mongoose.Schema({
     endDateAt: Date
 });
 
+const accomodationSchema = mongoose.Schema({
+    sleeping: Boolean,
+    restauration: Boolean,
+});
+
 const announceSchema = mongoose.Schema({
     host: { type: mongoose.Schema.Types.ObjectId, ref: 'hosts' },
     createdAt: Date,
@@ -23,7 +28,8 @@ const announceSchema = mongoose.Schema({
     description: String,
     media: [String],
     accessibility: Boolean,
-    placeRanking: Number
+    placeRanking: Number,
+    accomodation: accomodationSchema,
 });
 
 const Announce = mongoose.model('announces', announceSchema);
