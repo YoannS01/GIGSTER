@@ -30,20 +30,22 @@ router.post("/signup", (req, res) => {
     });
 });
 
+// Route SignIn (connexion)
 router.post("/signin", (req, res) => {
-    if (!checkBody(req.body, ["username", "password"])) {
-        res.json({ result: false, error: "Missing or empty fields" });
-        return;
+  //Vérification des champs
+  if (!checkBody(req.body, ["email", "password"])) {
+    res.json({ result: false, error: "Missing or empty fields" });
+    return;
+  }
+
+  //Cherche dans la DB en filtrant sur le username
+  User.findOne({ username: req.body.username }).then((data) => {
+    if (data && bcrypt.compareSync(req.body.password, data.password)) {
+      res.json({ result: true, token: data.token });
+    } else {
+      res.json({ result: false, error: "User not found or wrong password" });
     }
-
-    User.findOne({ username: req.body.username }).then((data) => {
-        if (data && bcrypt.compareSync(req.body.password, data.password)) {
-            res.json({ result: true, token: data.token });
-        } else {
-            res.json({ result: false, error: "User not found or wrong password" });
-        }
-    });
+  });
 });
-
 
 module.exports = router;
