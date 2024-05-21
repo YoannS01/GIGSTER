@@ -1,3 +1,4 @@
+import { FRONT_IP } from "@env"
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -10,9 +11,11 @@ import {
 
 import { useState } from "react";
 
+
 const EMAIL_REGEX =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const frontIp = process.env.FRONT_IP;
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const frontIp = FRONT_IP
+console.log(frontIp)
 
 export default function LoginScreen({ navigation }) {
   //Variables d'états
@@ -26,23 +29,24 @@ export default function LoginScreen({ navigation }) {
   const [emailError, setEmailError] = useState(false);
 
 
-  const handleSubmitSignup = () => {
-    if (EMAIL_REGEX.test(email)) {
-      fetch(`http://${frontIp}:3000/users/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          navigation.navigate("TabNavigator", { screen: "Home" });
-        });
-    } else {
-      setEmail("");
-      setEmailError(true);
-    }
-  };
+    const handleSubmitSignup = () => {
+        if (EMAIL_REGEX.test(emailSignUp)) {
+            console.log('HELLO')
+            fetch(`http://10.9.1.199:3000/users/signup`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: emailSignUp, password: passwordSignUp, username: username }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    navigation.navigate("TabNavigator", { screen: "Home" });
+                });
+        } else {
+            setEmailSignUp("");
+            setEmailError(true);
+        }
+    };
 
   const handleSubmitSignIn = () => {
     //Vérification de la validité de l'email lors du Sign In
