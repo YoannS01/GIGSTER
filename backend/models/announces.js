@@ -32,6 +32,9 @@ const announceSchema = mongoose.Schema({
     accomodation: accomodationSchema,
 });
 
+const AnnouncesAdress = mongoose.model('announcesAdress', addressSchema)
+const AvailableDate = mongoose.model('availableDate', availableDateSchema)
+const Accomodation = mongoose.model('accomodation', accomodationSchema)
 const Announce = mongoose.model('announces', announceSchema);
 
-module.exports = Announce;
+module.exports = { AnnouncesAdress, AvailableDate, Accomodation, Announce }

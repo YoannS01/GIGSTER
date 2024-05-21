@@ -18,6 +18,7 @@ const showSchema = mongoose.Schema({
     isRefused: Boolean,
 });
 
+const ShowsAdress = mongoose.model('showsAdress', addressSchema)
 const Show = mongoose.model('shows', showSchema);
 
-module.exports = Show;
+module.exports = { ShowsAdress, Show }
