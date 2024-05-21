@@ -6,7 +6,7 @@ import { updateEmail } from '../reducers/user';
 
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-export default function SignInScreen() {
+export default function LoginScreen({ navigation }) {
 
 
     //Vérification de la validité de l'email lors du Sign In 

@@ -18,9 +18,9 @@ const TabNavigator = () => {
       tabBarIcon: ({ color, size }) => {
         let iconName = '';
 
-        if (route.name === 'Map') {
+        if (route.name === 'Home') {
           iconName = 'location-arrow';
-        } else if (route.name === 'Places') {
+        } else if (route.name === 'Profile') {
           iconName = 'map-pin';
         }
 
@@ -40,7 +40,7 @@ export default function App() {
   return (
     <NavigationContainer style={styles.container}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={HomeScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
       <StatusBar style="auto" />
