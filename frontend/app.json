@@ -3,6 +3,9 @@
     "name": "myapp",
     "slug": "myapp",
     "version": "1.0.0",
+    "extra": {
+      "frontIp": "10.9.1.198"
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
