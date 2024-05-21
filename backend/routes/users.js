@@ -25,7 +25,7 @@ router.post("/signup", (req, res) => {
             };
             // Options pour le token JWT, incluant l'expiration et l'algorithme utilisé
             const options = {
-                expiresIn: '30d',
+                expiresIn: '30m',
                 algorithm: 'HS256'
             };
             // Hash le mot de passe avec bcrypt en utilisant 10 itérations
@@ -69,7 +69,7 @@ router.post("/signin", (req, res) => {
             };
             // Options pour le token JWT, incluant l'expiration et l'algorithme utilisé
             const options = {
-                expiresIn: '30d',
+                expiresIn: '30m',
                 algorithm: 'HS256'
             };
             // Génère un nouveau token JWT avec le payload et les options
@@ -88,6 +88,35 @@ router.post("/signin", (req, res) => {
     });
 });
 
+// Route POST pour rafraîchir le token pour éviter de demander à l'utilisateur de se reconnecter touts les 30 minutes
+router.post("/refresh", (req, res) => {
+    const token = req.body.token;
+    if (!token) {
+        res.json({ result: false, error: "Token is required" });
+        return;
+    }
 
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            res.json({ result: false, error: "Invalid token" });
+            return;
+        }
+
+        const payload = { username: decoded.username };
+        const options = { expiresIn: '30m', algorithm: 'HS256' };
+        const newToken = jwt.sign(payload, secretKey, options);
+
+        User.findOne({ username: decoded.username }).then((user) => {
+            if (user) {
+                user.token = newToken;
+                user.save().then(() => {
+                    res.json({ result: true, token: newToken });
+                });
+            } else {
+                res.json({ result: false, error: "User not found" });
+            }
+        });
+    });
+});
 
 module.exports = router;
