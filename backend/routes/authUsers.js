@@ -14,7 +14,6 @@ router.post("/artist", (req, res) => {
     User.findOne({ username }).then(exist => {
         if (exist) {
             const newArtist = new Artist({
-                artistName: [req.body.artistName],
                 genre: req.body.genre,
                 member: req.body.member,
             })
