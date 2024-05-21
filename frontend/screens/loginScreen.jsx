@@ -32,7 +32,7 @@ export default function LoginScreen({ navigation }) {
     const handleSubmitSignup = () => {
         if (EMAIL_REGEX.test(emailSignUp)) {
             console.log('HELLO')
-            fetch(`http://10.9.1.199:3000/users/signup`, {
+            fetch(`http://${frontIp}:3000/users/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: emailSignUp, password: passwordSignUp, username: username }),
