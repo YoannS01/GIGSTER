@@ -1,4 +1,4 @@
-//import de tous les modules
+// Importation de tous les modules nécessaires
 var express = require("express");
 var router = express.Router();
 const { checkBody } = require('../modules/checkBody');
@@ -7,27 +7,32 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRETKEY;
 const User = require('../models/users');
 
-//Route post avec un ceckbody qui va check si les req.body.username, password, email ne sont pas vides
+// Route POST pour l'inscription avec une vérification des champs requis
 router.post("/signup", (req, res) => {
+    // Vérifie si les champs 'username', 'password' et 'email' ne sont pas vides
     if (!checkBody(req.body, ['username', 'password', 'email'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
 
-    /*On va chercher en database si le username du req.body existe en database,
-    si il n'éxiste pas alors on le créer*/
+    // Cherche dans la base de données si le nom d'utilisateur existe déjà
     User.findOne({ username: req.body.username }).then(data => {
+        // Si le nom d'utilisateur n'existe pas en base de données
         if (data === null) {
+            // Crée une charge utile (payload) pour le token JWT avec le nom d'utilisateur
             const payload = {
                 username: req.body.username
             };
+            // Options pour le token JWT, incluant l'expiration et l'algorithme utilisé
             const options = {
                 expiresIn: '1h',
                 algorithm: 'HS256'
             };
-
+            // Hash le mot de passe avec bcrypt en utilisant 10 itérations
             const hash = bcrypt.hashSync(req.body.password, 10);
+            // Génère un token JWT avec le payload et les options
             const token = jwt.sign(payload, secretKey, options);
+            // Crée un nouvel utilisateur avec les informations fournies et le token généré
             const newUser = new User({
                 username: req.body.username,
                 email: req.body.email,
@@ -35,39 +40,49 @@ router.post("/signup", (req, res) => {
                 token
             });
 
+            // Sauvegarde le nouvel utilisateur dans la base de données et renvoie le token dans la réponse
             newUser.save().then(newDoc => {
                 res.json({ result: true, token: newDoc.token });
             });
         } else {
+            // Si l'utilisateur existe déjà, renvoie une erreur
             res.json({ result: false, error: 'User already exists' });
         }
     });
 });
 
+// Route POST pour la connexion (sign in)
 router.post("/signin", (req, res) => {
+    // Vérifie si les champs 'email' et 'password' ne sont pas vides
     if (!checkBody(req.body, ["email", "password"])) {
         res.json({ result: false, error: "Missing or empty fields" });
         return;
     }
 
+    // Cherche dans la base de données un utilisateur avec l'email fourni
     User.findOne({ email: req.body.email }).then((data) => {
+        // Si l'utilisateur est trouvé et que le mot de passe correspond
         if (data && bcrypt.compareSync(req.body.password, data.password)) {
-
+            // Crée une nouvelle charge utile (payload) pour le token JWT
             const payload = {
                 username: data.username
             };
+            // Options pour le token JWT, incluant l'expiration et l'algorithme utilisé
             const options = {
                 expiresIn: '1h',
                 algorithm: 'HS256'
             };
+            // Génère un nouveau token JWT avec le payload et les options
             const newToken = jwt.sign(payload, secretKey, options);
 
-
+            // Met à jour le token de l'utilisateur dans la base de données
             data.token = newToken;
             data.save().then(() => {
+                // Renvoie le nouveau token dans la réponse
                 res.json({ result: true, token: newToken });
             });
         } else {
+            // Si l'utilisateur n'est pas trouvé ou si le mot de passe est incorrect, renvoie une erreur
             res.json({ result: false, error: "User not found or wrong password" });
         }
     });
