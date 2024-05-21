@@ -23,6 +23,7 @@ export default function LoginScreen({ navigation }) {
     if (EMAIL_REGEX.test(email)) {
       navigation.navigate("TabNavigator", { screen: "Home" });
     } else {
+      setEmail("");
       setEmailError(true);
     }
   };
@@ -36,9 +37,8 @@ export default function LoginScreen({ navigation }) {
         style={styles.input_email}
         onChangeText={(value) => setEmail(value)}
         value={email}
-      >
-        {emailError && <Text style={styles.error}>Invalid email address</Text>}
-      </TextInput>
+      ></TextInput>
+      {emailError && <Text style={styles.error}>Invalid email address</Text>}
       <Text style={styles.titles}>Password</Text>
       <TextInput
         placeholder="Insert your password"
