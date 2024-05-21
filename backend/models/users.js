@@ -1,29 +1,29 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const adressSchema = mongoose.Schema({
+const addressSchema = mongoose.Schema({
     street: String,
     city: String,
     zipcode: String,
-})
+});
 
 const hostSchema = mongoose.Schema({
     hostRanking: Number,
     description: String,
-    announces: [{ type: mongoose.Schema.Types.ObjectId, ref: 'announces' }],
+    announces: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Announce' }],
     favoriteGenre: [String],
-    hostedArtist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
-})
+    hostedArtist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+});
 
 const artistSchema = mongoose.Schema({
     genre: [String],
     member: Number,
     artistName: String,
     media: [String],
-    descripton: String,
+    description: String,
     placeOrigin: String,
-    tours: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tours' }],
+    tours: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tour' }],
     artistRanking: Number,
-})
+});
 
 const userSchema = mongoose.Schema({
     email: String,
@@ -32,18 +32,17 @@ const userSchema = mongoose.Schema({
     lastname: String,
     password: String,
     token: String,
-    adress: adressSchema,
+    address: addressSchema,
     isArtist: Boolean,
     isHost: Boolean,
     artists: artistSchema,
     hosts: hostSchema,
     phoneNumber: String,
     birthdate: Date,
-    createdAt: Date,
-    updatedAt: Date,
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
     profilePicture: String,
-})
+});
 
-const User = mongoose.model('users', userSchema)
-
-module.exports = User
+const User = mongoose.model('User', userSchema);
+module.exports = User;
