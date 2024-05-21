@@ -1,3 +1,4 @@
+//import de tous les modules
 var express = require("express");
 var router = express.Router();
 const { checkBody } = require('../modules/checkBody');
@@ -6,12 +7,15 @@ const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRETKEY;
 const User = require('../models/users');
 
+//Route post avec un ceckbody qui va check si les req.body.username, password, email ne sont pas vides
 router.post("/signup", (req, res) => {
     if (!checkBody(req.body, ['username', 'password', 'email'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
 
+    /*On va chercher en database si le username du req.body existe en database,
+    si il n'éxiste pas alors on le créer*/
     User.findOne({ username: req.body.username }).then(data => {
         if (data === null) {
             const payload = {
