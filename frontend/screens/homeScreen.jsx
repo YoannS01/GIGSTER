@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
-export default function App() {
+export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
 
