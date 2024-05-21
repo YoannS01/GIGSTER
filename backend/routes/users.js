@@ -25,7 +25,7 @@ router.post("/signup", (req, res) => {
             };
             // Options pour le token JWT, incluant l'expiration et l'algorithme utilisé
             const options = {
-                expiresIn: '1h',
+                expiresIn: '30d',
                 algorithm: 'HS256'
             };
             // Hash le mot de passe avec bcrypt en utilisant 10 itérations
@@ -69,7 +69,7 @@ router.post("/signin", (req, res) => {
             };
             // Options pour le token JWT, incluant l'expiration et l'algorithme utilisé
             const options = {
-                expiresIn: '1h',
+                expiresIn: '30d',
                 algorithm: 'HS256'
             };
             // Génère un nouveau token JWT avec le payload et les options
@@ -87,5 +87,7 @@ router.post("/signin", (req, res) => {
         }
     });
 });
+
+
 
 module.exports = router;
