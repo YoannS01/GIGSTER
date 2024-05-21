@@ -44,5 +44,9 @@ const userSchema = mongoose.Schema({
     profilePicture: String,
 });
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+const UserAdress = mongoose.model('userAdress', addressSchema)
+const Host = mongoose.model('host', hostSchema)
+const Artist = mongoose.model('artist', artistSchema)
+const User = mongoose.model('user', userSchema);
+
+module.exports = { UserAdress, Host, Artist, User }
