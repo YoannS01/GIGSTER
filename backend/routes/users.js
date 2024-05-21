@@ -88,7 +88,8 @@ router.post("/signin", (req, res) => {
     });
 });
 
-// Route POST pour rafraîchir le token pour éviter de demander à l'utilisateur de se reconnecter touts les 30 minutes
+/*Route POST pour rafraîchir le token afin d'éviter de demander à l'utilisateur de se reconnecter toutes les 30 minutes.
+À chaque refresh, un nouveau token est généré (si le token précédent existe déjà en base de données).*/
 router.post("/refresh", (req, res) => {
     const token = req.body.token;
     if (!token) {
@@ -118,5 +119,25 @@ router.post("/refresh", (req, res) => {
         });
     });
 });
+
+router.post("/artist", (req, res) => {
+    if (!checkBody(req.body, ['genre', 'artistName', 'placeOrigin', 'member'])) {
+        res.json({ result: false, error: 'Missing or empty fields' });
+        return;
+    }
+})
+
+
+
+
+
+router.post("/host", (req, res) => {
+    if (!checkBody(req.body, [''])) {
+        res.json({ result: false, error: 'Missing or empty fields' });
+        return;
+    }
+
+})
+
 
 module.exports = router;
