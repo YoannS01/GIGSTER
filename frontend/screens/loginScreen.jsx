@@ -74,12 +74,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   signin: {
-    fontWeight: 700,
+    fontWeight: "bold",
     fontSize: 50,
     marginTop: 10,
   },
   titles: {
-    fontWeight: "600",
+    fontWeight: "bold",
     fontSize: 20,
     marginTop: 15,
   },
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   text_signin: {
     backgroundColor: "#ec2761",
     color: "#FFFFFF",
-    fontWeight: "600",
+    fontWeight: "bold",
     fontSize: 16,
     paddingBottom: 8,
     paddingTop: 8,
@@ -125,6 +125,6 @@ const styles = StyleSheet.create({
   },
   bottom_signup: {
     color: "#ec2761",
-    fontWeight: "800",
+    fontWeight: "bold",
   },
 });
