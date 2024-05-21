@@ -1,30 +1,29 @@
 var express = require("express");
 var router = express.Router();
 const { checkBody } = require('../modules/checkBody');
-const bcrypt = require("bcrypt")
-const jwt = require('jsonwebtoken')
-const secretKey = process.env.SECRETKEY
-
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRETKEY;
+const User = require('../models/users');
 
 router.post("/signup", (req, res) => {
-    if (!checkBody(req.body, ['username', 'password'])) {
+    if (!checkBody(req.body, ['username', 'password', 'email'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
 
     User.findOne({ username: req.body.username }).then(data => {
         if (data === null) {
-
             const payload = {
-                username
-            }
+                username: req.body.username
+            };
             const options = {
                 expiresIn: '1h',
                 algorithm: 'HS256'
-            }
+            };
 
             const hash = bcrypt.hashSync(req.body.password, 10);
-            const token = jwt.sign(payload, secretKey, options)
+            const token = jwt.sign(payload, secretKey, options);
             const newUser = new User({
                 username: req.body.username,
                 email: req.body.email,
@@ -36,24 +35,34 @@ router.post("/signup", (req, res) => {
                 res.json({ result: true, token: newDoc.token });
             });
         } else {
-            // User already exists in database
             res.json({ result: false, error: 'User already exists' });
         }
     });
 });
 
-// Route SignIn (connexion)
 router.post("/signin", (req, res) => {
-    //Vérification des champs
     if (!checkBody(req.body, ["email", "password"])) {
         res.json({ result: false, error: "Missing or empty fields" });
         return;
     }
 
-    //Cherche dans la DB en filtrant sur le username
-    User.findOne({ username: req.body.username }).then((data) => {
+    User.findOne({ email: req.body.email }).then((data) => {
         if (data && bcrypt.compareSync(req.body.password, data.password)) {
-            res.json({ result: true, token: data.token });
+
+            const payload = {
+                username: data.username
+            };
+            const options = {
+                expiresIn: '1h',
+                algorithm: 'HS256'
+            };
+            const newToken = jwt.sign(payload, secretKey, options);
+
+
+            data.token = newToken;
+            data.save().then(() => {
+                res.json({ result: true, token: newToken });
+            });
         } else {
             res.json({ result: false, error: "User not found or wrong password" });
         }
