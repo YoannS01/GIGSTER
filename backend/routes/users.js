@@ -1,13 +1,13 @@
 var express = require("express");
 var router = express.Router();
-import { checkBody } from "../modules/checkBody";
+const { checkBody } = require('../modules/checkBody');
 const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken')
 const secretKey = process.env.SECRETKEY
 
 
 router.post("/signup", (req, res) => {
-    if (!checkBody(req.body, ['username', 'password', 'firstname'])) {
+    if (!checkBody(req.body, ['username', 'password'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
@@ -26,8 +26,8 @@ router.post("/signup", (req, res) => {
             const hash = bcrypt.hashSync(req.body.password, 10);
             const token = jwt.sign(payload, secretKey, options)
             const newUser = new User({
-                firstname: req.body.firstname,
                 username: req.body.username,
+                email: req.body.email,
                 password: hash,
                 token
             });
