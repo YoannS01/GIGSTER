@@ -5,6 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomeScreen from "./screens/homeScreen";
 import LoginScreen from "./screens/loginScreen";
 import ProfileScreen from "./screens/profileScreen";
+import AddScreen from "./screens/addScreen";
 
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
@@ -20,9 +21,11 @@ const TabNavigator = () => {
           let iconName = "";
 
           if (route.name === "Home") {
-            iconName = "location-arrow";
+            iconName = "home";
+          } else if (route.name === "Add") {
+            iconName = "plus";
           } else if (route.name === "Profile") {
-            iconName = "map-pin";
+            iconName = "user";
           }
 
           return <FontAwesome name={iconName} size={size} color={color} />;
@@ -33,6 +36,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Add" component={AddScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
