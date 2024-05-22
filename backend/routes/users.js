@@ -43,6 +43,9 @@ router.post("/signup", (req, res) => {
                 token
             });
 
+            User.isArtist = false
+            User.isHost = false
+
             // Sauvegarde le nouvel utilisateur dans la base de données et renvoie le token dans la réponse
             newUser.save().then(newDoc => {
                 res.json({ result: true, token: newDoc.token });
@@ -82,7 +85,7 @@ router.post("/signin", (req, res) => {
             data.token = newToken;
             data.save().then(() => {
                 // Renvoie le nouveau token dans la réponse
-                res.json({ result: true, token: newToken });
+                res.json({ result: true, data });
             });
         } else {
             // Si l'utilisateur n'est pas trouvé ou si le mot de passe est incorrect, renvoie une erreur
