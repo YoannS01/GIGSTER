@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Pressable, Image, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Pressable, Image, TextInput, ScrollView } from 'react-native';
 import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -80,13 +80,49 @@ export default function HomeScreen() {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+            <Text style={styles.welcome}>Welcome JustneedVic</Text>
+            <Text style={styles.discover}>Discover...</Text>
+            <ScrollView horizontal={true} style={styles.recoZone}>
+                <View style={styles.recoCard}>
+
+                </View>
+                <View style={styles.recoCard}>
+
+                </View>
+                <View style={styles.recoCard}>
+
+                </View>
+                <View style={styles.recoCard}>
+
+                </View>
+                <View style={styles.recoCard}>
+
+                </View>
+            </ScrollView>
+            <Text style={styles.titleRanking}>Top Artist</Text>
+            <ScrollView horizontal={true} style={styles.topZone}>
+                <View style={styles.topCard}>
+
+                </View>
+                <View style={styles.topCard}>
+
+                </View>
+                <View style={styles.topCard}>
+
+                </View>
+                <View style={styles.topCard}>
+
+                </View>
+                <View style={styles.topCard}>
+
+                </View>
+            </ScrollView>
+        </View >
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#F0E7F6'
     },
     header: {
@@ -95,6 +131,7 @@ const styles = StyleSheet.create({
         marginTop: 50,
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom: 20
     },
     searchField: {
         flexDirection: 'row',
@@ -125,6 +162,52 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderBottomWidth: 3,
         borderRightWidth: 3
+    },
+    welcome: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginLeft: 25,
+        marginBottom: 10
+    },
+    discover: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        marginLeft: 20,
+    },
+    titleRanking: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginLeft: 25,
+    },
+    recoZone: {
+        width: '100%',
+        height: '40%',
+        flexDirection: 'row'
+    },
+    recoCard: {
+        width: 300,
+        height: '90%',
+        backgroundColor: 'white',
+        margin: 10,
+        borderRadius: 20,
+        borderWidth: 2,
+        borderBottomWidth: 6,
+        borderRightWidth: 6
+    },
+    topZone: {
+        width: '100%',
+        height: '28%',
+        flexDirection: 'row'
+    },
+    topCard: {
+        width: 150,
+        height: '80%',
+        backgroundColor: 'white',
+        margin: 10,
+        borderRadius: 20,
+        borderWidth: 2,
+        borderBottomWidth: 6,
+        borderRightWidth: 6
     },
     btnModal: {
         width: '20%',
