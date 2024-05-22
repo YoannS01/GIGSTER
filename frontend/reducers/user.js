@@ -4,8 +4,8 @@ const initialState = {
     value: {
         username: null,
         email: null,
-        token: null,
-        type: null,
+        isArtist: false,
+        isFalse: false,
         medias: []
     },
 };
