@@ -57,7 +57,10 @@ export default function LoginScreen({ navigation }) {
       fetch(`http://${FRONT_IP}:3000/users/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          email: emailSignUp,
+          password: passwordSignUp,
+        }),
       })
         .then((response) => response.json())
         .then((data) => {
