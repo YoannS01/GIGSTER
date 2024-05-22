@@ -30,6 +30,7 @@ router.post("/signup", (req, res) => {
             };
             // Hash le mot de passe avec bcrypt en utilisant 10 itérations
             const hash = bcrypt.hashSync(req.body.password, 10);
+            const verifiedHash = bcrypt.hashSync(req.body.verifiedPassword, 10)
             // Génère un token JWT avec le payload et les options
             const token = jwt.sign(payload, secretKey, options);
             // Crée un nouvel utilisateur avec les informations fournies et le token généré
@@ -37,7 +38,7 @@ router.post("/signup", (req, res) => {
                 username: req.body.username,
                 email: req.body.email,
                 password1: hash,
-                verifiedPassword: hash,
+                verifiedPassword: verifiedHash,
                 token
             });
 
