@@ -15,7 +15,6 @@ import { useState } from "react";
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-console.log(FRONT_IP);
 
 export default function LoginScreen({ navigation }) {
   //Variables d'états
@@ -30,7 +29,7 @@ export default function LoginScreen({ navigation }) {
 
   const handleSubmitSignUp = () => {
     if (EMAIL_REGEX.test(emailSignUp)) {
-      fetch(`http://${frontIp}:3000/users/signup`, {
+      fetch(`http://${FRONT_IP}:3000/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
