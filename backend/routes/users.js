@@ -10,10 +10,10 @@ const { User } = require('../models/users');
 // Route POST pour l'inscription avec une vérification des champs requis
 router.post("/signup", (req, res) => {
     // Vérifie si les champs 'username', 'password' et 'email' ne sont pas vides
-    if (req.body.password1 !== req.body.verifiedPassword) {
+    if (req.body.password !== req.body.verifiedPassword) {
         return res.json({ result: false, error: "Confirm your password" })
     }
-    if (!checkBody(req.body, ['username', 'password1', 'verifiedPassword', 'email'])) {
+    if (!checkBody(req.body, ['username', 'password', 'verifiedPassword', 'email'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
