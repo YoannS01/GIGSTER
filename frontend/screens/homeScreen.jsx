@@ -128,16 +128,16 @@ const styles = StyleSheet.create({
     header: {
         width: '100%',
         flexDirection: 'row',
-        marginTop: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 20
+        height: '20%',
+        paddingTop: 20,
     },
     searchField: {
         flexDirection: 'row',
         alignItems: 'center',
         width: '70%',
-        height: '70%',
+        height: '40%',
         borderRadius: 15,
         borderWidth: 2,
         borderBottomWidth: 4,
@@ -169,17 +169,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginLeft: 25,
-        marginBottom: 10
+        marginBottom: 10,
+        height: '4%'
     },
     discover: {
         fontSize: 15,
         fontWeight: 'bold',
         marginLeft: 20,
+        height: '3%'
     },
     titleRanking: {
         fontSize: 25,
         fontWeight: 'bold',
         marginLeft: 25,
+        height: '5%'
     },
     recoZone: {
         width: '100%',
