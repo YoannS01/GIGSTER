@@ -34,6 +34,7 @@ export default function LoginScreen({ navigation }) {
         body: JSON.stringify({
           email: emailSignUp,
           password: passwordSignUp,
+          verifiedPassword: confirmPasswordSignUp,
           username: username,
         }),
       })
@@ -41,13 +42,10 @@ export default function LoginScreen({ navigation }) {
         .then((data) => {
           if (!data.result) {
             setError(true);
+            console.log(data);
             setMessageError(data.error);
           } else {
-            if (!passwordSignUp === confirmPasswordSignUp) {
-              return setMessageError("Confirm your password");
-            } else {
-              return navigation.navigate("TabNavigator", { screen: "Home" });
-            }
+            return navigation.navigate("TabNavigator", { screen: "Home" });
           }
         });
     } else {
