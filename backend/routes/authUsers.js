@@ -11,21 +11,13 @@ router.post("/artist", (req, res) => {
 
     const username = req.auth.username;
 
-    User.findOne({ username }).then(exist => {
-        if (exist) {
-            const newArtist = new Artist({
-                genre: req.body.genre,
-                member: req.body.member,
+    User.findOne({ username }).then(user => {
+        if (user) {
+            const newArtist = new User({
+
             })
         }
     });
-});
-
-router.post("/host", (req, res) => {
-    if (!checkBody(req.body, [''])) {
-        res.json({ result: false, error: 'Missing or empty fields' });
-        return;
-    }
 });
 
 module.exports = router;
