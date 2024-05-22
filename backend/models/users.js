@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema({
     firstname: String,
     lastname: String,
     password: { type: String, required: true },
-    verifiedPassword: { type: String, required: true },
+    verifiedPassword: String,
     token: String,
     address: [addressSchema],
     isArtist: Boolean,
