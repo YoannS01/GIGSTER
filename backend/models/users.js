@@ -26,11 +26,11 @@ const artistSchema = mongoose.Schema({
 });
 
 const userSchema = mongoose.Schema({
-    email: String,
-    username: String,
+    email: { type: String, unique: true, required: true },
+    username: { type: String, unique: true, required: true },
     firstname: String,
     lastname: String,
-    password: String,
+    password: { type: String, required: true },
     token: String,
     address: addressSchema,
     isArtist: Boolean,
@@ -44,9 +44,9 @@ const userSchema = mongoose.Schema({
     profilePicture: String,
 });
 
-const UserAdress = mongoose.model('userAdress', addressSchema)
-const Host = mongoose.model('host', hostSchema)
-const Artist = mongoose.model('artist', artistSchema)
-const User = mongoose.model('user', userSchema);
+const UserAddress = mongoose.model('UserAddress', addressSchema);
+const Host = mongoose.model('Host', hostSchema);
+const Artist = mongoose.model('Artist', artistSchema);
+const User = mongoose.model('User', userSchema);
 
-module.exports = { UserAdress, Host, Artist, User }
+module.exports = { UserAddress, Host, Artist, User };
