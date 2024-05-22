@@ -11,10 +11,8 @@ import {
 
 import { useState } from "react";
 
-
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 
 export default function LoginScreen({ navigation }) {
   //Variables d'états
@@ -25,7 +23,7 @@ export default function LoginScreen({ navigation }) {
   const [confirmPasswordSignUp, setConfirmPasswordSignUp] = useState("");
   const [username, setUsername] = useState("");
   const [isSignIn, setIsSignIn] = useState(false);
-  const [emailError, setEmailError] = useState(false);
+  const [messageError, setMessageError] = useState(false);
 
   const handleSubmitSignUp = () => {
     if (EMAIL_REGEX.test(emailSignUp)) {
@@ -40,19 +38,22 @@ export default function LoginScreen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-          navigation.navigate("TabNavigator", { screen: "Home" });
+          if (data.result) {
+            return navigation.navigate("TabNavigator", { screen: "Home" });
+          } else {
+            const error = data.error;
+          }
         });
     } else {
       setEmailSignUp("");
-      setEmailError(true);
+      setMessageError(true);
     }
   };
 
   const handleSubmitSignIn = () => {
     //Vérification de la validité de l'email lors du Sign In
     if (EMAIL_REGEX.test(email)) {
-      fetch(`http://${frontIp}:3000/users/signin`, {
+      fetch(`http://${FRONT_IP}:3000/users/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -79,7 +80,7 @@ export default function LoginScreen({ navigation }) {
         onChangeText={(value) => setEmailSignIn(value)}
         value={emailSignIn}
       ></TextInput>
-      {emailError && <Text style={styles.error}>Invalid email address</Text>}
+      {messageError && <Text style={styles.error}>Invalid email address</Text>}
       <Text style={styles.titles}>Password</Text>
       <TextInput
         placeholder="Insert your password"
@@ -105,6 +106,7 @@ export default function LoginScreen({ navigation }) {
     //SIGN UP SCREEN :
     <View style={styles.container}>
       <Text style={styles.signup}>Sign Up</Text>
+      {messageError && <Text style={styles.error}>Informations</Text>}
       <Text style={styles.titles}>Username</Text>
       <TextInput
         placeholder="Username"
@@ -119,7 +121,7 @@ export default function LoginScreen({ navigation }) {
         onChangeText={(value) => setEmailSignUp(value)}
         value={emailSignUp}
       ></TextInput>
-      {emailError && <Text style={styles.error}>Invalid email address</Text>}
+      {messageError && <Text style={styles.error}>Invalid email address</Text>}
       <Text style={styles.titles}>Password</Text>
       <TextInput
         placeholder="Insert your password"
