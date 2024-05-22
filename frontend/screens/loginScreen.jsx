@@ -40,14 +40,23 @@ export default function LoginScreen({ navigation }) {
         .then((response) => response.json())
         .then((data) => {
           if (!data.result) {
+            setError(true);
             setMessageError(data.error);
           } else {
-            return navigation.navigate("TabNavigator", { screen: "Home" });
+            if (!passwordSignUp === confirmPasswordSignUp) {
+              return setMessageError("Confirm your password");
+            } else {
+              return navigation.navigate("TabNavigator", { screen: "Home" });
+            }
           }
         });
     } else {
       setEmailSignUp("");
+      setPasswordSignUp("");
+      setConfirmPasswordSignUp("");
+      setUsername("");
       setError(true);
+      setMessageError("Invalid email adress");
     }
   };
 
@@ -69,7 +78,7 @@ export default function LoginScreen({ navigation }) {
         });
     } else {
       setEmailSignIn("");
-      setEmailError(true);
+      setError(true);
     }
   };
 
@@ -84,7 +93,6 @@ export default function LoginScreen({ navigation }) {
         onChangeText={(value) => setEmailSignIn(value)}
         value={emailSignIn}
       ></TextInput>
-      {Error && <Text style={styles.error}>Invalid email address</Text>}
       <Text style={styles.titles}>Password</Text>
       <TextInput
         placeholder="Insert your password"
@@ -110,7 +118,6 @@ export default function LoginScreen({ navigation }) {
     //SIGN UP SCREEN :
     <View style={styles.container}>
       <Text style={styles.signup}>Sign Up</Text>
-      {Error && <Text style={styles.error}>{messageError}</Text>}
       <Text style={styles.titles}>Username</Text>
       <TextInput
         placeholder="Username"
@@ -125,7 +132,6 @@ export default function LoginScreen({ navigation }) {
         onChangeText={(value) => setEmailSignUp(value)}
         value={emailSignUp}
       ></TextInput>
-      {Error && <Text style={styles.error}>Invalid email address</Text>}
       <Text style={styles.titles}>Password</Text>
       <TextInput
         placeholder="Insert your password"
@@ -140,6 +146,7 @@ export default function LoginScreen({ navigation }) {
         onChangeText={(value) => setConfirmPasswordSignUp(value)}
         value={confirmPasswordSignUp}
       ></TextInput>
+      {Error && <Text style={styles.error}>{messageError}</Text>}
       <TouchableOpacity style={styles.input_signup_button}>
         <Text style={styles.text_signup} onPress={() => handleSubmitSignUp()}>
           Sign Up
