@@ -1,4 +1,4 @@
-import { FRONT_IP } from "@env"
+import { FRONT_IP } from "@env";
 import { StatusBar } from "expo-status-bar";
 import {
     StyleSheet,
@@ -11,11 +11,10 @@ import {
 
 import { useState } from "react";
 
-
 const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const frontIp = FRONT_IP
-console.log(frontIp)
+const frontIp = FRONT_IP;
+console.log(frontIp);
 
 export default function LoginScreen({ navigation }) {
     //Variables d'états
@@ -28,13 +27,16 @@ export default function LoginScreen({ navigation }) {
     const [isSignIn, setIsSignIn] = useState(false);
     const [emailError, setEmailError] = useState(false);
 
-    const handleSubmitSignup = () => {
+    const handleSubmitSignUp = () => {
         if (EMAIL_REGEX.test(emailSignUp)) {
-            console.log('HELLO')
             fetch(`http://${frontIp}:3000/users/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: emailSignUp, password: passwordSignUp, username: username }),
+                body: JSON.stringify({
+                    email: emailSignUp,
+                    password: passwordSignUp,
+                    username: username,
+                }),
             })
                 .then((response) => response.json())
                 .then((data) => {
@@ -49,11 +51,11 @@ export default function LoginScreen({ navigation }) {
 
     const handleSubmitSignIn = () => {
         //Vérification de la validité de l'email lors du Sign In
-        if (EMAIL_REGEX.test(emailSignIn)) {
+        if (EMAIL_REGEX.test(email)) {
             fetch(`http://${frontIp}:3000/users/signin`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: emailSignIn, password: passwordSignIn }),
+                body: JSON.stringify(data),
             })
                 .then((response) => response.json())
                 .then((data) => {
@@ -133,7 +135,7 @@ export default function LoginScreen({ navigation }) {
                 value={confirmPasswordSignUp}
             ></TextInput>
             <TouchableOpacity style={styles.input_signup_button}>
-                <Text style={styles.text_signup} onPress={() => handleSubmitSignup()}>
+                <Text style={styles.text_signup} onPress={() => handleSubmitSignUp()}>
                     Sign Up
                 </Text>
             </TouchableOpacity>

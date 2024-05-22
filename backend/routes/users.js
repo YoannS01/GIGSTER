@@ -5,7 +5,7 @@ const { checkBody } = require('../modules/checkBody');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRETKEY;
-const User = require('../models/users');
+const { User } = require('../models/users');
 
 // Route POST pour l'inscription avec une vérification des champs requis
 router.post("/signup", (req, res) => {
@@ -119,25 +119,5 @@ router.post("/refresh", (req, res) => {
         });
     });
 });
-
-router.post("/artist", (req, res) => {
-    if (!checkBody(req.body, ['genre', 'artistName', 'placeOrigin', 'member'])) {
-        res.json({ result: false, error: 'Missing or empty fields' });
-        return;
-    }
-})
-
-
-
-
-
-router.post("/host", (req, res) => {
-    if (!checkBody(req.body, [''])) {
-        res.json({ result: false, error: 'Missing or empty fields' });
-        return;
-    }
-
-})
-
 
 module.exports = router;
