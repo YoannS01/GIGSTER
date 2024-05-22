@@ -5,7 +5,6 @@ import {
   Text,
   TextInput,
   View,
-  Image,
   TouchableOpacity,
 } from "react-native";
 
@@ -26,7 +25,9 @@ export default function LoginScreen({ navigation }) {
   const [Error, setError] = useState(false);
   const [messageError, setMessageError] = useState("");
 
+  // Au press du boutton signUp
   const handleSubmitSignUp = () => {
+    //Vérification de la validité de l'email lors du Sign In
     if (EMAIL_REGEX.test(emailSignUp)) {
       fetch(`http://${FRONT_IP}:3000/users/signup`, {
         method: "POST",
@@ -42,7 +43,6 @@ export default function LoginScreen({ navigation }) {
         .then((data) => {
           if (!data.result) {
             setError(true);
-            console.log(data);
             setMessageError(data.error);
           } else {
             return navigation.navigate("TabNavigator", { screen: "Home" });
@@ -58,6 +58,7 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
+  // Au press du boutton signIn
   const handleSubmitSignIn = () => {
     //Vérification de la validité de l'email lors du Sign In
     if (EMAIL_REGEX.test(emailSignIn)) {
@@ -65,18 +66,24 @@ export default function LoginScreen({ navigation }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: emailSignUp,
-          password: passwordSignUp,
+          email: emailSignIn,
+          password: passwordSignIn,
         }),
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
-          navigation.navigate("TabNavigator", { screen: "Home" });
+          if (!data.result) {
+            setError(true);
+            setMessageError(data.error);
+          } else {
+            return navigation.navigate("TabNavigator", { screen: "Home" });
+          }
         });
     } else {
       setEmailSignIn("");
+      setPasswordSignIn("");
       setError(true);
+      setMessageError("Missing or empty fields");
     }
   };
 
@@ -98,6 +105,7 @@ export default function LoginScreen({ navigation }) {
         onChangeText={(value) => setPasswordSignIn(value)}
         value={passwordSignIn}
       ></TextInput>
+      {Error && <Text style={styles.error}>{messageError}</Text>}
       <TouchableOpacity style={styles.input_signin_button}>
         <Text style={styles.text_signin} onPress={() => handleSubmitSignIn()}>
           Sign In
@@ -150,6 +158,12 @@ export default function LoginScreen({ navigation }) {
           Sign Up
         </Text>
       </TouchableOpacity>
+      <View style={styles.bottom}>
+        <Text style={styles.bottom_text}>Déjà inscrit ?</Text>
+        <Text style={styles.bottom_signup} onPress={() => setIsSignIn(false)}>
+          Sign In
+        </Text>
+      </View>
     </View>
   );
 }
