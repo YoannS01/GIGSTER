@@ -6,7 +6,8 @@ const initialState = {
         email: null,
         isArtist: false,
         isFalse: false,
-        medias: []
+        medias: [],
+        token: null
     },
 };
 
