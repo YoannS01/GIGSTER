@@ -6,6 +6,7 @@ import HomeScreen from "./screens/homeScreen";
 import LoginScreen from "./screens/loginScreen";
 import ProfileScreen from "./screens/profileScreen";
 import AddScreen from "./screens/addScreen";
+import StatusScreen from "./screens/StatusScreen";
 
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
@@ -44,7 +45,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Add" component={AddScreen} />
+      <Tab.Screen name="Add" component={StatusScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

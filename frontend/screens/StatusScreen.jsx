@@ -2,7 +2,7 @@ import { FRONT_IP } from "../hide-ip";
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function StatusScreen() {
 
