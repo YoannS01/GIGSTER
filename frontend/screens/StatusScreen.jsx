@@ -1,23 +1,29 @@
 import { FRONT_IP } from "../hide-ip";
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { Text, StyleSheet } from "react-native";
+import { updateEmail } from "../reducers/user";
 
 export default function StatusScreen() {
 
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.value)
+
     //variable d'états :
     const [isArtist, setIsArtist] = useState(false)
     const [isHost, setIsHost] = useState(false)
 
     function handleArtist() {
-        if (user.token) {
-            dispatch(setIsArtist(true))
-        }
+
+        dispatch(setIsArtist(true))
+        console.log(isArtist)
+
+
 
     }
+
 
     function handleHost() {
         if (user.token) {
@@ -33,7 +39,7 @@ export default function StatusScreen() {
 
 
 
-        const validateStep1 = () => {
+        function validateStep1() {
             if (!step1Data.firstname || !step1Data.lastname || !step1Data.street || !step1Data.city || !step1Data.zipcode || !step1Data.phoneNumber || !step1Data.birthdate) {
                 Alert.alert('Validation Error', 'Please fill out all fields in Step 1.');
                 return false;
@@ -50,7 +56,7 @@ export default function StatusScreen() {
         };
 
         return (
-            <View style={styles.container}>
+            <View style={styles.mainSelect}>
                 <ProgressSteps>
                     <ProgressStep label="Step 1" onNext={validateStep1}>
                         <View style={styles.stepContent}>
@@ -144,29 +150,17 @@ export default function StatusScreen() {
 
     return (
         <View>
-            <View>
+            <View style={styles.mainSelect}>
                 <Text>Quel profil es tu ?</Text>
-                <TouchableOpacity onPress={() => handleArtist()}>
-                    <Text>Artiste</Text>
+                <TouchableOpacity style={styles.artistBtn} onPress={() => handleArtist()}>
+                    <Text style={styles.text} >Artiste</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleHost()}>
-                    <Text>Hôte</Text>
+                <TouchableOpacity tyle={styles.hostBtn} onPress={() => handleHost()}>
+                    <Text style={styles.text}>Hôte</Text>
                 </TouchableOpacity>
             </View>
             <View>
-                {isArtist &&
-                    <ProgressSteps>
-                        <ProgressStep label="First Step">
-                            <View style={{ alignItems: 'center' }}>
-                                <Text>Informations User additionnelles</Text>
-                            </View>
-                        </ProgressStep>
-                        <ProgressStep label="Second Step">
-                            <View style={{ alignItems: 'center' }}>
-                                <Text>Set up ton profil Artiste</Text>
-                            </View>
-                        </ProgressStep>
-                    </ProgressSteps>}
+                {isArtist && validateStep1()}
             </View>
             <View>
                 {isHost &&
@@ -187,4 +181,24 @@ export default function StatusScreen() {
 
         </View>
     )
+
+
+
 }
+
+const styles = StyleSheet.create({
+    mainSelect: {
+
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#e1f5ff',
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    text: {
+        color: 'black'
+    }
+
+
+});

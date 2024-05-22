@@ -5,7 +5,7 @@ const initialState = {
         username: null,
         email: null,
         isArtist: false,
-        isFalse: false,
+        isHost: false,
         medias: [],
         token: null
     },
