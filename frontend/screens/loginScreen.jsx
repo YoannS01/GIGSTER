@@ -9,12 +9,21 @@ import {
 } from "react-native";
 
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  updateEmail,
+  updateUsername,
+  updateToken,
+  updateArtist,
+  updateHost,
+} from "../reducers/user";
 
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export default function LoginScreen({ navigation }) {
   //Variables d'états
+  const dispatch = useDispatch();
   const [emailSignIn, setEmailSignIn] = useState("");
   const [emailSignUp, setEmailSignUp] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
@@ -27,7 +36,7 @@ export default function LoginScreen({ navigation }) {
 
   // Au press du boutton signUp
   const handleSubmitSignUp = () => {
-    //Vérification de la validité de l'email lors du Sign In
+    //Vérification de la validité de l'email lors du Sign Up
     if (EMAIL_REGEX.test(emailSignUp)) {
       fetch(`http://${FRONT_IP}:3000/users/signup`, {
         method: "POST",
@@ -45,6 +54,11 @@ export default function LoginScreen({ navigation }) {
             setError(true);
             setMessageError(data.error);
           } else {
+            dispatch(updateUsername(username));
+            dispatch(updateEmail(emailSignUp));
+            dispatch(updateToken(data.token));
+            dispatch(updateArtist(data.isArtist));
+            dispatch(updateHost(data.isHost));
             return navigation.navigate("TabNavigator", { screen: "Home" });
           }
         });
@@ -72,10 +86,16 @@ export default function LoginScreen({ navigation }) {
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
           if (!data.result) {
             setError(true);
             setMessageError(data.error);
           } else {
+            dispatch(updateUsername(data.data.username));
+            dispatch(updateEmail(data.data.email));
+            dispatch(updateToken(data.data.token));
+            dispatch(updateArtist(data.data.isArtist));
+            dispatch(updateHost(data.data.isHost));
             return navigation.navigate("TabNavigator", { screen: "Home" });
           }
         });
@@ -100,6 +120,7 @@ export default function LoginScreen({ navigation }) {
       ></TextInput>
       <Text style={styles.titles}>Password</Text>
       <TextInput
+        secureTextEntry={true}
         placeholder="Insert your password"
         style={styles.input_password}
         onChangeText={(value) => setPasswordSignIn(value)}
@@ -140,6 +161,7 @@ export default function LoginScreen({ navigation }) {
       ></TextInput>
       <Text style={styles.titles}>Password</Text>
       <TextInput
+        secureTextEntry={true}
         placeholder="Insert your password"
         style={styles.input_password}
         onChangeText={(value) => setPasswordSignUp(value)}
@@ -147,6 +169,7 @@ export default function LoginScreen({ navigation }) {
       ></TextInput>
       <Text style={styles.titles}>Confirm your Password</Text>
       <TextInput
+        secureTextEntry={true}
         placeholder="Confirm your password"
         style={styles.input_password}
         onChangeText={(value) => setConfirmPasswordSignUp(value)}
