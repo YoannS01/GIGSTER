@@ -10,7 +10,7 @@ const { User } = require('../models/users');
 // Route POST pour l'inscription avec une vérification des champs requis
 router.post("/signup", (req, res) => {
     // Vérifie si les champs 'username', 'password' et 'email' ne sont pas vides
-    if (!checkBody(req.body, ['username', 'password', 'email'])) {
+    if (!checkBody(req.body, ['username', 'password1', 'password2', 'email'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
@@ -36,10 +36,14 @@ router.post("/signup", (req, res) => {
             const newUser = new User({
                 username: req.body.username,
                 email: req.body.email,
-                password: hash,
+                password1: hash,
+                password2: hash,
                 token
             });
 
+            if (password1 !== password2) {
+                return res.json({ result: false, error: "Confirm your password" })
+            }
             // Sauvegarde le nouvel utilisateur dans la base de données et renvoie le token dans la réponse
             newUser.save().then(newDoc => {
                 res.json({ result: true, token: newDoc.token });
