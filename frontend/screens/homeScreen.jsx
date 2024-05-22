@@ -73,8 +73,8 @@ export default function HomeScreen() {
                         placeholder="Find your future hosts"
                         style={styles.input}
                     ></TextInput>
-                    <TouchableOpacity style={styles.input_signin_button}>
-                        <Text style={styles.btnSearch}>
+                    <TouchableOpacity style={styles.btnSearch}>
+                        <Text style={styles.textSearch}>
                             Search
                         </Text>
                     </TouchableOpacity>
@@ -152,16 +152,18 @@ const styles = StyleSheet.create({
     },
     btnSearch: {
         backgroundColor: '#5100FF',
-        color: 'white',
         paddingTop: 6,
         paddingBottom: 6,
         paddingLeft: 10,
         paddingRight: 10,
         borderRadius: 8,
-        fontWeight: 'bold',
         borderWidth: 1,
         borderBottomWidth: 3,
         borderRightWidth: 3
+    },
+    textSearch: {
+        color: 'white',
+        fontWeight: 'bold',
     },
     welcome: {
         fontSize: 20,
