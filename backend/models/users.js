@@ -15,9 +15,9 @@ const hostSchema = mongoose.Schema({
 });
 
 const artistSchema = mongoose.Schema({
+    artistName: String,
     genre: [String],
     member: Number,
-    artistName: String,
     media: [String],
     description: String,
     placeOrigin: String,
@@ -32,11 +32,11 @@ const userSchema = mongoose.Schema({
     lastname: String,
     password: { type: String, required: true },
     token: String,
-    address: addressSchema,
+    address: [addressSchema],
     isArtist: Boolean,
     isHost: Boolean,
-    artists: artistSchema,
-    hosts: hostSchema,
+    artists: [artistSchema],
+    hosts: [hostSchema],
     phoneNumber: String,
     birthdate: Date,
     createdAt: { type: Date, default: Date.now },

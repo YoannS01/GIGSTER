@@ -16,7 +16,7 @@ router.post("/signup", (req, res) => {
     }
 
     // Cherche dans la base de données si le nom d'utilisateur existe déjà
-    User.findOne({ username: req.body.username }).then(data => {
+    User.find({ username: req.body.username, email: req.body.email }).then(data => {
         // Si le nom d'utilisateur n'existe pas en base de données
         if (data === null) {
             // Crée une charge utile (payload) pour le token JWT avec le nom d'utilisateur
