@@ -24,8 +24,11 @@ export const userSlice = createSlice({
         updateToken: (state, action) => {
             state.value.token = action.payload;
         },
-        updateType: (state, action) => {
-            state.value.type = action.payload;
+        updateArtist: (state, action) => {
+            state.value.isArtist = action.payload;
+        },
+        updateHost: (state, action) => {
+            state.value.isHost = action.payload;
         },
         addMedia: (state, action) => {
             state.value.medias.push(action.payload);
@@ -36,5 +39,5 @@ export const userSlice = createSlice({
     },
 });
 
-export const { updateUsername, updateEmail, updateToken, updateType, addMedia, removeMedia } = userSlice.actions;
+export const { updateUsername, updateEmail, updateToken, updateArtist, updateHost, addMedia, removeMedia } = userSlice.actions;
 export default userSlice.reducer;
