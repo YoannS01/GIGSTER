@@ -40,11 +40,10 @@ router.post("/signup", (req, res) => {
                 username: req.body.username,
                 email: req.body.email,
                 password: hash,
+                isArtist: false,
+                isHost: false,
                 token
             });
-
-            User.isArtist = false
-            User.isHost = false
 
             // Sauvegarde le nouvel utilisateur dans la base de données et renvoie le token dans la réponse
             newUser.save().then(newDoc => {
