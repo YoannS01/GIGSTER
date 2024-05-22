@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema({
     username: { type: String, unique: true, required: true },
     firstname: String,
     lastname: String,
-    password1: { type: String, required: true },
+    password: { type: String, required: true },
     verifiedPassword: { type: String, required: true },
     token: String,
     address: [addressSchema],
