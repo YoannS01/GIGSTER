@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 export default function StatusScreen() {
     const dispatch = useDispatch()
     const [isArtist, setIsArtist] = useState(false)
-    const [isHost, setIsArtist] = 
+    const [isHost, setIsHost] = useState(false)
 
     const user = useSelector(state => state.user.value)
 
