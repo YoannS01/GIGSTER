@@ -3,7 +3,7 @@ import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { useState } from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { Text, StyleSheet } from "react-native";
+
 import { updateEmail } from "../reducers/user";
 
 export default function StatusScreen() {
