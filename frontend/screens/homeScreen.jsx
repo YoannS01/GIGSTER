@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Pressable, Image, TextInput } from 'react-native';
 import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -64,24 +64,71 @@ export default function HomeScreen() {
                     </View>
                 </View>
             </Modal>
-            <TouchableOpacity style={styles.btnModal} onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.btnText}>Bouton Modal</Text>
-            </TouchableOpacity>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.btnModal} onPress={() => setModalVisible(!modalVisible)}>
+                    <Image style={styles.profilePicMenu} source={require('../assets/Shulk.png')} />
+                </TouchableOpacity>
+                <View style={styles.searchField}>
+                    <TextInput
+                        placeholder="Find your future hosts"
+                        style={styles.input}
+                    ></TextInput>
+                    <TouchableOpacity style={styles.input_signin_button}>
+                        <Text style={styles.btnSearch}>
+                            Search
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        backgroundColor: '#F0E7F6'
+    },
+    header: {
+        width: '100%',
+        flexDirection: 'row',
+        marginTop: 50,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    btnModal: {
-        backgroundColor: 'green',
-        width: '20%',
+    searchField: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 100
+        width: '70%',
+        height: '70%',
+        borderRadius: 15,
+        borderWidth: 2,
+        borderBottomWidth: 4,
+        borderRightWidth: 4,
+        justifyContent: 'space-between',
+        paddingLeft: 10,
+        paddingRight: 10,
+        backgroundColor: 'white'
+    },
+    input: {
+        width: '70%'
+    },
+    btnSearch: {
+        backgroundColor: '#5100FF',
+        color: 'white',
+        paddingTop: 6,
+        paddingBottom: 6,
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderRadius: 8,
+        fontWeight: 'bold',
+        borderWidth: 1,
+        borderBottomWidth: 3,
+        borderRightWidth: 3
+    },
+    btnModal: {
+        width: '20%',
+        marginRight: 10
     },
     modal: {
         margin: 0
@@ -102,6 +149,14 @@ const styles = StyleSheet.create({
         height: 70,
         backgroundColor: 'red',
         borderRadius: 40
+    },
+    profilePicMenu: {
+        width: 80,
+        height: 80,
+        backgroundColor: 'red',
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: 'black',
     },
     modalNav: {
         alignItems: 'center',
