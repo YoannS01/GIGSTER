@@ -1,10 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 
-const ProgressStepsComponent = () => {
-    const [step1Data, setStep1Data] = useState({ name: '', address: '' });
-    const [step2Data, setStep2Data] = useState({ email: '', username: '' });
+const ProgressStepsComponent = (props) => {
+    const [step1Data, setStep1Data] = useState({
+        firstname: '',
+        lastname: '',
+        street: '',
+        city: '',
+        zipcode: '',
+        phoneNumber: '',
+        birthdate: ''
+    });
+    const [step2Data, setStep2Data] = useState({
+        artistName: '',
+        member: '',
+        genre: [],
+        placeOrigin: ''
+
+    });
+
+    const [hostStep2Data, setHostStep2Data] = useState({
+        description: '',
+        favoriteGenre: ''
+    })
 
     function validateStep1() {
         if (!step1Data.firstname || !step1Data.lastname || !step1Data.street || !step1Data.city || !step1Data.zipcode || !step1Data.phoneNumber || !step1Data.birthdate) {
@@ -15,7 +34,7 @@ const ProgressStepsComponent = () => {
     };
 
     const validateStep2 = () => {
-        if (!step2Data.email || !step2Data.username) {
+        if (!step2Data.artistName || !step2Data.member || !step2Data.genre || !step2Data.placeOrigin) {
             Alert.alert('Validation Error', 'Please fill out all fields in Step 2.');
             return false;
         }
@@ -24,8 +43,8 @@ const ProgressStepsComponent = () => {
 
     return (
         <View style={styles.mainSelect}>
-            <ProgressSteps>
-                <ProgressStep label="Step 1" onNext={validateStep1}>
+            <ProgressSteps >
+                <ProgressStep label="Mes infos" onNext={validateStep1} nextBtnStyle={styles.nextBtnStyle}>
                     <View style={styles.stepContent}>
                         <Text style={styles.label}>Lastname</Text>
                         <TextInput
@@ -44,14 +63,14 @@ const ProgressStepsComponent = () => {
                         <Text style={styles.label}>Address</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="Address"
+                            placeholder="Street"
                             value={step1Data.address}
                             onChangeText={text => setStep1Data({ ...step1Data, street: text })}
                         />
 
                         <TextInput
                             style={styles.input}
-                            placeholder="Address"
+                            placeholder="City"
                             value={step1Data.address}
                             onChangeText={text => setStep1Data({ ...step1Data, city: text })}
                         />
@@ -79,40 +98,74 @@ const ProgressStepsComponent = () => {
                     </View>
                 </ProgressStep>
 
-                <ProgressStep label="Step 2" onNext={validateStep2} onPrevious={() => { validateStep1 }}>
-                    <View style={styles.stepContent}>
-                        <Text style={styles.label}>Artist name</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="name"
-                            value={step2Data.email}
-                            onChangeText={text => setStep2Data({ ...step2Data, artistName: text })}
-                        />
-                        <Text style={styles.label}>Username</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Username"
-                            value={step2Data.username}
-                            onChangeText={text => setStep2Data({ ...step2Data, username: text })}
-                        />
-                        <Text style={styles.label}>Username</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Username"
-                            value={step2Data.username}
-                            onChangeText={text => setStep2Data({ ...step2Data, username: text })}
-                        />
-                    </View>
-                </ProgressStep>
+                {!props.isHost ?
+                    <ProgressStep label="Mon projet" onNext={validateStep2} onPrevious={() => { validateStep1 }}>
+                        <View style={styles.stepContent}>
+                            <Text style={styles.label}>Artist name</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="name"
+                                value={step2Data.artistName}
+                                onChangeText={text => setStep2Data({ ...step2Data, artistName: text })}
+                            />
+                            <Text style={styles.label}>Member</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Number"
+                                value={step2Data.member}
+                                onChangeText={text => setStep2Data({ ...step2Data, member: text })}
+                            />
+                            <Text style={styles.label}>Genre</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Genre"
+                                value={step2Data.genre}
+                                onChangeText={text => setStep2Data({ ...step2Data, genre: text })}
+                            />
+                            <Text style={styles.label}>Place of origin</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="City"
+                                value={step2Data.placeOrigin}
+                                onChangeText={text => setStep2Data({ ...step2Data, placeOrigin: text })}
+                            />
+                        </View>
+                    </ProgressStep>
+                    :
+                    <ProgressStep label="Mon profil" onNext={validateStep2} onPrevious={() => { validateStep1 }}>
+                        <View style={styles.stepContent}>
+                            <Text style={styles.label}>Description</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Description"
+                                value={hostStep2Data.description}
+                                onChangeText={text => setStep2Data({ ...hostStep2Data, description: text })}
+                            />
+                            <Text style={styles.label}>Favorite genre(s)</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Favorite genre"
+                                value={HostStep2Data.member}
+                                onChangeText={text => setStep2Data({ ...hostStep2Data, favoriteGenre: text })}
+                            />
+
+
+                        </View>
+                    </ProgressStep>
+                }
             </ProgressSteps>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
+
+    mainSelect: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#e1f5ff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     label: {
         fontSize: 16,
@@ -121,13 +174,28 @@ const styles = StyleSheet.create({
 
     },
     input: {
-        width: '100%',
-        height: 50,
-        backgroundColor: '#e8f5e9',
-        borderRadius: 10,
-        paddingHorizontal: 15,
-        marginBottom: 10,
-        marginTop: 10
+        backgroundColor: 'white',
+        paddingTop: 6,
+        paddingBottom: 6,
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderBottomWidth: 3,
+        borderRightWidth: 3,
+        marginTop: 5
+    },
+    nextBtnStyle: {
+        backgroundColor: '#5100FF',
+        paddingTop: 6,
+        paddingBottom: 6,
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderBottomWidth: 3,
+        borderRightWidth: 3,
+        color: 'white',
     },
 });
 

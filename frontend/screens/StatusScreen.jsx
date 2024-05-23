@@ -17,53 +17,40 @@ export default function StatusScreen() {
     const [isHost, setIsHost] = useState(false)
 
     function handleArtist() {
-        if (user.token) {
-            dispatch(setIsArtist(true))
-
-        }
+        setIsArtist(true)
     }
 
 
     function handleHost() {
-        if (user.token) {
-            dispatch(setIsHost(true))
-
-        }
+        setIsHost(true)
     }
 
-    return (
-        <View>
-            <View style={styles.mainSelect}>
-                <Text>Quel profil es tu ?</Text>
-                <TouchableOpacity style={styles.artistBtn} onPress={() => handleArtist()}>
-                    <Text style={styles.text} >Artiste</Text>
-                </TouchableOpacity>
-                <TouchableOpacity tyle={styles.hostBtn} onPress={() => handleHost()}>
-                    <Text style={styles.text}>Hôte</Text>
-                </TouchableOpacity>
-            </View>
+    if (!isArtist || !isHost) {
+        return (
             <View>
-                {isArtist && <ProgressStepsComponent />}
+                <View style={styles.mainSelect}>
+                    <Text>Quel profil es tu ?</Text>
+                    <TouchableOpacity style={styles.artistBtn} onPress={() => handleArtist()}>
+                        <Text style={styles.text} >Artiste</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity tyle={styles.hostBtn} onPress={() => handleHost()}>
+                        <Text style={styles.text}>Hôte</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-            <View>
-                {isHost &&
-                    <ProgressSteps>
-                        <ProgressStep label="First Step">
-                            <View style={{ alignItems: 'center' }}>
-                                <Text>Informations User additionnelles</Text>
+        )
+    }
 
-                            </View>
-                        </ProgressStep>
-                        <ProgressStep label="Second Step">
-                            <View style={{ alignItems: 'center' }}>
-                                <Text>Set up ton profil Hôte</Text>
-                            </View>
-                        </ProgressStep>
-                    </ProgressSteps>}
+
+    if (isArtist) {
+        return (
+            <View>
+                <ProgressStepsComponent />
             </View>
 
-        </View>
-    )
+        )
+    }
+
 
 
 
@@ -71,7 +58,6 @@ export default function StatusScreen() {
 
 const styles = StyleSheet.create({
     mainSelect: {
-
         width: '100%',
         height: '100%',
         backgroundColor: '#e1f5ff',
