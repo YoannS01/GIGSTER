@@ -1,4 +1,4 @@
-import { FRONT_IP } from "../hide-ip";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,8 +9,6 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   updateEmail,
@@ -19,192 +17,237 @@ import {
   updateArtist,
   updateHost,
 } from "../reducers/user";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import { FRONT_IP } from "../hide-ip";
 
-const EMAIL_REGEX =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+// Définir les schémas de validation avec Yup
+const signInSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
+
+const signUpSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Confirm Password is required"),
+});
 
 export default function LoginScreen({ navigation }) {
-  //Variables d'états
   const dispatch = useDispatch();
-  const [emailSignIn, setEmailSignIn] = useState("");
-  const [emailSignUp, setEmailSignUp] = useState("");
-  const [passwordSignIn, setPasswordSignIn] = useState("");
-  const [passwordSignUp, setPasswordSignUp] = useState("");
-  const [confirmPasswordSignUp, setConfirmPasswordSignUp] = useState("");
-  const [username, setUsername] = useState("");
   const [isSignIn, setIsSignIn] = useState(false);
-  const [Error, setError] = useState(false);
-  const [messageError, setMessageError] = useState("");
 
-  // Au press du boutton signUp
-  const handleSubmitSignUp = () => {
-    //Vérification de la validité de l'email lors du Sign Up
-    if (EMAIL_REGEX.test(emailSignUp)) {
-      fetch(`http://${FRONT_IP}:3000/users/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: emailSignUp,
-          password: passwordSignUp,
-          verifiedPassword: confirmPasswordSignUp,
-          username: username,
-        }),
+  const handleSubmitSignIn = (values, { setSubmitting, setErrors }) => {
+    fetch(`http://${FRONT_IP}:3000/users/signin`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: values.email,
+        password: values.password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setSubmitting(false);
+        if (!data.result) {
+          setErrors({ general: data.error });
+        } else {
+          dispatch(updateUsername(data.data.username));
+          dispatch(updateEmail(data.data.email));
+          dispatch(updateToken(data.data.token));
+          dispatch(updateArtist(data.data.isArtist));
+          dispatch(updateHost(data.data.isHost));
+          navigation.navigate("TabNavigator", { screen: "Home" });
+        }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (!data.result) {
-            setError(true);
-            setEmailSignUp("");
-            setPasswordSignUp("");
-            setConfirmPasswordSignUp("");
-            setUsername("");
-            setMessageError(data.error);
-          } else {
-            dispatch(updateUsername(username));
-            dispatch(updateEmail(emailSignUp));
-            dispatch(updateToken(data.token));
-            dispatch(updateArtist(data.isArtist));
-            dispatch(updateHost(data.isHost));
-            return navigation.navigate("TabNavigator", { screen: "Home" });
-          }
-        });
+      .catch((error) => {
+        setSubmitting(false);
+        setErrors({ general: "An error occurred. Please try again." });
+      });
+  };
+
+  const handleSubmitSignUp = (values, { setSubmitting, setErrors }) => {
+    if (values.password !== values.confirmPassword) {
+      setErrors({ confirmPassword: "Passwords must match" });
+      setSubmitting(false);
     } else {
-      setEmailSignUp("");
-      setPasswordSignUp("");
-      setConfirmPasswordSignUp("");
-      setUsername("");
-      setError(true);
-      setMessageError("Invalid email adress");
+      dispatch(updateUsername(values.username));
+      dispatch(updateEmail(values.email));
+      setSubmitting(false);
+      navigation.navigate("Status");
     }
   };
 
-  // Au press du boutton signIn
-  const handleSubmitSignIn = () => {
-    //Vérification de la validité de l'email lors du Sign In
-    if (EMAIL_REGEX.test(emailSignIn)) {
-      fetch(`http://${FRONT_IP}:3000/users/signin`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: emailSignIn,
-          password: passwordSignIn,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          if (!data.result) {
-            setError(true);
-            setEmailSignIn("");
-            setPasswordSignIn("");
-            setMessageError(data.error);
-          } else {
-            dispatch(updateUsername(data.data.username));
-            dispatch(updateEmail(data.data.email));
-            dispatch(updateToken(data.data.token));
-            dispatch(updateArtist(data.data.isArtist));
-            dispatch(updateHost(data.data.isHost));
-            return navigation.navigate("TabNavigator", { screen: "Home" });
-          }
-        });
-    } else {
-      setEmailSignIn("");
-      setPasswordSignIn("");
-      setError(true);
-      setMessageError("Invalid email adress");
-    }
-  };
-
-  return !isSignIn ? (
-    // SIGN IN SCREEN :
+  return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
     >
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <Text style={styles.signin}>Sign In</Text>
-        <Text style={styles.titles}>Email</Text>
-        <TextInput
-          placeholder="name@example.com"
-          style={styles.input_email}
-          onChangeText={(value) => setEmailSignIn(value)}
-          value={emailSignIn}
-        />
-        <Text style={styles.titles}>Password</Text>
-        <TextInput
-          secureTextEntry={true}
-          placeholder="Insert your password"
-          style={styles.input_password}
-          onChangeText={(value) => setPasswordSignIn(value)}
-          value={passwordSignIn}
-        />
-        {Error && <Text style={styles.error}>{messageError}</Text>}
-        <TouchableOpacity style={styles.input_signin_button}>
-          <Text style={styles.text_signin} onPress={() => handleSubmitSignIn()}>
-            Sign In
-          </Text>
-        </TouchableOpacity>
-        <Text>or use one of your social profiles</Text>
-        <View style={styles.bottom}>
-          <Text style={styles.bottom_text}>Pas encore inscrit ?</Text>
-          <Text style={styles.bottom_signup} onPress={() => setIsSignIn(true)}>
-            Sign Up
-          </Text>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
-  ) : (
-    // SIGN UP SCREEN :
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
-    >
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <Text style={styles.signup}>Sign Up</Text>
-        <Text style={styles.titles}>Username</Text>
-        <TextInput
-          placeholder="Username"
-          style={styles.input_username}
-          onChangeText={(value) => setUsername(value)}
-          value={username}
-        />
-        <Text style={styles.titles}>Email</Text>
-        <TextInput
-          placeholder="name@example.com"
-          style={styles.input_email}
-          onChangeText={(value) => setEmailSignUp(value)}
-          value={emailSignUp}
-        />
-        <Text style={styles.titles}>Password</Text>
-        <TextInput
-          secureTextEntry={true}
-          placeholder="Insert your password"
-          style={styles.input_password}
-          onChangeText={(value) => setPasswordSignUp(value)}
-          value={passwordSignUp}
-        />
-        <Text style={styles.titles}>Confirm your Password</Text>
-        <TextInput
-          secureTextEntry={true}
-          placeholder="Confirm your password"
-          style={styles.input_password}
-          onChangeText={(value) => setConfirmPasswordSignUp(value)}
-          value={confirmPasswordSignUp}
-        />
-        {Error && <Text style={styles.error}>{messageError}</Text>}
-        <TouchableOpacity style={styles.input_signup_button}>
-          <Text style={styles.text_signup} onPress={() => handleSubmitSignUp()}>
-            Sign Up
-          </Text>
-        </TouchableOpacity>
-        <View style={styles.bottom}>
-          <Text style={styles.bottom_text}>Déjà inscrit ?</Text>
-          <Text style={styles.bottom_signup} onPress={() => setIsSignIn(false)}>
-            Sign In
-          </Text>
-        </View>
+        {!isSignIn ? (
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            validationSchema={signInSchema}
+            onSubmit={handleSubmitSignIn}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              isSubmitting,
+            }) => (
+              <View>
+                <Text style={styles.signin}>Sign In</Text>
+                <Text style={styles.titles}>Email</Text>
+                <TextInput
+                  placeholder="name@example.com"
+                  style={styles.input_email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.error}>{errors.email}</Text>
+                )}
+                <Text style={styles.titles}>Password</Text>
+                <TextInput
+                  secureTextEntry
+                  placeholder="Insert your password"
+                  style={styles.input_password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                />
+                {touched.password && errors.password && (
+                  <Text style={styles.error}>{errors.password}</Text>
+                )}
+                {errors.general && (
+                  <Text style={styles.error}>{errors.general}</Text>
+                )}
+                <TouchableOpacity
+                  style={styles.input_signin_button}
+                  onPress={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  <Text style={styles.text_signin}>Sign In</Text>
+                </TouchableOpacity>
+                <Text>or use one of your social profiles</Text>
+                <View style={styles.bottom}>
+                  <Text style={styles.bottom_text}>Pas encore inscrit ?</Text>
+                  <Text
+                    style={styles.bottom_signup}
+                    onPress={() => setIsSignIn(true)}
+                  >
+                    Sign Up
+                  </Text>
+                </View>
+              </View>
+            )}
+          </Formik>
+        ) : (
+          <Formik
+            initialValues={{
+              username: "",
+              email: "",
+              password: "",
+              confirmPassword: "",
+            }}
+            validationSchema={signUpSchema}
+            onSubmit={handleSubmitSignUp}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              isSubmitting,
+            }) => (
+              <View>
+                <Text style={styles.signup}>Sign Up</Text>
+                <Text style={styles.titles}>Username</Text>
+                <TextInput
+                  placeholder="Username"
+                  style={styles.input_username}
+                  onChangeText={handleChange("username")}
+                  onBlur={handleBlur("username")}
+                  value={values.username}
+                />
+                {touched.username && errors.username && (
+                  <Text style={styles.error}>{errors.username}</Text>
+                )}
+                <Text style={styles.titles}>Email</Text>
+                <TextInput
+                  placeholder="name@example.com"
+                  style={styles.input_email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                />
+                {touched.email && errors.email && (
+                  <Text style={styles.error}>{errors.email}</Text>
+                )}
+                <Text style={styles.titles}>Password</Text>
+                <TextInput
+                  secureTextEntry
+                  placeholder="Insert your password"
+                  style={styles.input_password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                />
+                {touched.password && errors.password && (
+                  <Text style={styles.error}>{errors.password}</Text>
+                )}
+                <Text style={styles.titles}>Confirm your Password</Text>
+                <TextInput
+                  secureTextEntry
+                  placeholder="Confirm your password"
+                  style={styles.input_password}
+                  onChangeText={handleChange("confirmPassword")}
+                  onBlur={handleBlur("confirmPassword")}
+                  value={values.confirmPassword}
+                />
+                {touched.confirmPassword && errors.confirmPassword && (
+                  <Text style={styles.error}>{errors.confirmPassword}</Text>
+                )}
+                {errors.general && (
+                  <Text style={styles.error}>{errors.general}</Text>
+                )}
+                <TouchableOpacity
+                  style={styles.input_signup_button}
+                  onPress={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  <Text style={styles.text_signup}>Sign Up</Text>
+                </TouchableOpacity>
+                <View style={styles.bottom}>
+                  <Text style={styles.bottom_text}>Déjà inscrit ?</Text>
+                  <Text
+                    style={styles.bottom_signup}
+                    onPress={() => setIsSignIn(false)}
+                  >
+                    Sign In
+                  </Text>
+                </View>
+              </View>
+            )}
+          </Formik>
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -221,13 +264,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  image: {
-    marginTop: 50,
-    marginBottom: 50,
-    height: "22%",
-    width: "50%",
-    borderRadius: 100,
   },
   signup: {
     fontWeight: "bold",
@@ -315,5 +351,9 @@ const styles = StyleSheet.create({
   bottom_signup: {
     color: "#ec2761",
     fontWeight: "bold",
+  },
+  error: {
+    color: "red",
+    marginTop: 10,
   },
 });
