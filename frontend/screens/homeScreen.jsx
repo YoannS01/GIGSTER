@@ -1,13 +1,43 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Pressable, Image, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView, Platform, Button } from 'react-native';
 import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
+
+    //   const [image, setImage] = useState(null);
+
+    //    const pickImage = async () => {
+    //         // Request permission to access media library
+    //         if (Platform.OS !== 'web') {
+    //             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //             if (status !== 'granted') {
+    //                 alert('Sorry, we need camera roll permissions to make this work!');
+    //                 return;
+    //             }
+    //         }
+
+    // Open the image picker
+    // let result = await ImagePicker.launchImageLibraryAsync({
+    //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //     allowsEditing: true,
+    //     aspect: [4, 3],
+    //     quality: 1,
+    // });
+
+    //     if (!result.canceled) {
+    //         setImage(result.assets[0].uri);
+    //     }
+    // };
+
+    // <Button title="Pick an image from camera roll" onPress={pickImage} />
+    // {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
     return (
         <View style={styles.container}>
