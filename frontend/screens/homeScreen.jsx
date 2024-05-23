@@ -82,7 +82,7 @@ export default function HomeScreen() {
             </View>
             <Text style={styles.welcome}>Welcome JustneedVic</Text>
             <Text style={styles.discover}>Discover...</Text>
-            <ScrollView horizontal={true} style={styles.recoZone}>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone}>
                 <View style={styles.recoCard}>
 
                 </View>
@@ -100,7 +100,7 @@ export default function HomeScreen() {
                 </View>
             </ScrollView>
             <Text style={styles.titleRanking}>Top Artist</Text>
-            <ScrollView horizontal={true} style={styles.topZone}>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.topZone}>
                 <View style={styles.topCard}>
 
                 </View>
