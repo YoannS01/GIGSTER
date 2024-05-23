@@ -29,7 +29,6 @@ const userSchema = mongoose.Schema({
     email: { type: String, unique: true, required: true },
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    verifiedPassword: String,
     token: String,
     address: [addressSchema],
     isArtist: Boolean,
@@ -39,10 +38,11 @@ const userSchema = mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     profilePicture: String,
-    firstname: String,
-    lastname: String,
+    firstName: String,
+    lastName: String,
     birthDate: Date,
     phoneNumber: String,
+    verifiedPassword: String,
 });
 
 const UserAddress = mongoose.model('UserAddress', addressSchema);
