@@ -1,13 +1,43 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Pressable, Image, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView, Platform, Button } from 'react-native';
 import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
+
+    //   const [image, setImage] = useState(null);
+
+    //    const pickImage = async () => {
+    //         // Request permission to access media library
+    //         if (Platform.OS !== 'web') {
+    //             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //             if (status !== 'granted') {
+    //                 alert('Sorry, we need camera roll permissions to make this work!');
+    //                 return;
+    //             }
+    //         }
+
+    // Open the image picker
+    // let result = await ImagePicker.launchImageLibraryAsync({
+    //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //     allowsEditing: true,
+    //     aspect: [4, 3],
+    //     quality: 1,
+    // });
+
+    //     if (!result.canceled) {
+    //         setImage(result.assets[0].uri);
+    //     }
+    // };
+
+    // <Button title="Pick an image from camera roll" onPress={pickImage} />
+    // {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
     return (
         <View style={styles.container}>
@@ -84,19 +114,84 @@ export default function HomeScreen() {
             <Text style={styles.discover}>Discover...</Text>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone}>
                 <View style={styles.recoCard}>
-
+                    <View style={styles.recoImage}>
+                        <Image style={styles.recoImg} source={require('../assets/Felicita.png')} />
+                    </View>
+                    <View style={styles.recoDesc}>
+                        <View>
+                            <Text style={styles.recoTitle}>La Felicita</Text>
+                            <Text style={styles.recoPlace}>Paris 13</Text>
+                            <Text>06 Juin - 17 Juin</Text>
+                        </View>
+                        <View style={styles.recoNote}>
+                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
+                            <Text style={styles.recoPlace}>4.5</Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.recoCard}>
-
+                    <View style={styles.recoImage}>
+                        <Image style={styles.recoImg} source={require('../assets/Jardin.png')} />
+                    </View>
+                    <View style={styles.recoDesc}>
+                        <View>
+                            <Text style={styles.recoTitle}>Jardin d'Arcachon</Text>
+                            <Text style={styles.recoPlace}>Arcachon</Text>
+                            <Text>27 Mai - 02 Juin</Text>
+                        </View>
+                        <View style={styles.recoNote}>
+                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
+                            <Text style={styles.recoPlace}>3.8</Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.recoCard}>
-
+                    <View style={styles.recoImage}>
+                        <Image style={styles.recoImg} source={require('../assets/Lyon.png')} />
+                    </View>
+                    <View style={styles.recoDesc}>
+                        <View>
+                            <Text style={styles.recoTitle}>Batiment au nom bi...</Text>
+                            <Text style={styles.recoPlace}>Lyon</Text>
+                            <Text>25 Mai - 13 Juillet</Text>
+                        </View>
+                        <View style={styles.recoNote}>
+                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
+                            <Text style={styles.recoPlace}>4.3</Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.recoCard}>
-
+                    <View style={styles.recoImage}>
+                        <Image style={styles.recoImg} source={require('../assets/Daddoo.png')} />
+                    </View>
+                    <View style={styles.recoDesc}>
+                        <View>
+                            <Text style={styles.recoTitle}>Dortoir du Seigneur</Text>
+                            <Text style={styles.recoPlace}>Bordeaux</Text>
+                            <Text>25 Mai - 31 Mai</Text>
+                        </View>
+                        <View style={styles.recoNote}>
+                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
+                            <Text style={styles.recoPlace}>2.4</Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={styles.recoCard}>
-
+                    <View style={styles.recoImage}>
+                        <Image style={styles.recoImg} source={require('../assets/Matelas.png')} />
+                    </View>
+                    <View style={styles.recoDesc}>
+                        <View>
+                            <Text style={styles.recoTitle}>Déchéterie (chez moi)</Text>
+                            <Text style={styles.recoPlace}>Tokyo</Text>
+                            <Text>24 Juillet - 23 Janvier</Text>
+                        </View>
+                        <View style={styles.recoNote}>
+                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
+                            <Text style={styles.recoPlace}>1.2</Text>
+                        </View>
+                    </View>
                 </View>
             </ScrollView>
             <Text style={styles.titleRanking}>Top Artist</Text>
@@ -195,9 +290,47 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         margin: 10,
         borderRadius: 20,
-        borderWidth: 2,
+    },
+    recoImage: {
+        width: '100%',
+        height: '70%',
+        borderTopEndRadius: 20,
+        borderTopStartRadius: 20,
+        borderTopWidth: 2,
+        borderLeftWidth: 2,
+        borderRightWidth: 6,
+        borderBottomWidth: 1,
+        overflow: 'hidden'
+    },
+    recoImg: {
+        width: '105%',
+        height: '105%',
+    },
+    recoDesc: {
+        width: '100%',
+        height: '30%',
+        backgroundColor: 'white',
+        borderBottomEndRadius: 20,
+        borderBottomStartRadius: 20,
+        borderTopWidth: 1,
+        borderLeftWidth: 2,
+        borderRightWidth: 6,
         borderBottomWidth: 6,
-        borderRightWidth: 6
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 10,
+        paddingRight: 15,
+    },
+    recoTitle: {
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    recoPlace: {
+        fontSize: 15,
+        fontWeight: 'bold'
+    },
+    recoNote: {
+        justifyContent: 'center'
     },
     topZone: {
         width: '100%',
