@@ -7,12 +7,12 @@ const addressSchema = mongoose.Schema({
 });
 
 const showSchema = mongoose.Schema({
-    tourID: { type: mongoose.Schema.Types.ObjectId, ref: 'Tours' },
+    tourID: { type: mongoose.Schema.Types.ObjectId, ref: 'tours' },
     date: Date,
     createdAt: Date,
     updatedAt: Date,
     adress: addressSchema,
-    host: { type: Schema.Types.ObjectId, ref: 'users' },
+    host: { type: Schema.Types.ObjectId, ref: 'user' },
     status: String,
     isValidated: Boolean,
     isRefused: Boolean,

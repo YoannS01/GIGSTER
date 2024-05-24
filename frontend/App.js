@@ -7,6 +7,7 @@ import LoginScreen from "./screens/loginScreen";
 import ProfileScreen from "./screens/profileScreen";
 import AddScreen from "./screens/addScreen";
 import StatusScreen from "./screens/StatusScreen";
+import diyTourScreen from "./screens/diyTourScreen";
 
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
@@ -58,6 +59,7 @@ export default function App() {
       <NavigationContainer style={styles.container}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Statut" component={StatusScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
         <StatusBar style="auto" />

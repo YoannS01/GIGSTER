@@ -50,4 +50,4 @@ const Host = mongoose.model('Host', hostSchema);
 const Artist = mongoose.model('Artist', artistSchema);
 const User = mongoose.model('User', userSchema);
 
-module.exports = { UserAddress, Host, Artist, User };
+module.exports = { UserAddress, Host, Artist, User }; 
