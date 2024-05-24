@@ -5,31 +5,26 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRETKEY;
 const { User } = require('../models/users');
-const moment = require('moment')
+const moment = require('moment');
 
 router.post("/signup", (req, res) => {
     if (req.body.password !== req.body.verifiedPassword) {
-        return res.json({ result: false, error: "Confirm your password" })
+        return res.json({ result: false, error: "Confirm your password" });
     }
     if (!checkBody(req.body, ['username', 'password', 'verifiedPassword', 'email', 'firstname', 'lastname', 'birthdate', 'phoneNumber'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
 
-    User.findOne({ username: req.body.username, email: req.body.email }).then(user => {
-        if (user === null) {
-
-            const payload = {
-                username: req.body.username
-            };
-
-            const options = {
-                expiresIn: '30m',
-                algorithm: 'HS256'
-            };
-
+    User.findOne({ $or: [{ username: req.body.username }, { email: req.body.email }] }).then(user => {
+        if (user) {
+            res.json({ result: false, error: 'User already exists' });
+        } else {
+            const payload = { username: req.body.username };
+            const options = { expiresIn: '30m', algorithm: 'HS256' };
             const hash = bcrypt.hashSync(req.body.password, 10);
             const token = jwt.sign(payload, secretKey, options);
+
             const newUser = new User({
                 username: req.body.username,
                 email: req.body.email,
@@ -40,7 +35,10 @@ router.post("/signup", (req, res) => {
                 phoneNumber: req.body.phoneNumber,
                 isArtist: req.body.isArtist,
                 isHost: req.body.isHost,
-                token
+                token,
+                addresses: [],
+                artist: req.body.isArtist ? {} : null,
+                host: req.body.isHost ? {} : null,
             });
 
             const newAddress = {
@@ -49,29 +47,27 @@ router.post("/signup", (req, res) => {
                 zipCode: req.body.zipCode
             };
 
-            const newArtist = {
+            const newArtist = req.body.isArtist ? {
                 genres: req.body.genres,
                 members: req.body.members,
                 artistName: req.body.artistName,
                 placeOrigin: req.body.placeOrigin,
                 artistRanking: 5
-            }
+            } : null;
 
-            const newHost = {
+            const newHost = req.body.isHost ? {
                 description: req.body.description,
-                favoritesGenres: req.body.favoriteGenres,
+                favoriteGenres: req.body.favoriteGenres,
                 hostRanking: 5
-            }
+            } : null;
 
-            newUser.address.push(newAddress);
-            newUser.artist.push(newArtist)
-            newUser.host.push(newHost)
+            newUser.addresses.push(newAddress);
+            if (newArtist) newUser.artist = newArtist;
+            if (newHost) newUser.host = newHost;
 
             newUser.save().then(newDoc => {
                 res.json({ result: true, token: newDoc.token });
             });
-        } else {
-            res.json({ result: false, error: 'User already exists' });
         }
     });
 });
@@ -84,13 +80,8 @@ router.post("/signin", (req, res) => {
 
     User.findOne({ email: req.body.email }).then((data) => {
         if (data && bcrypt.compareSync(req.body.password, data.password)) {
-            const payload = {
-                username: data.username
-            };
-            const options = {
-                expiresIn: '30m',
-                algorithm: 'HS256'
-            };
+            const payload = { username: data.username };
+            const options = { expiresIn: '30m', algorithm: 'HS256' };
             const newToken = jwt.sign(payload, secretKey, options);
 
             data.token = newToken;
