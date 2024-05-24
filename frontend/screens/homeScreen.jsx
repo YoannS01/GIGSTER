@@ -5,11 +5,95 @@ import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 
+import AnnounceCard from '../components/AnnounceCard'
+import TopCard from '../components/TopCard'
+
 
 
 export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [searching, setSearching] = useState(false)
+
+    const cardsData = [
+        {
+            image: require("../assets/Felicita.png"),
+            title: 'La Felicita',
+            location: 'Paris 13',
+            availability: '06 Juin - 17 Juin',
+            note: '4.5'
+        },
+        {
+            image: require("../assets/Jardin.png"),
+            title: `Jardin d'Arcachon`,
+            location: 'Archachon',
+            availability: '27 Mai - 02 Juin',
+            note: '4.5'
+        },
+        {
+            image: require("../assets/Lyon.png"),
+            title: 'Batiment au nom bien long',
+            location: 'Lyon',
+            availability: '25 Mai - 13 Juillet',
+            note: '4.3'
+        },
+        {
+            image: require("../assets/Daddoo.png"),
+            title: 'Dortoir du Seigneur',
+            location: 'Bordeaux',
+            availability: '25 Mai - 31 Mai',
+            note: '2.4'
+        },
+        {
+            image: require("../assets/Matelas.png"),
+            title: 'Déchetterie (chez moi)',
+            location: 'Tokyo',
+            availability: '24 Juillet - 23 Janvier',
+            note: '1.2'
+        },
+    ]
+
+    const cardList = cardsData.map((data, i) => {
+        return <AnnounceCard
+            key={i}
+            image={data.image}
+            title={data.title}
+            location={data.location}
+            availability={data.availability}
+            note={data.note} />
+
+    })
+
+    const topData = [
+        {
+            image: require("../assets/PP1.png"),
+            name: 'Galaxy Brain'
+        },
+        {
+            image: require("../assets/PP2.png"),
+            name: 'Antistar'
+        },
+        {
+            image: require("../assets/PP3.png"),
+            name: 'Domo Arigato'
+        },
+        {
+            image: require("../assets/PP4.png"),
+            name: 'Meuf Manga'
+        },
+        {
+            image: require("../assets/PP5.png"),
+            name: 'SupraDarky'
+        },
+    ]
+
+    const topList = topData.map((data, i) => {
+        return <TopCard
+            key={i}
+            image={data.image}
+            name={data.name} />
+
+    })
 
     //   const [image, setImage] = useState(null);
 
@@ -112,105 +196,12 @@ export default function HomeScreen() {
             </View>
             <Text style={styles.welcome}>Welcome JustneedVic</Text>
             <Text style={styles.discover}>Discover...</Text>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone}>
-                <View style={styles.recoCard}>
-                    <View style={styles.recoImage}>
-                        <Image style={styles.recoImg} source={require('../assets/Felicita.png')} />
-                    </View>
-                    <View style={styles.recoDesc}>
-                        <View>
-                            <Text style={styles.recoTitle}>La Felicita</Text>
-                            <Text style={styles.recoPlace}>Paris 13</Text>
-                            <Text>06 Juin - 17 Juin</Text>
-                        </View>
-                        <View style={styles.recoNote}>
-                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
-                            <Text style={styles.recoPlace}>4.5</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.recoCard}>
-                    <View style={styles.recoImage}>
-                        <Image style={styles.recoImg} source={require('../assets/Jardin.png')} />
-                    </View>
-                    <View style={styles.recoDesc}>
-                        <View>
-                            <Text style={styles.recoTitle}>Jardin d'Arcachon</Text>
-                            <Text style={styles.recoPlace}>Arcachon</Text>
-                            <Text>27 Mai - 02 Juin</Text>
-                        </View>
-                        <View style={styles.recoNote}>
-                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
-                            <Text style={styles.recoPlace}>3.8</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.recoCard}>
-                    <View style={styles.recoImage}>
-                        <Image style={styles.recoImg} source={require('../assets/Lyon.png')} />
-                    </View>
-                    <View style={styles.recoDesc}>
-                        <View>
-                            <Text style={styles.recoTitle}>Batiment au nom bi...</Text>
-                            <Text style={styles.recoPlace}>Lyon</Text>
-                            <Text>25 Mai - 13 Juillet</Text>
-                        </View>
-                        <View style={styles.recoNote}>
-                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
-                            <Text style={styles.recoPlace}>4.3</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.recoCard}>
-                    <View style={styles.recoImage}>
-                        <Image style={styles.recoImg} source={require('../assets/Daddoo.png')} />
-                    </View>
-                    <View style={styles.recoDesc}>
-                        <View>
-                            <Text style={styles.recoTitle}>Dortoir du Seigneur</Text>
-                            <Text style={styles.recoPlace}>Bordeaux</Text>
-                            <Text>25 Mai - 31 Mai</Text>
-                        </View>
-                        <View style={styles.recoNote}>
-                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
-                            <Text style={styles.recoPlace}>2.4</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.recoCard}>
-                    <View style={styles.recoImage}>
-                        <Image style={styles.recoImg} source={require('../assets/Matelas.png')} />
-                    </View>
-                    <View style={styles.recoDesc}>
-                        <View>
-                            <Text style={styles.recoTitle}>Déchéterie (chez moi)</Text>
-                            <Text style={styles.recoPlace}>Tokyo</Text>
-                            <Text>24 Juillet - 23 Janvier</Text>
-                        </View>
-                        <View style={styles.recoNote}>
-                            <FontAwesome name='star' size={30} color={'#d4a60f'} />
-                            <Text style={styles.recoPlace}>1.2</Text>
-                        </View>
-                    </View>
-                </View>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone} >
+                {cardList}
             </ScrollView>
             <Text style={styles.titleRanking}>Top Artist</Text>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.topZone}>
-                <View style={styles.topCard}>
-
-                </View>
-                <View style={styles.topCard}>
-
-                </View>
-                <View style={styles.topCard}>
-
-                </View>
-                <View style={styles.topCard}>
-
-                </View>
-                <View style={styles.topCard}>
-
-                </View>
+                {topList}
             </ScrollView>
         </View >
     );
@@ -284,68 +275,10 @@ const styles = StyleSheet.create({
         height: '40%',
         flexDirection: 'row'
     },
-    recoCard: {
-        width: 300,
-        height: '90%',
-        backgroundColor: 'white',
-        margin: 10,
-        borderRadius: 20,
-    },
-    recoImage: {
-        width: '100%',
-        height: '70%',
-        borderTopEndRadius: 20,
-        borderTopStartRadius: 20,
-        borderTopWidth: 2,
-        borderLeftWidth: 2,
-        borderRightWidth: 6,
-        borderBottomWidth: 1,
-        overflow: 'hidden'
-    },
-    recoImg: {
-        width: '105%',
-        height: '105%',
-    },
-    recoDesc: {
-        width: '100%',
-        height: '30%',
-        backgroundColor: 'white',
-        borderBottomEndRadius: 20,
-        borderBottomStartRadius: 20,
-        borderTopWidth: 1,
-        borderLeftWidth: 2,
-        borderRightWidth: 6,
-        borderBottomWidth: 6,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingLeft: 10,
-        paddingRight: 15,
-    },
-    recoTitle: {
-        fontSize: 20,
-        fontWeight: 'bold'
-    },
-    recoPlace: {
-        fontSize: 15,
-        fontWeight: 'bold'
-    },
-    recoNote: {
-        justifyContent: 'center'
-    },
     topZone: {
         width: '100%',
         height: '28%',
         flexDirection: 'row'
-    },
-    topCard: {
-        width: 150,
-        height: '80%',
-        backgroundColor: 'white',
-        margin: 10,
-        borderRadius: 20,
-        borderWidth: 2,
-        borderBottomWidth: 6,
-        borderRightWidth: 6
     },
     btnModal: {
         width: '20%',
