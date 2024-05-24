@@ -59,7 +59,7 @@ router.post("/signup", (req, res) => {
 
             const newHost = {
                 description: req.body.description,
-                favoritesGenres: req.body.favoriteGenre,
+                favoritesGenres: req.body.favoriteGenres,
                 hostRanking: 5
             }
 

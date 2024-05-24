@@ -1,17 +1,6 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Alert,
-  Pressable,
-  Image,
-  TextInput,
-  ScrollView,
-} from "react-native";
-import Modal from "react-native-modal";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { StyleSheet, Text } from "react-native";
+
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useEffect } from "react";
@@ -21,24 +10,42 @@ import { useEffect } from "react";
 
 export default function diyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
-  console.log(currentPosition);
+  const [mapRegion, setMapRegion] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const result = await Location.requestForegroundPermissionsAsync();
-      const status = result?.status;
+      const { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status === "granted") {
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+        const location = await Location.getCurrentPositionAsync({});
+        setCurrentPosition(location.coords);
+        setMapRegion({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 5,
+          longitudeDelta: 5,
+        });
+
+        Location.watchPositionAsync({ distanceInterval: 10 }, () => {
           setCurrentPosition(location.coords);
+          setMapRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          });
         });
       }
     })();
   }, []);
 
+  if (!mapRegion) {
+    return <Text style={styles.loading}>Loading...</Text>;
+  }
+
   return (
-    <MapView style={styles.map}>
-      <Marker coordinate={currentPosition} title="Me !" pinColor="#fecb2d" />
+    <MapView style={styles.map} initialRegion={{ mapRegion }}>
+      {currentPosition && (
+        <Marker coordinate={currentPosition} title="Me !" pinColor="#fecb2d" />
+      )}
     </MapView>
   );
 }
@@ -46,5 +53,11 @@ export default function diyTourScreen() {
 const styles = StyleSheet.create({
   map: {
     flex: 1,
+  },
+  loading: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

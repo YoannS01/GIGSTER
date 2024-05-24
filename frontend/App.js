@@ -1,4 +1,3 @@
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -10,20 +9,18 @@ import AddScreen from "./screens/addScreen";
 import StatusScreen from "./screens/StatusScreen";
 import diyTourScreen from "./screens/diyTourScreen";
 
-
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
-import stepper from "./reducers/stepper";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { user, stepper },
+  reducer: { user },
 });
 
 const TabNavigator = () => {
@@ -78,5 +75,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-
