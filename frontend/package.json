@@ -13,12 +13,9 @@
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
-<<<<<<< HEAD
     "@react-native-community/checkbox": "^0.5.17",
     "@react-native-community/slider": "^4.5.2",
-=======
     "@material.ui/react-native-stepper": "^1.3.2",
->>>>>>> e469b3c34aab327bcd184d2cfedda5066bda04c1
     "@react-navigation/bottom-tabs": "6",
     "@react-navigation/native": "6",
     "@react-navigation/native-stack": "6",
