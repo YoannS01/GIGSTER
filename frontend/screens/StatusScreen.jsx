@@ -27,7 +27,7 @@ export default function StatusScreen() {
                         <Text style={styles.text} >Artiste</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.statusBtn} onPress={() => handleHost()}>
-                        <Text style={styles.text}>Hôte</Text>
+                        <Text style={styles.text}>HÃ´te</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
         paddingBottom: 6,
         paddingLeft: 10,
         paddingRight: 10,
+
 
         borderRadius: 8,
         borderWidth: 1,
