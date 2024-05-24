@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { TouchableOpacity, View, Text } from "react-native";
 =======
 import { useState } from "react";
@@ -13,12 +14,13 @@ import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { useState } from "react";
 =======
 >>>>>>> e469b3c34aab327bcd184d2cfedda5066bda04c1
+=======
+>>>>>>> 69c2cbdb4d2f408ce1b437e597a1b707261f6213
 import { TouchableOpacity, View, Text, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressStepsComponent from "../components/ProgessStepsComponent";
 import { updateArtist, updateHost } from "../reducers/user";
 
->>>>>>> 2834aa6aa8ef308508a9bbe9e4f4fbdd789f9f61
 
 export default function StatusScreen() {
     const dispatch = useDispatch()
@@ -43,7 +45,7 @@ export default function StatusScreen() {
                         <Text style={styles.text} >Artiste</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.statusBtn} onPress={() => handleHost()}>
-                        <Text style={styles.text}>Hôte</Text>
+                        <Text style={styles.text}>HÃ´te</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -76,6 +78,7 @@ const styles = StyleSheet.create({
         paddingBottom: 6,
         paddingLeft: 10,
         paddingRight: 10,
+
         borderRadius: 8,
         borderWidth: 1,
         borderBottomWidth: 3,
@@ -83,6 +86,7 @@ const styles = StyleSheet.create({
         marginTop: 5
 
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 
@@ -152,3 +156,6 @@ const styles = StyleSheet.create({
 =======
 });
 >>>>>>> e469b3c34aab327bcd184d2cfedda5066bda04c1
+=======
+});
+>>>>>>> 69c2cbdb4d2f408ce1b437e597a1b707261f6213
