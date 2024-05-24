@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -11,40 +12,38 @@ import { useDispatch } from "react-redux";
 import { FRONT_IP } from "../hide-ip";
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { useState } from "react";
+=======
+>>>>>>> e469b3c34aab327bcd184d2cfedda5066bda04c1
 import { TouchableOpacity, View, Text, StyleSheet, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressStepsComponent from "../components/ProgessStepsComponent";
-
+import { updateArtist, updateHost } from "../reducers/user";
 
 >>>>>>> 2834aa6aa8ef308508a9bbe9e4f4fbdd789f9f61
 
 export default function StatusScreen() {
-
     const dispatch = useDispatch()
     const user = useSelector(state => state.user.value)
 
-    //variable d'états :
-    const [isArtist, setIsArtist] = useState(false)
-    const [isHost, setIsHost] = useState(false)
-
     function handleArtist() {
-        setIsArtist(true)
+        dispatch(updateArtist(true))
+        dispatch(updateHost(false))
     }
-
 
     function handleHost() {
-        setIsHost(true)
+        dispatch(updateHost(true))
+        dispatch(updateArtist(false))
     }
 
-    if (!isArtist || !isHost) {
+    if (!user.isArtist && !user.isHost) {
         return (
             <View>
                 <View style={styles.mainSelect}>
                     <Text>Quel profil es tu ?</Text>
-                    <TouchableOpacity style={styles.artistBtn} onPress={() => handleArtist()}>
+                    <TouchableOpacity style={styles.statusBtn} onPress={() => handleArtist()}>
                         <Text style={styles.text} >Artiste</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity tyle={styles.hostBtn} onPress={() => handleHost()}>
+                    <TouchableOpacity style={styles.statusBtn} onPress={() => handleHost()}>
                         <Text style={styles.text}>Hôte</Text>
                     </TouchableOpacity>
                 </View>
@@ -52,18 +51,11 @@ export default function StatusScreen() {
         )
     }
 
-
-    if (isArtist) {
-        return (
-            <View>
-                <ProgressStepsComponent />
-            </View>
-
-        )
-    }
-
-
-
+    return (
+        <View>
+            <ProgressStepsComponent isArtist={user.isArtist} isHost={user.isHost} />
+        </View>
+    )
 
 }
 
@@ -73,12 +65,26 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: '#e1f5ff',
         alignItems: 'center',
-        justifyContent: 'center',
-
+        justifyContent: 'space-evenly',
+        display: 'flex',
     },
     text: {
         color: 'black'
+    },
+    statusBtn: {
+        backgroundColor: '#5100FF',
+        paddingTop: 6,
+        paddingBottom: 6,
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderBottomWidth: 3,
+        borderRightWidth: 3,
+        marginTop: 5
+
     }
+<<<<<<< HEAD
 
 
 <<<<<<< HEAD
@@ -144,3 +150,6 @@ const styles = StyleSheet.create({
 });
 >>>>>>> 2834aa6aa8ef308508a9bbe9e4f4fbdd789f9f61
 */
+=======
+});
+>>>>>>> e469b3c34aab327bcd184d2cfedda5066bda04c1

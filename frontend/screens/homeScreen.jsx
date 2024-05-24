@@ -301,13 +301,11 @@ const styles = StyleSheet.create({
     profilePic: {
         width: 70,
         height: 70,
-        backgroundColor: 'red',
         borderRadius: 40
     },
     profilePicMenu: {
         width: 80,
         height: 80,
-        backgroundColor: 'red',
         borderRadius: 40,
         borderWidth: 2,
         borderColor: 'black',
