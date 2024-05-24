@@ -3,22 +3,22 @@ const mongoose = require('mongoose');
 const addressSchema = mongoose.Schema({
     street: String,
     city: String,
-    zipCode: Number,
+    zipcode: String,
 });
 
 const hostSchema = mongoose.Schema({
     hostRanking: Number,
     description: String,
     announces: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Announce' }],
-    favoriteGenre: [String],
-    hostedArtist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    favoritesGenres: [String],
+    hostedArtists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
 
 const artistSchema = mongoose.Schema({
     artistName: String,
-    genre: [String],
-    member: Number,
-    media: [String],
+    genres: [String],
+    members: Number,
+    medias: [String],
     description: String,
     placeOrigin: String,
     tours: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tour' }],
@@ -28,21 +28,21 @@ const artistSchema = mongoose.Schema({
 const userSchema = mongoose.Schema({
     email: { type: String, unique: true, required: true },
     username: { type: String, unique: true, required: true },
+    firstname: String,
+    lastname: String,
     password: { type: String, required: true },
+    verifiedPassword: String,
     token: String,
-    address: [addressSchema],
+    addresses: [addressSchema],
     isArtist: Boolean,
     isHost: Boolean,
-    artist: [artistSchema],
-    host: [hostSchema],
+    artist: artistSchema,
+    host: hostSchema,
+    phoneNumber: String,
+    birthdate: Date,
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     profilePicture: String,
-    firstName: String,
-    lastName: String,
-    birthDate: Date,
-    phoneNumber: String,
-    verifiedPassword: String,
 });
 
 const UserAddress = mongoose.model('UserAddress', addressSchema);
@@ -50,4 +50,4 @@ const Host = mongoose.model('Host', hostSchema);
 const Artist = mongoose.model('Artist', artistSchema);
 const User = mongoose.model('User', userSchema);
 
-module.exports = { UserAddress, Host, Artist, User };
+module.exports = { UserAddress, Host, Artist, User }; 
