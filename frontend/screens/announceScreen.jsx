@@ -1,12 +1,11 @@
 
-
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, TextInput, SafeAreaView, StatusBar } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, TextInput, SafeAreaView, StatusBar, Button } from 'react-native';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import DropDownPicker from 'react-native-dropdown-picker';
 
-
-
+import { launchImageLibrary } from 'react-native-image-picker';
+import { launchCamera } from 'react-native-image-picker';
 
 
 export default function announceScreen() {
@@ -47,7 +46,47 @@ export default function announceScreen() {
         { label: 'Appartement', value: 'appartement' },
     ]);
 
+    const openImagePicker = () => {
+        const options = {
+            mediaType: 'photo',
+            includeBase64: false,
+            maxHeight: 2000,
+            maxWidth: 2000,
+        };
 
+        launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('Image picker error: ', response.error);
+            } else {
+                let imageUri = response.uri || response.assets?.[0]?.uri;
+                setSelectedImage(imageUri);
+            }
+        });
+    };
+
+
+    handleCameraLaunch = () => {
+        const options = {
+            mediaType: 'photo',
+            includeBase64: false,
+            maxHeight: 2000,
+            maxWidth: 2000,
+        };
+
+        launchCamera(options, response => {
+            if (response.didCancel) {
+                console.log('User cancelled camera');
+            } else if (response.error) {
+                console.log('Camera Error: ', response.error);
+            } else {
+                let imageUri = response.uri || response.assets?.[0]?.uri;
+                setSelectedImage(imageUri);
+                console.log(imageUri);
+            }
+        });
+    }
 
 
     return (
@@ -55,7 +94,7 @@ export default function announceScreen() {
             <ScrollView style={styles.scrollView}>
 
                 <View>
-                    <Text>Adresse de votre lieu d'accueil :</Text>
+                    <Text style={styles.title}>Adresse de votre lieu d'accueil :</Text>
                     <TextInput
                         placeholder="Indiquez la rue"
                         style={styles.input_address}
@@ -71,13 +110,14 @@ export default function announceScreen() {
                 </View>
 
                 <View>
-                    <Text>Décrivez votre lieu d'accueil :</Text>
+                    <Text style={styles.title}>Décrivez votre lieu d'accueil :</Text>
                     <TextInput placeholder="Description du lieu d'accueil" style={styles.input_description}></TextInput>
 
                 </View>
 
                 {/*Dropdown list concernant le type de lieu d'accueil*/}
-                <View style={styles.dropdownlist_lieu_accueil}>
+                <View style={[styles.dropdownlist_lieu_accueil, open && { zIndex: 1000 }]}>
+                    <Text style={styles.title}>Choisissez votre type lieu d'accueil :</Text>
                     <DropDownPicker
                         open={open}
                         value={value}
@@ -85,14 +125,15 @@ export default function announceScreen() {
                         setOpen={setOpen}
                         setValue={setValue}
                         setItems={setItems}
-                        placeholder={"Choisissez votre type lieu d'accueil"}
+                        placeholder={"Type lieu d'accueil..."}
+                        containerStyle={{ height: open ? 200 : 40 }}
                     />
                 </View>
 
 
                 {/*Checkbox de validation pour lieu accessible aux handicapés, faire yarn add react-native-bouncy-checkbox*/}
                 <View style={styles.accesibility}>
-                    <Text>Accessibilité :</Text>
+                    <Text style={styles.title}>Accessibilité :</Text>
                     <BouncyCheckbox
                         size={25}
                         fillColor="green"
@@ -106,7 +147,7 @@ export default function announceScreen() {
                 </View>
 
                 <View style={styles.accomodations_container}>
-                    <Text>Sélectionnez les servicess disponibles :</Text>
+                    <Text style={styles.title}>Sélectionnez les servicess disponibles :</Text>
                     <TouchableOpacity style={{
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -137,7 +178,7 @@ export default function announceScreen() {
 
 
                 <View style={styles.instruments_container}>
-                    <Text>Sélectionnez les intsruments que vous pouvez mettre à disposition des artistes :</Text>
+                    <Text style={styles.title}>Sélectionnez les intsruments que vous pouvez mettre à disposition des artistes :</Text>
                     <TouchableOpacity style={{
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -205,6 +246,19 @@ export default function announceScreen() {
                     </TouchableOpacity>
                 </View>
 
+                <View>
+                    <Text style={styles.title}>Ajoutez des images à votre lieu d'accueil :</Text>
+                </View>
+
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                    <View style={{ marginTop: 20 }}>
+
+                        <Button title="Choose from Device" onPress={openImagePicker} />
+                    </View>
+                    <View style={{ marginTop: 20, marginBottom: 50 }}>
+                        <Button title="Open Camera" onPress={handleCameraLaunch} />
+                    </View>
+                </View>
 
             </ScrollView>
         </SafeAreaView>
@@ -259,12 +313,13 @@ const styles = StyleSheet.create({
         width: '100%',
         marginBottom: 10,
         marginTop: 10,
-
+        zIndex: 1000,
     },
     accesibility: {
         width: '90%',
         marginBottom: 10,
         marginTop: 10,
+        zIndex: 10,
     },
     accomodations_container: {
         flexDirection: "row",
@@ -272,6 +327,11 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 10,
         marginBottom: 10,
+        zIndex: 10,
+    },
+    title: {
+        fontWeight: '700',
+        fontSize: '17px',
     },
 
 })

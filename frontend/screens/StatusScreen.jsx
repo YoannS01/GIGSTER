@@ -1,3 +1,4 @@
+/*
 <<<<<<< HEAD
 <<<<<<< HEAD
 import { TouchableOpacity, View, Text } from "react-native";
@@ -142,3 +143,4 @@ const styles = StyleSheet.create({
 =======
 });
 >>>>>>> 2834aa6aa8ef308508a9bbe9e4f4fbdd789f9f61
+*/
