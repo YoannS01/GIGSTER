@@ -8,7 +8,7 @@ require('./models/connection')
 const auth = require('./middleware/auth');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var authUsersRouter = require('./routes/authUsers')
+//var authUsersRouter = require('./routes/authUsers')
 
 var app = express();
 const cors = require('cors');
@@ -22,6 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/authUsers', auth, authUsersRouter)
+//app.use('/authUsers', auth, authUsersRouter)
 
 module.exports = app;
