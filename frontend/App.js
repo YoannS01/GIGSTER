@@ -7,6 +7,8 @@ import HomeScreen from "./screens/homeScreen";
 import LoginScreen from "./screens/loginScreen";
 import ProfileScreen from "./screens/profileScreen";
 import AddScreen from "./screens/addScreen";
+import StatusScreen from "./screens/StatusScreen";
+import diyTourScreen from "./screens/diyTourScreen";
 
 
 import { StatusBar } from "expo-status-bar";
@@ -46,7 +48,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Add" component={AddScreen} />
+      <Tab.Screen name="Add" component={StatusScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -58,6 +60,7 @@ export default function App() {
       <NavigationContainer style={styles.container}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Statut" component={StatusScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
         <StatusBar style="auto" />

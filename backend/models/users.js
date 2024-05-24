@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const addressSchema = mongoose.Schema({
     street: String,
     city: String,
-    zipcode: String,
+    zipCode: Number,
 });
 
 const hostSchema = mongoose.Schema({
@@ -15,9 +15,9 @@ const hostSchema = mongoose.Schema({
 });
 
 const artistSchema = mongoose.Schema({
+    artistName: String,
     genre: [String],
     member: Number,
-    artistName: String,
     media: [String],
     description: String,
     placeOrigin: String,
@@ -28,20 +28,21 @@ const artistSchema = mongoose.Schema({
 const userSchema = mongoose.Schema({
     email: { type: String, unique: true, required: true },
     username: { type: String, unique: true, required: true },
-    firstname: String,
-    lastname: String,
     password: { type: String, required: true },
     token: String,
-    address: addressSchema,
+    address: [addressSchema],
     isArtist: Boolean,
     isHost: Boolean,
-    artists: artistSchema,
-    hosts: hostSchema,
-    phoneNumber: String,
-    birthdate: Date,
+    artist: [artistSchema],
+    host: [hostSchema],
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     profilePicture: String,
+    firstName: String,
+    lastName: String,
+    birthDate: Date,
+    phoneNumber: String,
+    verifiedPassword: String,
 });
 
 const UserAddress = mongoose.model('UserAddress', addressSchema);

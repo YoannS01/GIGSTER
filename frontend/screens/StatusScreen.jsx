@@ -1,23 +1,86 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { TouchableOpacity, View, Text } from "react-native";
 =======
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 >>>>>>> 4cfa60bd5bec8253255699ee5e02c29cbafa0a12
+=======
+import { FRONT_IP } from "../hide-ip";
+import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
+import { useState } from "react";
+import { TouchableOpacity, View, Text, StyleSheet, Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import ProgressStepsComponent from "../components/ProgessStepsComponent";
+
+
+>>>>>>> 2834aa6aa8ef308508a9bbe9e4f4fbdd789f9f61
 
 export default function StatusScreen() {
+
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user.value)
+
+    //variable d'états :
     const [isArtist, setIsArtist] = useState(false)
     const [isHost, setIsHost] = useState(false)
 
-    const user = useSelector(state => state.user.value)
+    function handleArtist() {
+        setIsArtist(true)
+    }
+
+
+    function handleHost() {
+        setIsHost(true)
+    }
+
+    if (!isArtist || !isHost) {
+        return (
+            <View>
+                <View style={styles.mainSelect}>
+                    <Text>Quel profil es tu ?</Text>
+                    <TouchableOpacity style={styles.artistBtn} onPress={() => handleArtist()}>
+                        <Text style={styles.text} >Artiste</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity tyle={styles.hostBtn} onPress={() => handleHost()}>
+                        <Text style={styles.text}>Hôte</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
+
+    if (isArtist) {
+        return (
+            <View>
+                <ProgressStepsComponent />
+            </View>
+
+        )
+    }
 
 
 
 
+}
+
+const styles = StyleSheet.create({
+    mainSelect: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#e1f5ff',
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    text: {
+        color: 'black'
+    }
 
 
+<<<<<<< HEAD
 
     return (
 <<<<<<< HEAD
@@ -76,3 +139,6 @@ const styles = StyleSheet.create({
     },
 
 })
+=======
+});
+>>>>>>> 2834aa6aa8ef308508a9bbe9e4f4fbdd789f9f61
