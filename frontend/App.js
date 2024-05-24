@@ -1,3 +1,4 @@
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -8,6 +9,7 @@ import ProfileScreen from "./screens/profileScreen";
 import AddScreen from "./screens/addScreen";
 import StatusScreen from "./screens/StatusScreen";
 import diyTourScreen from "./screens/diyTourScreen";
+
 
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
@@ -76,3 +78,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+

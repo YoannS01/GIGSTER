@@ -11,7 +11,7 @@ router.post("/signup", (req, res) => {
     if (req.body.password !== req.body.verifiedPassword) {
         return res.json({ result: false, error: "Confirm your password" })
     }
-    if (!checkBody(req.body, ['username', 'password', 'verifiedPassword', 'email', 'firstName', 'lastName', 'birthDate', 'phoneNumber'])) {
+    if (!checkBody(req.body, ['username', 'password', 'verifiedPassword', 'email', 'firstname', 'lastname', 'birthdate', 'phoneNumber'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
@@ -34,9 +34,9 @@ router.post("/signup", (req, res) => {
                 username: req.body.username,
                 email: req.body.email,
                 password: hash,
-                firstName: req.body.firstName,
-                lastName: req.body.lastname,
-                birthDate: moment(req.body.birthDate, 'DD/MM/YYYY').toDate(),
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                birthdate: moment(req.body.birthdate, 'DD/MM/YYYY').toDate(),
                 phoneNumber: req.body.phoneNumber,
                 isArtist: req.body.isArtist,
                 isHost: req.body.isHost,
@@ -50,8 +50,8 @@ router.post("/signup", (req, res) => {
             };
 
             const newArtist = {
-                genre: req.body.genre,
-                member: req.body.member,
+                genres: req.body.genres,
+                members: req.body.members,
                 artistName: req.body.artistName,
                 placeOrigin: req.body.placeOrigin,
                 artistRanking: 5
@@ -59,7 +59,7 @@ router.post("/signup", (req, res) => {
 
             const newHost = {
                 description: req.body.description,
-                favoriteGenre: req.body.favoriteGenre,
+                favoritesGenres: req.body.favoriteGenre,
                 hostRanking: 5
             }
 
