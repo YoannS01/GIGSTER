@@ -1,5 +1,4 @@
 <<<<<<< HEAD
-/*
 <<<<<<< HEAD
 <<<<<<< HEAD
 import { TouchableOpacity, View, Text } from "react-native";
@@ -89,9 +88,9 @@ const styles = StyleSheet.create({
 
 <<<<<<< HEAD
 
-    return (
+    return(
 <<<<<<< HEAD
-        <View style={styles.container}>
+        <View style = { styles.container } >
             <Text style={styles.title}>Je suis un..</Text>
             <TouchableOpacity style={styles.input_button}>
                 <Text style={styles.text_button}>Artiste</Text>
@@ -100,56 +99,56 @@ const styles = StyleSheet.create({
                 <Text style={styles.text_button}>Hôte</Text>
 =======
         <View>
-            <Text>Quel profil es tu ?</Text>
-            <TouchableOpacity onPress={() => handleArtist()}>
-                <Text>Artiste</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleHost()}>
-                <Text>Hôte</Text>
+                    <Text>Quel profil es tu ?</Text>
+                    <TouchableOpacity onPress={() => handleArtist()}>
+                        <Text>Artiste</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleHost()}>
+                        <Text>Hôte</Text>
 >>>>>>> 4cfa60bd5bec8253255699ee5e02c29cbafa0a12
-            </TouchableOpacity>
-        </View>
-    )
+                    </TouchableOpacity>
+                </View>
+                )
 }
 
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#e1f5ff",
-        alignItems: "center",
-        justifyContent: "center",
+                const styles = StyleSheet.create({
+                    container: {
+                    flex: 1,
+                backgroundColor: "#e1f5ff",
+                alignItems: "center",
+                justifyContent: "center",
     },
-    title: {
-        fontWeight: "bold",
-        fontSize: 20,
-        marginTop: 15,
+                title: {
+                    fontWeight: "bold",
+                fontSize: 20,
+                marginTop: 15,
     },
-    input_button: {
-        height: "6%",
-        width: "100%",
-        alignItems: "center",
-        paddingTop: 10,
-        marginTop: 20,
-        marginBottom: 10,
+                input_button: {
+                    height: "6%",
+                width: "100%",
+                alignItems: "center",
+                paddingTop: 10,
+                marginTop: 20,
+                marginBottom: 10,
     },
-    text_button: {
-        backgroundColor: "#ec2761",
-        color: "#FFFFFF",
-        fontWeight: "bold",
-        fontSize: 16,
-        paddingBottom: 8,
-        paddingTop: 8,
-        paddingLeft: 130,
-        paddingRight: 130,
-        height: "100%",
+                text_button: {
+                    backgroundColor: "#ec2761",
+                color: "#FFFFFF",
+                fontWeight: "bold",
+                fontSize: 16,
+                paddingBottom: 8,
+                paddingTop: 8,
+                paddingLeft: 130,
+                paddingRight: 130,
+                height: "100%",
     },
 
 })
 =======
 });
 >>>>>>> 2834aa6aa8ef308508a9bbe9e4f4fbdd789f9f61
-*/
+
 =======
 });
 >>>>>>> e469b3c34aab327bcd184d2cfedda5066bda04c1
