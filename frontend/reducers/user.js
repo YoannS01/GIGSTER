@@ -4,6 +4,25 @@ const initialState = {
     value: {
         username: null,
         email: null,
+        firstName: null,
+        lastName: null,
+        address: {
+            street: null,
+            city: null,
+            zipCode: null,
+        },
+        phoneNumber: null,
+        birthDate: null,
+        artist: {
+            artistName: null,
+            member: 0,
+            placeOrigin: null,
+            genres: [],
+        },
+        host: {
+            description: null,
+            favoritesGenres: [],
+        },
         isArtist: false,
         isHost: false,
         medias: [],
@@ -20,6 +39,29 @@ export const userSlice = createSlice({
         },
         updateEmail: (state, action) => {
             state.value.email = action.payload;
+        },
+        updateFirstName: (state, action) => {
+            state.value.firstName = action.payload;
+        },
+        updateLastName: (state, action) => {
+            state.value.lastName = action.payload;
+        },
+        updateAddress: (state, action) => {
+            state.value.address = action.payload;
+        },
+        updatePhoneNumber: (state, action) => {
+            state.value.phoneNumber = action.payload;
+        },
+        getArtistInfos: (state, action) => {
+            state.value.artist = action.payload
+            console.log('hello')
+        },
+        getHostInfos: (state, action) => {
+            state.value.host = action.payload
+
+        },
+        updateBirthDate: (state, action) => {
+            state.value.birthDate = action.payload;
         },
         updateToken: (state, action) => {
             state.value.token = action.payload;
@@ -39,5 +81,19 @@ export const userSlice = createSlice({
     },
 });
 
-export const { updateUsername, updateEmail, updateToken, updateArtist, updateHost, addMedia, removeMedia } = userSlice.actions;
+export const { updateUsername,
+    updateEmail,
+    updateFirstName,
+    updateLastName,
+    updateBirthDate,
+    updateAddress,
+    updateToken,
+    updateArtist,
+    updateHost,
+    updatePhoneNumber,
+    addMedia,
+    removeMedia,
+    getArtistInfos,
+    getHostInfos
+} = userSlice.actions;
 export default userSlice.reducer;
