@@ -17,14 +17,19 @@ router.post("/signup", (req, res) => {
     }
 
     User.findOne({ $or: [{ username: req.body.username }, { email: req.body.email }] }).then(user => {
-        if (user) {
-            res.json({ result: false, error: 'User already exists' });
-        } else {
-            const payload = { username: req.body.username };
-            const options = { expiresIn: '30m', algorithm: 'HS256' };
+        if (user === null) {
+
+            const payload = {
+                username: req.body.username
+            };
+
+            const options = {
+                expiresIn: '30m',
+                algorithm: 'HS256'
+            };
+
             const hash = bcrypt.hashSync(req.body.password, 10);
             const token = jwt.sign(payload, secretKey, options);
-
             const newUser = new User({
                 username: req.body.username,
                 email: req.body.email,
@@ -37,37 +42,43 @@ router.post("/signup", (req, res) => {
                 isHost: req.body.isHost,
                 token,
                 addresses: [],
-                artist: req.body.isArtist ? {} : null,
-                host: req.body.isHost ? {} : null,
+                artist: {},
+                host: {}
             });
 
             const newAddress = {
                 street: req.body.street,
                 city: req.body.city,
-                zipcode: req.body.zipcode
+                zipCode: req.body.zipCode
             };
 
-            const newArtist = req.body.isArtist ? {
+            const newArtist = {
                 genres: req.body.genres,
                 members: req.body.members,
                 artistName: req.body.artistName,
                 placeOrigin: req.body.placeOrigin,
                 artistRanking: 5
-            } : null;
+            }
 
-            const newHost = req.body.isHost ? {
+            const newHost = {
                 description: req.body.description,
                 favoriteGenres: req.body.favoriteGenres,
                 hostRanking: 5
-            } : null;
+            }
 
             newUser.addresses.push(newAddress);
-            if (newArtist) newUser.artist = newArtist;
-            if (newHost) newUser.host = newHost;
+            if (req.body.isArtist) {
+                newUser.artist = newArtist;
+            }
+            if (req.body.isHost) {
+                newUser.host = newHost;
+            }
 
             newUser.save().then(newDoc => {
                 res.json({ result: true, token: newDoc.token });
             });
+        } else {
+            res.json({ result: false, error: 'User already exists' });
         }
     });
 });
