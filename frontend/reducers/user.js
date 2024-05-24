@@ -54,7 +54,7 @@ export const userSlice = createSlice({
         },
         getArtistInfos: (state, action) => {
             state.value.artist = action.payload
-            console.log('hello')
+
         },
         getHostInfos: (state, action) => {
             state.value.host = action.payload
