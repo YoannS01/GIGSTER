@@ -27,7 +27,7 @@ export default function StatusScreen() {
                         <Text style={styles.text} >Artiste</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.statusBtn} onPress={() => handleHost()}>
-                        <Text style={styles.text}>HÃ´te</Text>
+                        <Text style={styles.text}>Hôte</Text>
                     </TouchableOpacity>
                 </View>
             </View>
