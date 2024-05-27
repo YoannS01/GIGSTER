@@ -4,17 +4,17 @@ const initialState = {
     value: {
         username: null,
         email: null,
-        firstName: null,
-        lastName: null,
+        firstname: null,
+        lastname: null,
         address: {
             street: null,
             city: null,
-            zipCode: null,
+            zipcode: null,
         },
         phoneNumber: null,
-        birthDate: null,
+        birthdate: null,
         artist: {
-            artistName: null,
+            artistname: null,
             member: 0,
             placeOrigin: null,
             genres: [],
@@ -40,11 +40,11 @@ export const userSlice = createSlice({
         updateEmail: (state, action) => {
             state.value.email = action.payload;
         },
-        updateFirstName: (state, action) => {
-            state.value.firstName = action.payload;
+        updateFirstname: (state, action) => {
+            state.value.firstname = action.payload;
         },
-        updateLastName: (state, action) => {
-            state.value.lastName = action.payload;
+        updateLastname: (state, action) => {
+            state.value.lastname = action.payload;
         },
         updateAddress: (state, action) => {
             state.value.address = action.payload;
@@ -60,8 +60,8 @@ export const userSlice = createSlice({
             state.value.host = action.payload
 
         },
-        updateBirthDate: (state, action) => {
-            state.value.birthDate = action.payload;
+        updateBirthdate: (state, action) => {
+            state.value.birthdate = action.payload;
         },
         updateToken: (state, action) => {
             state.value.token = action.payload;
@@ -83,9 +83,9 @@ export const userSlice = createSlice({
 
 export const { updateUsername,
     updateEmail,
-    updateFirstName,
-    updateLastName,
-    updateBirthDate,
+    updateFirstname,
+    updateLastname,
+    updateBirthdate,
     updateAddress,
     updateToken,
     updateArtist,

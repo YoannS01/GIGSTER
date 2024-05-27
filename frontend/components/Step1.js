@@ -4,26 +4,26 @@ import { useDispatch } from "react-redux";
 import { getNextPage } from "../reducers/stepper";
 import {
     updateAddress,
-    updateBirthDate,
-    updateFirstName,
-    updateLastName,
+    updateBirthdate,
+    updateFirstname,
+    updateLastname,
     updatePhoneNumber
 } from "../reducers/user";
 
 export default function Step1(props) {
     const dispatch = useDispatch()
     const [step1Data, setStep1Data] = useState({
-        firstName: '',
-        lastName: '',
+        firstname: '',
+        lastname: '',
         street: '',
         city: '',
-        zipCode: '',
+        zipcode: '',
         phoneNumber: '',
-        birthDate: ''
+        birthdate: ''
     })
 
     function nextStep() {
-        if (!step1Data.firstName || !step1Data.lastName || !step1Data.street || !step1Data.city || !step1Data.zipCode || !step1Data.phoneNumber || !step1Data.birthDate) {
+        if (!step1Data.firstname || !step1Data.lastname || !step1Data.street || !step1Data.city || !step1Data.zipcode || !step1Data.phoneNumber || !step1Data.birthdate) {
             Alert.alert('Validation Error', 'Please fill out all fields ')
             return false;
         }
@@ -31,12 +31,12 @@ export default function Step1(props) {
         dispatch(updateAddress({
             street: step1Data.street,
             city: step1Data.city,
-            zipCode: step1Data.zipCode
+            zipcode: step1Data.zipcode
         }));
-        dispatch(updateFirstName(step1Data.firstName));
-        dispatch(updateLastName(step1Data.lastName));
-        dispatch(updateBirthDate(step1Data.birthDate));
-        dispatch(updatePhoneNumber(step1Data.phoneNumber));
+        dispatch(updateFirstName(step1Data.firstname));
+        dispatch(updateLastName(step1Data.lastname));
+        dispatch(updateBirthDate(step1Data.birthdate));
+        dispatch(updatePhoneNumber(step1Data.phonenumber));
         dispatch(getNextPage(true));
     }
 
@@ -47,15 +47,15 @@ export default function Step1(props) {
                 <TextInput
                     style={styles.input}
                     placeholder="Lastname"
-                    value={step1Data.lastName}
-                    onChangeText={text => setStep1Data({ ...step1Data, lastName: text })}
+                    value={step1Data.lastname}
+                    onChangeText={text => setStep1Data({ ...step1Data, lastname: text })}
                 />
                 <Text style={styles.label}>Firstname</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Firstname"
-                    value={step1Data.firstName}
-                    onChangeText={text => setStep1Data({ ...step1Data, firstName: text })}
+                    value={step1Data.firstname}
+                    onChangeText={text => setStep1Data({ ...step1Data, firstname: text })}
                 />
                 <Text style={styles.label}>Address</Text>
                 <TextInput
@@ -73,8 +73,8 @@ export default function Step1(props) {
                 <TextInput
                     style={styles.input}
                     placeholder="Zipcode"
-                    value={step1Data.zipCode}
-                    onChangeText={text => setStep1Data({ ...step1Data, zipCode: text })}
+                    value={step1Data.zipcode}
+                    onChangeText={text => setStep1Data({ ...step1Data, zipcode: text })}
                 />
                 <Text style={styles.label}>Phone number</Text>
                 <TextInput
@@ -87,8 +87,8 @@ export default function Step1(props) {
                 <TextInput
                     style={styles.input}
                     placeholder="Birthdate"
-                    value={step1Data.birthDate}
-                    onChangeText={text => setStep1Data({ ...step1Data, birthDate: text })}
+                    value={step1Data.birthdate}
+                    onChangeText={text => setStep1Data({ ...step1Data, birthdate: text })}
                 />
             </View>
             <TouchableOpacity style={styles.btn} onPress={() => nextStep()} >
