@@ -20,7 +20,7 @@ export default function Step2() {
     const [step2Data, setStep2Data] = useState({
         artistname: '',
         members: 0,
-        genre: [],
+        genres: [],
         placeOrigin: ''
     });
 
@@ -42,7 +42,7 @@ export default function Step2() {
             dispatch(getArtistInfos({
                 artistname: step2Data.artistname,
                 members: parseInt(step2Data.members, 10),
-                genre: step2Data.genre,
+                genres: step2Data.genres,
                 placeOrigin: step2Data.placeOrigin,
             }));
 
