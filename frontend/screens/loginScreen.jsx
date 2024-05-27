@@ -96,8 +96,11 @@ export default function LoginScreen({ navigation }) {
         .then(() => {
           dispatch(updateUsername(values.username));
           dispatch(updateEmail(values.email));
-          setSubmitting(false);
           navigation.navigate("Status");
+        })
+        .catch((error) => {
+          setSubmitting(false);
+          setErrors({ general: "An error occurred. Please try again." });
         });
     }
   };
