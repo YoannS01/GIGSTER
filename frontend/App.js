@@ -15,12 +15,13 @@ import { StyleSheet, Text, View } from "react-native";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
+import stepper from "./reducers/stepper";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, stepper },
 });
 
 const TabNavigator = () => {
@@ -46,7 +47,7 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Add" component={StatusScreen} />
+      <Tab.Screen name="Add" component={AddScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -58,7 +59,7 @@ export default function App() {
       <NavigationContainer style={styles.container}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Statut" component={StatusScreen} />
+          <Stack.Screen name="Status" component={StatusScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
         <StatusBar style="auto" />
