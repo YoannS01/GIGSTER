@@ -87,6 +87,8 @@ export default function LoginScreen({ navigation }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          username: values.username,
+          email: values.email,
           password: values.password,
         }),
       })
