@@ -80,6 +80,8 @@ export default function LoginScreen({ navigation }) {
       setErrors({ confirmPassword: "Passwords must match" });
       setSubmitting(false);
     } else {
+
+
       dispatch(updateUsername(values.username));
       dispatch(updateEmail(values.email));
       setSubmitting(false);

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getNextPage } from "../reducers/stepper";
-import { getArtistInfos, getHostInfos } from "../reducers/user";
+import { getArtistInfos, getHostInfos, updateToken } from "../reducers/user";
 import { FRONT_IP } from "../hide-ip"
 
 export default function Step2() {
@@ -30,9 +30,7 @@ export default function Step2() {
         favoriteGenre: []
     });
 
-    useEffect(() => {
-        console.log("Updated User State:", user);
-    }, [user]);
+
 
     function submitInfos() {
         if (user.isArtist) {
@@ -47,10 +45,10 @@ export default function Step2() {
                 artistname: step2Data.artistname,
                 members: parseInt(step2Data.members, 10),
                 placeOrigin: step2Data.placeOrigin,
-                genres: [step2Data.genres],
+                genres: step2Data.genres,
 
             }));
-            console.log("USER=>", user)
+
 
         } else if (user.isHost) {
             // Check host fields
@@ -64,13 +62,36 @@ export default function Step2() {
                 favoriteGenre: hostStep2Data.favoriteGenre,
             }));
         }
-
-
-
-
-
-
     };
+
+    console.log(user)
+    fetch(`http://${FRONT_IP}:3000/users/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            firstname: user.firstname,
+            lastname: user.lastname,
+            birthdate: user.birthdate,
+            phoneNumber: user.phoneNumber,
+            isArtist: user.isArtist,
+            isHost: user.isHost,
+            street: user.address.street,
+            city: user.address.city,
+            zipcode: user.address.zipcode,
+            artistname: user.artist.artistname,
+            members: user.artist.members,
+            placeOrigin: user.artist.placeOrigin,
+            description: user.host.description,
+            favoritesGenres: user.host.favoritesGenres
+        }).then(response => response.json())
+            .then(data => {
+                if (data.result) {
+                    dispatch(updateToken(data.token))
+                    navigation.navigate("TabNavigator", { screen: "Home" });
+                }
+
+            })
+    })
 
     const previousPage = () => {
         dispatch(getNextPage(false));
