@@ -93,10 +93,15 @@ export default function LoginScreen({ navigation }) {
         }),
       })
         .then((response) => response.json())
-        .then(() => {
-          dispatch(updateUsername(values.username));
-          dispatch(updateEmail(values.email));
-          navigation.navigate("Status");
+        .then((data) => {
+          setSubmitting(false);
+          if (!data.result) {
+            setErrors({ general: data.error });
+          } else {
+            dispatch(updateUsername(values.username));
+            dispatch(updateEmail(values.email));
+            navigation.navigate("Status");
+          }
         })
         .catch((error) => {
           setSubmitting(false);
