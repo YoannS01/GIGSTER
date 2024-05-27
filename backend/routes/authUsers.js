@@ -53,6 +53,8 @@ router.post("/announce", authMiddleware, (req, res) => {
 
 
 
+
+
                 newAnnounce.save().then(() => {
                     res.json({ result: true, url: resultCloudinary.secure_url, newAnnounce })
                 });
