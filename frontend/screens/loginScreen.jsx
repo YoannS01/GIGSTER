@@ -96,6 +96,7 @@ export default function LoginScreen({ navigation }) {
         .then((data) => {
           setSubmitting(false);
           if (!data.result) {
+            console.log(data);
             setErrors({ general: data.error });
           } else {
             dispatch(updateUsername(values.username));
