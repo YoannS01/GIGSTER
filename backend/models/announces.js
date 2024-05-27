@@ -1,37 +1,65 @@
-const mongoose = require('mongoose');
+var express = require("express");
+var router = express.Router();
+const moment = require('moment');
+const { checkBody } = require('../modules/checkBody');
+const authMiddleware = require('../middleware/auth');
+const { Announce } = require("../models/announces");
+const { User } = require("../models/user");
+const fs = require('fs');
+const uniqid = require('uniqid');
+const cloudinary = require('cloudinary').v2;
 
-const addressSchema = mongoose.Schema({
-    street: String,
-    city: String,
-    zipcode: String,
+router.post("/announce", authMiddleware, (req, res) => {
+    if (!checkBody(req.body, ['street', 'city', 'zipcode', 'instrumentsAvailable', 'locationType', 'availableDate', 'capacity', 'sleeping', 'restauration'])) {
+        res.json({ result: false, error: 'Missing or empty fields' });
+        return;
+    }
+
+    const photoPath = `./tmp/${uniqid()}.jpg`;
+
+    req.files.photoFromFront.mv(photoPath).then(() => {
+        return cloudinary.uploader.upload(photoPath);
+    }).then(resultCloudinary => {
+        fs.unlinkSync(photoPath);
+
+        const username = req.auth.username;
+
+        User.findOne({ username }).then(user => {
+            if (user) {
+                const newAnnounce = new Announce({
+                    host: user._id,
+                    address: [{
+                        street: req.body.street,
+                        city: req.body.city,
+                        zipcode: req.body.zipcode
+                    }],
+                    availableDates: [{
+                        startDateAt: moment(req.body.availableDate).startOf('day').toDate(),
+                        endDateAt: moment(req.body.availableDate).endOf('day').toDate()
+                    }],
+                    locationType: req.body.locationType.split(','),
+                    instrumentsAvailable: req.body.instrumentsAvailable.split(','),
+                    capacity: req.body.capacity,
+                    description: req.body.description,
+                    media: [resultCloudinary.secure_url],
+                    accessibility: req.body.accessibility,
+                    placeRanking: req.body.placeRanking || 0,
+                    accomodation: {
+                        sleeping: req.body.sleeping,
+                        restauration: req.body.restauration
+                    },
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                });
+
+                newAnnounce.save().then(() => {
+                    res.json({ result: true, url: resultCloudinary.secure_url });
+                });
+            } else {
+                res.json({ result: false, error: 'User not found' });
+            }
+        });
+    });
 });
 
-const availableDateSchema = mongoose.Schema({
-    startDateAt: Date,
-    endDateAt: Date
-});
-
-const accomodationSchema = mongoose.Schema({
-    sleeping: Boolean,
-    restauration: Boolean,
-});
-
-const announceSchema = mongoose.Schema({
-    host: { type: mongoose.Schema.Types.ObjectId, ref: 'host' },
-    address: [addressSchema],
-    availableDates: [availableDateSchema],
-    locationType: [String],
-    instrumentsAvailable: [String],
-    capacity: Number,
-    description: String,
-    media: [String],
-    accessibility: Boolean,
-    placeRanking: Number,
-    accomodation: accomodationSchema,
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
-});
-
-const Announce = mongoose.model('announces', announceSchema);
-
-module.exports = { Announce }
+module.exports = router;
