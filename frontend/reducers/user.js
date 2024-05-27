@@ -53,8 +53,8 @@ export const userSlice = createSlice({
             state.value.phoneNumber = action.payload;
         },
         getArtistInfos: (state, action) => {
-            state.value.artist = action.payload
-            console.log(action.payload)
+            state.value.artist = { ...state.value.artist, ...action.payload }
+            console.log(state.value.artist)
 
         },
         getHostInfos: (state, action) => {

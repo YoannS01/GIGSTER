@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Alert,
     StyleSheet,
@@ -30,6 +30,10 @@ export default function Step2() {
         favoriteGenre: []
     });
 
+    useEffect(() => {
+        console.log("Updated User State:", user);
+    }, [user]);
+
     function submitInfos() {
         if (user.isArtist) {
             // Check artist fields
@@ -43,9 +47,10 @@ export default function Step2() {
                 artistname: step2Data.artistname,
                 members: parseInt(step2Data.members, 10),
                 placeOrigin: step2Data.placeOrigin,
-                genres: step2Data.genres,
+                genres: [step2Data.genres],
 
             }));
+            console.log("USER=>", user)
 
         } else if (user.isHost) {
             // Check host fields
@@ -60,7 +65,7 @@ export default function Step2() {
             }));
         }
 
-        console.log("USER=>", user)
+
 
 
 
