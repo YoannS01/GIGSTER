@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
@@ -22,27 +22,35 @@ export default function diyTourScreen() {
         setMapRegion({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
-          latitudeDelta: 5,
-          longitudeDelta: 5,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
         });
 
-        Location.watchPositionAsync({ distanceInterval: 10 }, () => {
+        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
           setCurrentPosition(location.coords);
-          setMapRegion({
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          });
         });
       }
     })();
   }, []);
 
   if (!mapRegion) {
-    return <Text style={styles.loading}>Loading...</Text>;
+    return (
+      <View style={styles.loading}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
-    <MapView style={styles.map} initialRegion={{ mapRegion }}>
+    <MapView
+      style={styles.map}
+      initialRegion={{
+        latitude: mapRegion.latitude,
+        longitude: mapRegion.longitude,
+        latitudeDelta: mapRegion.latitudeDelta,
+        longitudeDelta: mapRegion.longitudeDelta,
+      }}
+    >
       {currentPosition && (
         <Marker coordinate={currentPosition} title="Me !" pinColor="#fecb2d" />
       )}

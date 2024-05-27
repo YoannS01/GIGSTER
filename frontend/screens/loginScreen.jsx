@@ -22,6 +22,8 @@ import * as Yup from "yup";
 import { FRONT_IP } from "../hide-ip";
 
 // Définir les schémas de validation avec Yup
+
+// SignIn Schema
 const signInSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
@@ -29,6 +31,7 @@ const signInSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
 });
 
+// SignUp Schema
 const signUpSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   email: Yup.string()
@@ -80,12 +83,20 @@ export default function LoginScreen({ navigation }) {
       setErrors({ confirmPassword: "Passwords must match" });
       setSubmitting(false);
     } else {
-
-
-      dispatch(updateUsername(values.username));
-      dispatch(updateEmail(values.email));
-      setSubmitting(false);
-      navigation.navigate("Status");
+      fetch(`http://${FRONT_IP}:3000/users/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password: values.password,
+        }),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          dispatch(updateUsername(values.username));
+          dispatch(updateEmail(values.email));
+          setSubmitting(false);
+          navigation.navigate("Status");
+        });
     }
   };
 
