@@ -33,10 +33,10 @@ export default function Step1(props) {
             city: step1Data.city,
             zipcode: step1Data.zipcode
         }));
-        dispatch(updateFirstName(step1Data.firstname));
-        dispatch(updateLastName(step1Data.lastname));
-        dispatch(updateBirthDate(step1Data.birthdate));
-        dispatch(updatePhoneNumber(step1Data.phonenumber));
+        dispatch(updateFirstname(step1Data.firstname));
+        dispatch(updateLastname(step1Data.lastname));
+        dispatch(updateBirthdate(step1Data.birthdate));
+        dispatch(updatePhoneNumber(step1Data.phoneNumber));
         dispatch(getNextPage(true));
     }
 

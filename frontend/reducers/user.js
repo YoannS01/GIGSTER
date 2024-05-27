@@ -15,7 +15,7 @@ const initialState = {
         birthdate: null,
         artist: {
             artistname: null,
-            member: 0,
+            members: 0,
             placeOrigin: null,
             genres: [],
         },

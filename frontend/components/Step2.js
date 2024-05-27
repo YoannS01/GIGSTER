@@ -18,8 +18,8 @@ export default function Step2() {
 
     // Variable d'états pour artiste
     const [step2Data, setStep2Data] = useState({
-        artistName: '',
-        member: 0,
+        artistname: '',
+        members: 0,
         genre: [],
         placeOrigin: ''
     });
@@ -29,19 +29,19 @@ export default function Step2() {
         description: '',
         favoriteGenre: []
     });
-    console.log(step2Data)
+
     function submitInfos() {
         if (user.isArtist) {
             // Check artist fields
-            if (!step2Data.artistName || !step2Data.member || !step2Data.genre || !step2Data.placeOrigin) {
+            if (!step2Data.artistname || !step2Data.members || !step2Data.genre || !step2Data.placeOrigin) {
                 Alert.alert('Validation Error', 'Please fill out all fields');
                 return false;
             }
             console.log("ARTIST", step2Data)
             // Dispatch artist info
             dispatch(getArtistInfos({
-                artistName: step2Data.artistName,
-                member: parseInt(step2Data.member, 10),
+                artistname: step2Data.artistname,
+                members: parseInt(step2Data.members, 10),
                 genre: step2Data.genre,
                 placeOrigin: step2Data.placeOrigin,
             }));
