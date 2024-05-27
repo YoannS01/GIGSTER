@@ -7,10 +7,12 @@ const { Announce } = require("../models/announces");
 const { User } = require("../models/user");
 const fs = require('fs');
 const uniqid = require('uniqid');
+const { Show } = require("../models/shows");
 const cloudinary = require('cloudinary').v2;
+const { Tour } = require("../models/tours")
 
 router.post("/announce", authMiddleware, (req, res) => {
-    if (!checkBody(req.body, ['street', 'city', 'zipcode', 'instrumentsAvailable', 'locationType', 'availableDate', 'capacity', 'sleeping', 'restauration'])) {
+    if (!checkBody(req.body, ['street', 'city', 'zipcode', 'instrumentsAvailable', 'locationType', 'availableDate', 'capacity', 'sleeping', 'restauration', 'description'])) {
         res.json({ result: false, error: 'Missing or empty fields' });
         return;
     }
@@ -51,10 +53,6 @@ router.post("/announce", authMiddleware, (req, res) => {
                     updatedAt: new Date()
                 })
 
-
-
-
-
                 newAnnounce.save().then(() => {
                     res.json({ result: true, url: resultCloudinary.secure_url, newAnnounce })
                 });
@@ -65,6 +63,85 @@ router.post("/announce", authMiddleware, (req, res) => {
     });
 });
 
-router.post("/shows", authMiddleware, (req, res) => )
+router.post("/tours", authMiddleware, (req, res) => {
+    if (!checkBody(req.body, ['date', 'city', 'street', 'city', 'zipcode', 'status'])) {
+        res.json({ result: false, error: 'Missing or empty fields' });
+        return;
+    }
+
+    const username = req.auth.username;
+
+    User.findOne({ username }).then(user => {
+        if (user) {
+            const newShow = new Show({
+                host: user._id,
+                date: moment(req.body.birthdate, 'DD/MM/YYYY').toDate(),
+                address: [{
+                    street: req.body.street,
+                    city: req.body.city,
+                    zipcode: req.body.zipcode,
+                }],
+                status: req.body.status,
+                isValidated: req.body.isValidated,
+                isRefused: req.body.isRefused,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+
+            newShow.save().then(savedShow => {
+                const newTour = new Tour({
+                    artist: user._id,
+                    showsID: [savedShow._id],
+                    isValidated: req.body.isValidated,
+                    status: req.body.status,
+                    setDuration: req.body.setDuration,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                });
+                newTour.save().then(() => {
+                    res.json({ result: true, newTour });
+                });
+            });
+        } else {
+            res.json({ result: false, error: 'User not found' });
+        }
+    });
+});
+
+router.post("/shows", authMiddleware, (req, res) => {
+    if (!checkBody(req.body, ['date', 'city', 'street', 'city', 'zipcode', 'status'])) {
+        res.json({ result: false, error: 'Missing or empty fields' });
+        return;
+    }
+
+    const username = req.auth.username;
+
+    User.findOne({ username }).then(user => {
+        if (user) {
+            const newShow = new Show({
+                host: user._id,
+                tourID: req.body.tourID,
+                date: moment(req.body.birthdate, 'DD/MM/YYYY').toDate(),
+                address: [{
+                    street: req.body.street,
+                    city: req.body.city,
+                    zipcode: req.body.zipcode,
+                }],
+                status: req.body.status,
+                isValidated: req.body.isValidated,
+                isRefused: req.body.isRefused,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+            newShow.save().then(() => {
+                res.json({ result: true, newShow });
+            });
+        } else {
+            res.json({ result: false, error: "User not found" });
+        }
+    });
+});
+
+
 
 module.exports = router;
