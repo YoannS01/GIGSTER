@@ -42,8 +42,9 @@ export default function Step2() {
             dispatch(getArtistInfos({
                 artistname: step2Data.artistname,
                 members: parseInt(step2Data.members, 10),
-                genres: step2Data.genres,
                 placeOrigin: step2Data.placeOrigin,
+                genres: step2Data.genres,
+
             }));
 
         } else if (user.isHost) {
@@ -79,23 +80,23 @@ export default function Step2() {
                     <TextInput
                         style={styles.input}
                         placeholder="name"
-                        value={step2Data.artistName}
-                        onChangeText={text => setStep2Data({ ...step2Data, artistName: text })}
+                        value={step2Data.artistname}
+                        onChangeText={text => setStep2Data({ ...step2Data, artistname: text })}
                     />
                     <Text style={styles.label}>Member</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Number"
-                        value={step2Data.member}
+                        value={step2Data.members}
                         keyboardType="numeric"
-                        onChangeText={text => setStep2Data({ ...step2Data, member: text })}
+                        onChangeText={text => setStep2Data({ ...step2Data, members: text })}
                     />
                     <Text style={styles.label}>Genre</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Genre"
-                        value={step2Data.genre}
-                        onChangeText={text => setStep2Data({ ...step2Data, genre: text })}
+                        value={step2Data.genres}
+                        onChangeText={text => setStep2Data({ ...step2Data, genres: text })}
                     />
                     <Text style={styles.label}>Place of origin</Text>
                     <TextInput
