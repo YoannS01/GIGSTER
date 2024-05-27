@@ -33,7 +33,7 @@ export default function Step2() {
     function submitInfos() {
         if (user.isArtist) {
             // Check artist fields
-            if (!step2Data.artistname || !step2Data.members || !step2Data.genre || !step2Data.placeOrigin) {
+            if (!step2Data.artistname || !step2Data.members || !step2Data.genres || !step2Data.placeOrigin) {
                 Alert.alert('Validation Error', 'Please fill out all fields');
                 return false;
             }
