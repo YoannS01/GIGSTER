@@ -36,7 +36,7 @@ router.post("/signup", (req, res) => {
                 password: hash,
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
-                birthdate: moment(req.body.birthdate, 'DD/MM/YYYY').toDate(),
+                birthdate: req.body.birthdate,
                 phoneNumber: req.body.phoneNumber,
                 isArtist: req.body.isArtist,
                 isHost: req.body.isHost,
@@ -75,7 +75,7 @@ router.post("/signup", (req, res) => {
             }
 
             newUser.save().then(newDoc => {
-                res.json({ result: true, token: newDoc.token, newDoc });
+                res.json({ result: true, token: newDoc.token, data: newDoc });
             });
         } else {
             res.json({ result: false, error: 'User already exists' });

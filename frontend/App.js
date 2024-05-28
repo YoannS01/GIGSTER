@@ -3,11 +3,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomeScreen from "./screens/homeScreen";
-import LoginScreen from "./screens/loginScreen";
+import LoginScreen from "./screens/LoginScreen"
 import ProfileScreen from "./screens/profileScreen";
 import AddScreen from "./screens/addScreen";
-import StatusScreen from "./screens/StatusScreen";
-import diyTourScreen from "./screens/diyTourScreen";
+
 
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
@@ -16,6 +15,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import stepper from "./reducers/stepper";
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,8 +58,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer style={styles.container}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Status" component={StatusScreen} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
         <StatusBar style="auto" />

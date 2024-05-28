@@ -1,44 +1,46 @@
 import { TouchableOpacity, View, Text, StyleSheet, Alert } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+
 import ProgressStepsComponent from "../components/ProgessStepsComponent";
-import { updateArtist, updateHost } from "../reducers/user";
 
 
-export default function StatusScreen() {
-    const dispatch = useDispatch()
-    const user = useSelector(state => state.user.value)
+
+export default function StatusScreen(props) {
+
+
 
     function handleArtist() {
-        dispatch(updateArtist(true))
-        dispatch(updateHost(false))
+        const newStatus = {
+            isArtist: true,
+            isHost: false,
+        }
+        props.updateUser(newStatus)
     }
 
     function handleHost() {
-        dispatch(updateHost(true))
-        dispatch(updateArtist(false))
+        const newStatus = {
+            isArtist: false,
+            isHost: true,
+        }
+        props.updateUser(newStatus)
     }
 
-    if (!user.isArtist && !user.isHost) {
-        return (
-            <View>
-                <View style={styles.mainSelect}>
-                    <Text>Quel profil es tu ?</Text>
-                    <TouchableOpacity style={styles.statusBtn} onPress={() => handleArtist()}>
-                        <Text style={styles.text} >Artiste</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.statusBtn} onPress={() => handleHost()}>
-                        <Text style={styles.text}>Hôte</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
-    }
 
     return (
         <View>
-            <ProgressStepsComponent isArtist={user.isArtist} isHost={user.isHost} />
+            <View style={styles.mainSelect}>
+                <Text>Quel profil es tu ?</Text>
+                <TouchableOpacity style={styles.statusBtn} onPress={() => handleArtist()}>
+                    <Text style={styles.text} >Artiste</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.statusBtn} onPress={() => handleHost()}>
+                    <Text style={styles.text}>Hôte</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
+
+
+
 
 }
 

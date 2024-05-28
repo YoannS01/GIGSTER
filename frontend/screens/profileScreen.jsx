@@ -1,6 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, ImageBackground, ScrollView, } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { LinearGradient } from 'expo-linear-gradient';
+
+import profilePic from '../assets/Shulk.png'
 
 import { useDispatch } from 'react-redux';
 
@@ -10,28 +14,93 @@ export default function ProfileScreen() {
 
     const [image, setImage] = useState(null);
 
+    const galleryData = [
+        require('../assets/Gallery1.png'),
+        require('../assets/Gallery2.png'),
+        require('../assets/Gallery3.png'),
+        require('../assets/Gallery4.png'),
+        require('../assets/Gallery5.png'),
+        require('../assets/Gallery6.png'),
+        require('../assets/Gallery7.png'),
+        require('../assets/Gallery8.png'),
+        require('../assets/Gallery9.png'),
+    ]
+
+    let smallGalleryData = []
+
+    console.log(smallGalleryData)
+
+
+    if (galleryData.length < 9) {
+
+        smallGalleryData = [...galleryData]
+
+        for (let i = 1; i <= (9 - galleryData.length); i++) {
+            smallGalleryData.push(`void ${i}`)
+        }
+    }
+
+    console.log(smallGalleryData)
+
+
+    const galleryList = galleryData.map((data, i) => {
+        return <Image key={i} source={data} style={styles.media} />
+    })
+
+    const smallGalleryList = smallGalleryData.map((data, i) => {
+        return <Image key={i} source={data} style={styles.media} />
+    })
+
+
+
+
+
     return (
         <View style={styles.container}>
             <View style={styles.profileContainer}>
                 <View style={styles.profileCard}>
-                    <View style={styles.PPContainer}>
-                        <Image style={styles.profilePic} source={require('../assets/Shulk.png')} />
-                    </View>
-                    <View style={styles.profileDesc}>
-                        <Text style={styles.username}>JustneedVic</Text>
-                        <View style={styles.infosContainer}>
-                            <Text style={styles.type}>Artiste</Text>
-                            <Text>Versailles</Text>
+                    <ImageBackground source={profilePic}>
+                        <LinearGradient
+                            colors={['transparent', 'rgba(255,255,255,1)']}
+                            style={styles.background}
+                        />
+                        <View style={styles.profileDesc}>
+                            <View style={styles.infosContainer}>
+                                <Text style={styles.username}>JustneedVic</Text>
+                                <Text>Versailles</Text>
+                            </View>
                         </View>
-                        <View style={styles.infosContainer}>
-                            <Text style={styles.instruments}>Instruments : </Text>
-                            <Text style={styles.type}>Piano - Ampli - Batterie </Text>
+                    </ImageBackground>
+                </View>
+            </View>
+            <View style={styles.infosZone}>
+                <View style={styles.descCard}>
+                    <ScrollView>
+                        <Text style={styles.description}>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Enim consectetur blanditiis repudiandae, minima inventore recusandae facere vitae aspernatur fugiat veniam, quo velit explicabo amet architecto quas id molestiae quia. Reiciendis!
+
+                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde enim dicta sit ipsam, aliquam magni aut, voluptates possimus tempora harum, laborum iste sequi voluptatem. Iure magnam reiciendis autem natus excepturi.
+
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magnam ab quaerat nostrum ad. Explicabo eos nostrum repellendus dolores magnam fugit asperiores maiores cupiditate sunt unde! Ipsam aliquid deserunt laborum.
+                        </Text>
+                    </ScrollView>
+                </View>
+                <View style={styles.infosCardsContainer}>
+                    <View style={styles.infosCard}>
+                        <View style={styles.cardHead}>
+                            <Text style={styles.cardTitle}>Medias</Text>
+                            <FontAwesome name='camera' size={25} />
+                        </View>
+                        <View style={styles.mediaCard}>
+                            {(galleryData.length >= 9) ? galleryList : smallGalleryList}
+                        </View>
+                    </View>
+                    <View style={styles.infosCard}>
+                        <View style={styles.cardHead}>
+                            <Text style={styles.cardTitle}>Information</Text>
+                            <FontAwesome name='info' size={25} />
                         </View>
                     </View>
                 </View>
-            </View>
-            <View style={styles.galleryZone}>
-
             </View>
         </View>
     );
@@ -44,56 +113,104 @@ const styles = StyleSheet.create({
     },
     profileContainer: {
         width: '100%',
-        height: '60%',
+        height: '35%',
         justifyContent: 'flex-end',
         alignItems: 'center'
     },
     profileCard: {
-        width: '85%',
+        width: '95%',
         height: '80%',
-        borderWidth: 2,
+        borderTopWidth: 2,
+        borderLeftWidth: 2,
+        borderBottomWidth: 6,
+        borderRightWidth: 6,
         borderRadius: 20,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        overflow: 'hidden'
     },
-    PPContainer: {
-        width: '100%',
-        height: '40%',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    profilePic: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        borderWidth: 3,
-        borderColor: 'black',
-        position: 'relative',
-        top: '12%'
+    background: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: 300,
     },
     profileDesc: {
         width: '100%',
-        height: '60%',
-        justifyContent: 'space-evenly',
-        alignItems: 'center'
+        height: '100%',
+        justifyContent: 'flex-end',
+        paddingBottom: '2%'
     },
     username: {
         fontWeight: 'bold',
-        fontSize: 25
+        fontSize: 25,
     },
     infosContainer: {
         alignItems: 'center'
     },
-    instruments: {
-        fontStyle: 'italic',
-        fontSize: 15
+    infosZone: {
+        height: '57%',
+        alignItems: 'center',
+        paddingTop: '2%',
     },
-    type: {
-        fontStyle: 'italic',
-        fontWeight: 'bold',
-        fontSize: 17
+    descCard: {
+        width: '95%',
+        height: '49%',
+        borderTopWidth: 2,
+        borderLeftWidth: 2,
+        borderBottomWidth: 6,
+        borderRightWidth: 6,
+        borderRadius: 20,
+        backgroundColor: 'white',
+        overflow: 'hidden',
+        padding: 10
     },
-    galleryZone: {
-        height: '40%',
-        backgroundColor: 'grey'
+    description: {
+        fontSize: 15,
+        textAlign: 'justify'
+    },
+    infosCardsContainer: {
+        width: '95%',
+        height: '51%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingTop: '1%'
+    },
+    infosCard: {
+        width: '49%',
+        height: '100%',
+        borderTopWidth: 2,
+        borderLeftWidth: 2,
+        borderBottomWidth: 6,
+        borderRightWidth: 6,
+        borderRadius: 20,
+        backgroundColor: 'white',
+        overflow: 'hidden'
+    },
+    cardHead: {
+        backgroundColor: '#99818d',
+        flexDirection: 'row',
+        height: '20%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        columnGap: 15,
+        width: '101%'
+    },
+    cardTitle: {
+        fontSize: 17,
+        fontWeight: 'bold'
+    },
+    mediaCard: {
+        height: '80%',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-evenly',
+    },
+    media: {
+        width: '29%',
+        height: '29%',
+        objectFit: 'cover',
+        marginTop: '3%',
+        borderRadius: 5,
     }
 });
