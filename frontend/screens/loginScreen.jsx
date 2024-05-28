@@ -87,15 +87,26 @@ export default function LoginScreen({ navigation }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          username: values.username,
+          email: values.email,
           password: values.password,
         }),
       })
         .then((response) => response.json())
-        .then(() => {
-          dispatch(updateUsername(values.username));
-          dispatch(updateEmail(values.email));
+        .then((data) => {
           setSubmitting(false);
-          navigation.navigate("Status");
+          if (!data.result) {
+            console.log(data);
+            setErrors({ general: data.error });
+          } else {
+            dispatch(updateUsername(values.username));
+            dispatch(updateEmail(values.email));
+            navigation.navigate("Status");
+          }
+        })
+        .catch((error) => {
+          setSubmitting(false);
+          setErrors({ general: "An error occurred. Please try again." });
         });
     }
   };
