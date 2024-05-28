@@ -99,10 +99,32 @@ export default function ProfileScreen() {
                             <Text style={styles.cardTitle}>Information</Text>
                             <FontAwesome name='info' size={25} />
                         </View>
+                        <View style={styles.cardBottom}>
+                            <View style={styles.infoSection}>
+                                <Text>Genres: </Text>
+                                <Text style={{ fontWeight: 'bold' }}>Electro - Rock - Rap</Text>
+                            </View>
+                            <View style={styles.infoSection}>
+                                <Text>Instruments :</Text>
+                                <Text style={{ fontWeight: 'bold' }}>Piano - Batterie - Table de Mixage</Text>
+                            </View>
+                            <View style={styles.btnSection}>
+                                <TouchableOpacity style={styles.btnRecap}>
+                                    <Text style={{ fontWeight: 'bold', color: 'white' }}>
+                                        Date Recap
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
+            <View style={styles.spotifyContainer}>
+                <View style={styles.spotifyCard}>
+
+                </View>
+            </View>
+        </View >
     );
 }
 
@@ -115,7 +137,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '35%',
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     profileCard: {
         width: '95%',
@@ -174,7 +196,7 @@ const styles = StyleSheet.create({
         height: '51%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingTop: '1%'
+        paddingTop: '1%',
     },
     infosCard: {
         width: '49%',
@@ -196,6 +218,9 @@ const styles = StyleSheet.create({
         columnGap: 15,
         width: '101%'
     },
+    cardBottom: {
+        height: '80%'
+    },
     cardTitle: {
         fontSize: 17,
         fontWeight: 'bold'
@@ -212,5 +237,44 @@ const styles = StyleSheet.create({
         objectFit: 'cover',
         marginTop: '3%',
         borderRadius: 5,
-    }
+    },
+    infoSection: {
+        width: '90%',
+        marginLeft: '5%',
+        height: '35%',
+        marginTop: '2%',
+    },
+    btnSection: {
+        height: '28%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    btnRecap: {
+        width: '60%',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderRadius: 4,
+        paddingTop: 4,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        backgroundColor: '#5100FF'
+    },
+    spotifyContainer: {
+        backgroundColor: 'grey',
+        height: '8%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    spotifyCard: {
+        width: '95%',
+        height: '95%',
+        borderTopWidth: 2,
+        borderLeftWidth: 2,
+        borderBottomWidth: 6,
+        borderRightWidth: 6,
+        borderRadius: 20,
+        backgroundColor: 'white',
+        overflow: 'hidden'
+    },
 });
