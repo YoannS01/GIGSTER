@@ -100,7 +100,7 @@ export default function LoginScreen({ navigation }) {
       dispatch(updatePhoneNumber(user.phoneNumber));
       dispatch(getArtistInfos(user.artist));
       dispatch(getHostInfos(user.host));
-      dispatch(updateBirthdate(user.birthdate));
+      dispatch(updateBirthdate(moment(user.birthdate).format("DD/MM/YYYY")));
       dispatch(updateArtist(user.isArtist));
       dispatch(updateHost(user.isHost));
       navigation.navigate("TabNavigator", { screen: "Home" });

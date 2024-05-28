@@ -33,6 +33,7 @@
     "formik": "^2.4.6",
     "location": "^0.0.1",
     "metro-react-native-babel-preset": "^0.77.0",
+    "moment": "^2.30.1",
     "react": "18.2.0",
     "react-native": "0.74.1",
     "react-native-bouncy-checkbox": "^4.0.1",
