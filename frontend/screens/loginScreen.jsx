@@ -67,7 +67,7 @@ export default function LoginScreen({ navigation }) {
   }
 
   async function sendData() {
-    const navigation = useNavigation()
+
     console.log("Utilisateur final : ", user)
     console.log("Date relevée : ", user.birthdate)
     console.log("Envoi des données vers le backend")
