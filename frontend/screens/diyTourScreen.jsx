@@ -8,7 +8,7 @@ import { useEffect } from "react";
 //changer la ligne dans le tab navigator pour aller sur
 //      <Tab.Screen name="Add" component={StatusScreen} />
 
-export default function diyTourScreen() {
+export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
 
