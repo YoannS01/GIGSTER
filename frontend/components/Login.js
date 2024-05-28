@@ -16,6 +16,15 @@ import {
     updateToken,
     updateArtist,
     updateHost,
+    updateBirthdate,
+    updateFirstname,
+    updateLastname,
+    updateAddress,
+    updatePhoneNumber,
+    getArtistInfos,
+    getHostInfos,
+
+
 } from "../reducers/user";
 import { Formik } from "formik";
 import * as Yup from "yup";
