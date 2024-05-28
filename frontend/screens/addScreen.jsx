@@ -1,34 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
-
-import { useDispatch, useSelector } from 'react-redux';
-
+import user from "../reducers/user";
+import { useSelector } from "react-redux";
+import diyTourScreen from "./diyTourScreen";
+import announceScreen from "./announceScreen";
 
 export default function AddScreen() {
-    const user = useSelector(state => state.value)
-
-
-
-
+    const userIsArtist = useSelector((state) => state.user.value.isArtist);
+    const userIsHost = useSelector((state) => state.user.value.isHost);
 
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
-        >
-            <View style={styles.container}>
-                <Text>ADD PAGE</Text>
-            </View>
-        </KeyboardAvoidingView>
+        <>
+            {userIsArtist && <diyTourScreen />}
+            {userIsHost && <announceScreen />}
+        </>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e1f5ff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
-});
