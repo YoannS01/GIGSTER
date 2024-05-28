@@ -110,6 +110,7 @@ export default function Step1(props) {
 
                             <TextInput
                                 style={styles.input}
+                                keyboardType="numeric"
                                 placeholder="Zipcode"
                                 onChangeText={handleChange('zipcode')}
                                 onBlur={handleBlur('zipcode')}

@@ -6,6 +6,7 @@ import { FRONT_IP } from "../hide-ip";
 import StatusScreen from "./StatusScreen";
 import { updateToken } from "../reducers/user";
 import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch()
@@ -66,11 +67,11 @@ export default function LoginScreen({ navigation }) {
   }
 
   async function sendData() {
-
+    const navigation = useNavigation()
     console.log("Utilisateur final : ", user)
     console.log("Date relevée : ", user.birthdate)
     console.log("Envoi des données vers le backend")
-    const resp = await fetch(`http://192.168.1.95:3000/users/signup`, {
+    const resp = await fetch(`http://${FRONT_IP}:3000/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user)
