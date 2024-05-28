@@ -1,26 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity } from 'react-native';
-
-import { useDispatch } from 'react-redux';
-
-const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+import user from "../reducers/user";
+import { useSelector } from "react-redux";
+import diyTourScreen from "./diyTourScreen";
+import announceScreen from "./announceScreen";
 
 export default function AddScreen() {
+  const userIsArtist = useSelector((state) => state.user.value.isArtist);
+  const userIsHost = useSelector((state) => state.user.value.isHost);
 
-
-
-    return (
-        <View style={styles.container}>
-            <Text>ADD PAGE</Text>
-        </View>
-    );
+  return (
+    <>
+      {userIsArtist && <diyTourScreen />}
+      {userIsHost && <announceScreen />}
+    </>
+  );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e1f5ff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
-});
