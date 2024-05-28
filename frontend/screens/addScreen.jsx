@@ -9,10 +9,10 @@ export default function AddScreen() {
   const userIsArtist = useSelector((state) => state.user.value.isArtist);
   const userIsHost = useSelector((state) => state.user.value.isHost);
 
-  return (
-    <>
-      {userIsArtist && <diyTourScreen />}
-      {userIsHost && <announceScreen />}
-    </>
-  );
+    return (
+        <>
+            {userIsArtist && <diyTourScreen />}
+            {userIsHost && <announceScreen />}
+        </>
+    );
 }

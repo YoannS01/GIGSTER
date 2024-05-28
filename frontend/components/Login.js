@@ -98,7 +98,7 @@ export default function Login(props) {
 
     return (
         <KeyboardAvoidingView
-            style={styles.container}
+            style={styles.KeyboardAvoidingViewContainer}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
         >
@@ -263,21 +263,27 @@ export default function Login(props) {
 }
 
 const styles = StyleSheet.create({
-    container: {
 
+    KeyboardAvoidingViewContainer: {
         flex: 1,
         backgroundColor: "white",
         width: '100%',
         paddingTop: 33
-
     },
     scrollViewContainer: {
         flexGrow: 1,
-
         alignItems: "center",
         backgroundColor: "white"
         ,
     },
+    container: {
+        flex: 1,
+
+        width: '100%',
+        paddingTop: 33
+
+    },
+
     signup: {
         fontWeight: "bold",
         fontSize: 50,
