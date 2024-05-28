@@ -65,6 +65,6 @@ router.post("/announce", authMiddleware, (req, res) => {
     });
 });
 
-router.post("/shows", authMiddleware, (req, res) => )
+router.post("/shows", authMiddleware, (req, res) => { })
 
 module.exports = router;
