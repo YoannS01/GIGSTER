@@ -4,9 +4,23 @@ import Step2 from "../components/Step2";
 import React, { useState } from "react";
 import { FRONT_IP } from "../hide-ip";
 import StatusScreen from "./StatusScreen";
-import { updateToken } from "../reducers/user";
+import {
+  updateToken,
+  updateUsername,
+  updateEmail,
+  updateFirstname,
+  updateLastname,
+  updateAddress,
+  updatePhoneNumber,
+  getArtistInfos,
+  getHostInfos,
+  updateBirthdate,
+  updateArtist,
+  updateHost,
+} from "../reducers/user";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment/moment";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -65,10 +79,9 @@ export default function LoginScreen({ navigation }) {
   }
 
   async function sendData() {
-
-    console.log("Utilisateur final : ", user)
-    console.log("Date relevée : ", user.birthdate)
-    console.log("Envoi des données vers le backend")
+    console.log("Utilisateur final : ", user);
+    console.log("Date relevée : ", user.birthdate);
+    console.log("Envoi des données vers le backend");
     const resp = await fetch(`http://${FRONT_IP}:3000/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -80,7 +93,17 @@ export default function LoginScreen({ navigation }) {
     console.log("Retour du backend : ", data.result, data.token);
     if (data.result) {
       dispatch(updateToken(data.token));
-      console.log("hello");
+      dispatch(updateUsername(user.username));
+      dispatch(updateEmail(user.email));
+      dispatch(updateFirstname(user.firstname));
+      dispatch(updateLastname(user.lastname));
+      dispatch(updateAddress(user.address));
+      dispatch(updatePhoneNumber(user.phoneNumber));
+      dispatch(getArtistInfos(user.artist));
+      dispatch(getHostInfos(user.host));
+      dispatch(updateBirthdate(moment(user.birthdate).format("DD/MM/YYYY")));
+      dispatch(updateArtist(user.isArtist));
+      dispatch(updateHost(user.isHost));
       navigation.navigate("TabNavigator", { screen: "Home" });
     }
   }

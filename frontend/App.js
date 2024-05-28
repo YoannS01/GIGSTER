@@ -5,7 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomeScreen from "./screens/homeScreen";
 import LoginScreen from "./screens/LoginScreen"
 import ProfileScreen from "./screens/profileScreen";
-import AddScreen from "./screens/addScreen";
+import AddScreen from "./screens/AddScreen";
 
 
 import { StatusBar } from "expo-status-bar";

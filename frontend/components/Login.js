@@ -16,11 +16,21 @@ import {
     updateToken,
     updateArtist,
     updateHost,
+    updateBirthdate,
+    updateFirstname,
+    updateLastname,
+    updateAddress,
+    updatePhoneNumber,
+    getArtistInfos,
+    getHostInfos,
+
+
 } from "../reducers/user";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { FRONT_IP } from "../hide-ip";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 
 // Définir les schémas de validation avec Yup
 
@@ -46,7 +56,7 @@ const signUpSchema = Yup.object().shape({
         .required("Confirm Password is required"),
 });
 
-export default function Login(props) {
+export default function Login(props, navigate) {
     const navigation = useNavigation()
     const dispatch = useDispatch();
     const [isSignIn, setIsSignIn] = useState(false);
@@ -62,19 +72,29 @@ export default function Login(props) {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("REPONSE DU BACK", data.result)
+                console.log("REPONSE DU BACK", data.data)
                 setSubmitting(false);
                 if (!data.result) {
                     setErrors({ general: data.error });
                 } else {
-                    //navigation est undefined
+                    delete data.data.artist._id;
+
+                    dispatch(updateToken(data.data.token));
+                    dispatch(updateUsername(data.data.username));
+                    dispatch(updateEmail(data.email));
+                    dispatch(updateFirstname(data.data.firstname));
+                    dispatch(updateLastname(data.data.lastname));
+                    dispatch(updateAddress(data.data.address));
+                    dispatch(updatePhoneNumber(data.data.phoneNumber));
+                    dispatch(getArtistInfos(data.data.artist));
+                    dispatch(getHostInfos(data.data.host));
+                    dispatch(updateBirthdate(moment(data.data.birthdate).format("DD/MM/YYYY")));
+                    dispatch(updateArtist(data.data.isArtist));
+                    dispatch(updateHost(data.data.isHost));
+
                     navigation.navigate("TabNavigator", { screen: "Home" });
-                    /* dispatch(updateUsername(data.data.username));
-                     dispatch(updateEmail(data.data.email));
-                     dispatch(updateToken(data.data.token));
-                     dispatch(updateArtist(data.data.isArtist));
-                     dispatch(updateHost(data.data.isHost));
- */
+
+
                 }
             })
 
@@ -98,7 +118,7 @@ export default function Login(props) {
 
     return (
         <KeyboardAvoidingView
-            style={styles.container}
+            style={styles.KeyboardAvoidingViewContainer}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
         >
@@ -263,21 +283,27 @@ export default function Login(props) {
 }
 
 const styles = StyleSheet.create({
-    container: {
 
+    KeyboardAvoidingViewContainer: {
         flex: 1,
         backgroundColor: "white",
         width: '100%',
         paddingTop: 33
-
     },
     scrollViewContainer: {
         flexGrow: 1,
-
         alignItems: "center",
         backgroundColor: "white"
         ,
     },
+    container: {
+        flex: 1,
+
+        width: '100%',
+        paddingTop: 33
+
+    },
+
     signup: {
         fontWeight: "bold",
         fontSize: 50,
