@@ -20,6 +20,7 @@ import {
 } from "../reducers/user";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment/moment";
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
