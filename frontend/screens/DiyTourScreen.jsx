@@ -12,6 +12,7 @@ import { FRONT_IP } from "../hide-ip";
 export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
+  const [searchCity, setSearchCity] = useState('')
 
 
 
@@ -44,13 +45,52 @@ export default function DiyTourScreen() {
     );
   }
 
-  fetch(`http://${FRONT_IP}:3000/users/all`)
-    .then(response => response.json())
-    .then(data => {
-      console.log("RETOUR DE TOUT LES USER:", data)
-      const host = data.filter()
+  /* fetch(`http://${FRONT_IP}:3000/users/all`)
+     .then(response => response.json())
+     .then(data => {
+       console.log("RETOUR DE TOUT LES USERS:", data)
+       const host = data.bookings.filter(element => element.isHost !== false)
+       console.log("HOST FILTRES=>", host.announces)
+ 
+     })
+ 
+   const Dates = [
+     {
+       latitude: "yes",
+       longitude: "yes",
+       startDateAt: "2024-06-10T15:53:01.409+00:00",
+       endDateAt: "2024-06-17T15:53:01.409+00:00"
+     },
+     {
+       startDateAt: "2024-07-10T15:53:01.409+00:00",
+       endDateAt: "2024-07-17T15:53:01.409+00:00"
+     },
+   ] 
+  
+   const dispoMarkers = Dates.map((date) => date.startDateAt > date)
+  */
 
-    })
+  function getCityLocation() {
+    if (searchCity.length === 0) {
+      return;
+    }
+
+    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('RETOUR API', data.features[0].geometry.coordinates[1])
+        if (data.features.length === 0) {
+          return;
+        }
+
+        const foundCity = data.features[0];
+        setMapRegion({
+          latitude: foundCity.geometry.coordinates[1],
+          longitude: foundCity.geometry.coordinates[0],
+        })
+
+      });
+  }
 
 
 
@@ -74,11 +114,13 @@ export default function DiyTourScreen() {
       <View style={styles.topContainer}>
         <TextInput
           style={styles.textInput}
-          placeholder={'Search'}
+          placeholder={'Search... '}
           placeholderTextColor={'#666'}
+          onChangeText={(value) => setSearchCity(value)}
+          value={searchCity}
         />
 
-        <TouchableOpacity style={styles.btnSearch}>
+        <TouchableOpacity style={styles.btnSearch} onPress={() => getCityLocation()}>
           <Text style={styles.textSearch}>
             Go
           </Text>
