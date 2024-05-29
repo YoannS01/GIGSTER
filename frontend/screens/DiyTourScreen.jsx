@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useEffect } from "react";
+import { FRONT_IP } from "../hide-ip";
 
 //changer la ligne dans le tab navigator pour aller sur
 //      <Tab.Screen name="Add" component={StatusScreen} />
@@ -43,6 +44,13 @@ export default function DiyTourScreen() {
     );
   }
 
+  fetch(`http://${FRONT_IP}:3000/users/all`)
+    .then(response => response.json())
+    .then(data => {
+      console.log("RETOUR DE TOUT LES USER:", data)
+      const host = data.filter()
+
+    })
 
 
 
@@ -107,9 +115,9 @@ const styles = StyleSheet.create({
   topContainer: {
     position: 'absolute',
     top: 40,
-    width: '80%',
-    marginLeft: '10%',
-    marginRight: '10%',
+    width: '70%',
+    marginLeft: '15%',
+    marginRight: '15%',
     height: 50,
     borderColor: 'black',
     borderWidth: 1,
@@ -121,7 +129,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'white,'
+    backgroundColor: 'white',
 
   },
   textInput: {
@@ -144,14 +152,14 @@ const styles = StyleSheet.create({
 
   bottomContainer: {
     position: 'absolute',
-    bottom: 15,
-    width: '90%',
-    height: '30%',
+    bottom: 100,
+    width: '89%',
+    height: '25%',
     paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: 'white',
     alignItems: 'center',
-    marginLeft: '5%',
+    marginLeft: '5.5%',
     borderRadius: 13,
     borderWidth: 1.5,
     borderBottomWidth: 4,
