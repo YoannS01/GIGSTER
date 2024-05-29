@@ -6,7 +6,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 
 import AnnounceCard from '../components/AnnounceCard'
+import AnnounceCardSearch from '../components/AnnounceCardSearch';
 import TopCard from '../components/TopCard'
+
+import ProfileScreen from "./ProfileScreen";
+import { useNavigation } from '@react-navigation/native';
+
 
 
 
@@ -14,6 +19,7 @@ export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [searching, setSearching] = useState(false)
+    const navigation = useNavigation()
 
     const cardsData = [
         {
@@ -61,7 +67,16 @@ export default function HomeScreen() {
             location={data.location}
             availability={data.availability}
             note={data.note} />
+    })
 
+    const cardListSearch = cardsData.map((data, i) => {
+        return <AnnounceCardSearch
+            key={i}
+            image={data.image}
+            title={data.title}
+            location={data.location}
+            availability={data.availability}
+            note={data.note} />
     })
 
     const topData = [
@@ -95,33 +110,14 @@ export default function HomeScreen() {
 
     })
 
-    //   const [image, setImage] = useState(null);
+    function navigateModal() {
+        navigation.navigate("TabNavigator", { screen: "Profile" });
+        setModalVisible(!modalVisible)
+    }
 
-    //    const pickImage = async () => {
-    //         // Request permission to access media library
-    //         if (Platform.OS !== 'web') {
-    //             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    //             if (status !== 'granted') {
-    //                 alert('Sorry, we need camera roll permissions to make this work!');
-    //                 return;
-    //             }
-    //         }
-
-    // Open the image picker
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //     allowsEditing: true,
-    //     aspect: [4, 3],
-    //     quality: 1,
-    // });
-
-    //     if (!result.canceled) {
-    //         setImage(result.assets[0].uri);
-    //     }
-    // };
-
-    // <Button title="Pick an image from camera roll" onPress={pickImage} />
-    // {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+    function logout() {
+        navigation.navigate("LoginScreen");
+    }
 
     return (
         <View style={styles.container}>
@@ -134,8 +130,8 @@ export default function HomeScreen() {
                 hideModalContentWhileAnimating={true}
                 backdropTransitionInTiming={500}
                 backdropTransitionOutTiming={500}
-                onBackdropPress={() => setModalVisible(false)} // Fermeture du modal lors du clic sur le backdrop
-                onSwipeComplete={() => setModalVisible(false)} // Fermeture du modal lors du swipe
+                onBackdropPress={() => setModalVisible(false)}
+                onSwipeComplete={() => setModalVisible(false)}
             >
                 <View style={styles.centeredView}>
                     <View>
@@ -147,25 +143,31 @@ export default function HomeScreen() {
                             <View style={styles.modalSection}>
                                 <FontAwesome name='user' size={35} />
                                 <View style={styles.modalAlign}>
-                                    <Text style={styles.modalText}>My gigs</Text>
+                                    <Text style={styles.modalText} onPress={() => navigateModal()} >Profile</Text>
                                 </View>
                             </View>
                             <View style={styles.modalSection}>
-                                <FontAwesome name='bell' size={28} />
+                                <FontAwesome name={true ? 'globe' : 'music'} size={35} />
                                 <View style={styles.modalAlign}>
-                                    <Text style={styles.modalText}>Notifications</Text>
+                                    <Text style={styles.modalText}>{true ? 'My tours' : 'My bookings'}</Text>
                                 </View>
                             </View>
                             <View style={styles.modalSection}>
-                                <FontAwesome name='globe' size={35} />
+                                <FontAwesome name='heart' size={28} />
                                 <View style={styles.modalAlign}>
-                                    <Text style={styles.modalText}>Mon compte</Text>
+                                    <Text style={styles.modalText}>{true ? 'Liked hosts' : 'Liked artists'}</Text>
+                                </View>
+                            </View>
+                            <View style={styles.modalSection}>
+                                <FontAwesome name='star' size={30} />
+                                <View style={styles.modalAlign}>
+                                    <Text style={styles.modalText}>Preferences</Text>
                                 </View>
                             </View>
                             <View style={styles.lastModalSection}>
-                                <FontAwesome name='heart' size={30} />
+                                <FontAwesome name='close' size={30} />
                                 <View style={styles.modalAlign}>
-                                    <Text style={styles.modalText}>Saved</Text>
+                                    <Text style={styles.modalText} onPress={() => logout()}>Log out</Text>
                                 </View>
                             </View>
                         </View>
@@ -173,7 +175,7 @@ export default function HomeScreen() {
                     <View style={styles.settings}>
                         <FontAwesome name='gear' size={50} />
                         <View style={styles.modalAlign}>
-                            <Text style={styles.settingText}>Paramètres</Text>
+                            <Text style={styles.settingText}>Settings</Text>
                         </View>
                     </View>
                 </View>
@@ -187,22 +189,35 @@ export default function HomeScreen() {
                         placeholder="Find your future hosts"
                         style={styles.input}
                     ></TextInput>
-                    <TouchableOpacity style={styles.btnSearch}>
+                    <TouchableOpacity style={styles.btnSearch} onPress={() => setSearching(true)}>
                         <Text style={styles.textSearch}>
                             Search
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <Text style={styles.welcome}>Welcome JustneedVic</Text>
-            <Text style={styles.discover}>Discover...</Text>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone} >
-                {cardList}
-            </ScrollView>
-            <Text style={styles.titleRanking}>Top Artist</Text>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.topZone}>
-                {topList}
-            </ScrollView>
+            {!searching ?
+                <>
+                    <Text style={styles.welcome}>Welcome JustneedVic</Text>
+                    <Text style={styles.discover}>Discover...</Text>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone} >
+                        {cardList}
+                    </ScrollView>
+                    <Text style={styles.titleRanking}>Top Artist</Text>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.topZone}>
+                        {topList}
+                    </ScrollView>
+                </> :
+
+                <ScrollView style={styles.recoZoneSearching} >
+                    <View style={styles.searchTitle}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Results for Bordeaux : </Text>
+                        <FontAwesome name='close' size={30} onPress={() => setSearching(false)} />
+                    </View>
+                    {cardListSearch}
+                </ScrollView>
+
+            }
         </View >
     );
 }
@@ -274,6 +289,11 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '40%',
         flexDirection: 'row'
+    },
+    recoZoneSearching: {
+        width: '100%',
+        height: '80%',
+        marginLeft: '2%'
     },
     topZone: {
         width: '100%',
@@ -355,7 +375,12 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         marginLeft: 20
+    },
+    searchTitle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: '5%',
+        paddingRight: '12%',
     }
 });
-
-console.log('debug')
