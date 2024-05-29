@@ -121,7 +121,8 @@ export default function ProfileScreen() {
             </View>
             <View style={styles.spotifyContainer}>
                 <View style={styles.spotifyCard}>
-
+                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Link to</Text>
+                    <Image style={styles.logoSpotify} source={require('../assets/LogoSpotify.png')} />
                 </View>
             </View>
         </View >
@@ -261,7 +262,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#5100FF'
     },
     spotifyContainer: {
-        backgroundColor: 'grey',
         height: '8%',
         alignItems: 'center',
         justifyContent: 'center'
@@ -275,6 +275,14 @@ const styles = StyleSheet.create({
         borderRightWidth: 6,
         borderRadius: 20,
         backgroundColor: 'white',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        columnGap: 20
     },
+    logoSpotify: {
+        height: '90%',
+        width: '40%'
+    }
 });
