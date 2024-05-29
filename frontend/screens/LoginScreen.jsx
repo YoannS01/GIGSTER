@@ -80,7 +80,7 @@ export default function LoginScreen({ navigation }) {
 
   async function sendData() {
     console.log("Utilisateur final : ", user);
-    console.log("Date relevée : ", user.birthdate);
+
     console.log("Envoi des données vers le backend");
     const resp = await fetch(`http://${FRONT_IP}:3000/users/signup`, {
       method: "POST",
