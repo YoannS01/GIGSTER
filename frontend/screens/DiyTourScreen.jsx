@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useEffect } from "react";
-import { FRONT_IP } from "../hide-ip";
-
-//changer la ligne dans le tab navigator pour aller sur
-//      <Tab.Screen name="Add" component={StatusScreen} />
 
 export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
-  const [searchCity, setSearchCity] = useState('')
-  const [newMapRegion, setNewMapRegion] = useState('')
-
-
+  const [searchCity, setSearchCity] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -27,8 +27,6 @@ export default function DiyTourScreen() {
         setMapRegion({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1,
         });
 
         Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
@@ -71,7 +69,6 @@ export default function DiyTourScreen() {
    const dispoMarkers = Dates.map((date) => date.startDateAt > date)
   */
 
-
   function getCityLocation() {
     fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
       .then((response) => response.json())
@@ -81,11 +78,9 @@ export default function DiyTourScreen() {
         }
 
         const foundCity = data.features[0];
-        setNewMapRegion({
+        setMapRegion({
           latitude: foundCity.geometry.coordinates[1],
           longitude: foundCity.geometry.coordinates[0],
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1,
         });
       });
   }
@@ -94,19 +89,12 @@ export default function DiyTourScreen() {
     <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFillObject}
-        initialRegion={{
+        region={{
           latitude: mapRegion.latitude,
           longitude: mapRegion.longitude,
-          latitudeDelta: mapRegion.latitudeDelta,
-          longitudeDelta: mapRegion.longitudeDelta,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
         }}
-        region={{
-          latitude: newMapRegion.latitude,
-          longitude: newMapRegion.longitude,
-          latitudeDelta: newMapRegion.latitudeDelta,
-          longitudeDelta: newMapRegion.longitudeDelta,
-        }}
-      // onRegionChange={(region) => setNewMapRegion(region)}
       >
         {currentPosition && (
           <Marker coordinate={currentPosition} title="Me!" pinColor="#fecb2d" />
@@ -116,23 +104,19 @@ export default function DiyTourScreen() {
       <View style={styles.topContainer}>
         <TextInput
           style={styles.textInput}
-          placeholder={'Search... '}
-          placeholderTextColor={'#666'}
+          placeholder={"Search... "}
+          placeholderTextColor={"#666"}
           onChangeText={(value) => setSearchCity(value)}
           value={searchCity}
         />
 
         <TouchableOpacity
           style={styles.btnSearch}
-          onPress={() => getCityLocation()}>
-          <Text style={styles.textSearch}>
-            Go
-          </Text>
+          onPress={() => getCityLocation()}
+        >
+          <Text style={styles.textSearch}>Go</Text>
         </TouchableOpacity>
       </View>
-
-
-
 
       <View style={styles.bottomContainer}>
         <Text style={styles.title}>Mon Parcours</Text>
@@ -149,8 +133,8 @@ export default function DiyTourScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center,'
+    justifyContent: "center",
+    alignItems: "center,",
   },
   loading: {
     flex: 1,
@@ -159,35 +143,34 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   topContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 40,
-    width: '70%',
-    marginLeft: '15%',
-    marginRight: '15%',
+    width: "70%",
+    marginLeft: "15%",
+    marginRight: "15%",
     height: 50,
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     borderBottomWidth: 4,
     borderRightWidth: 4,
     borderRadius: 13,
     margin: 10,
     padding: 5,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
-
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "white",
   },
   textInput: {
-    color: '#000',
+    color: "#000",
     height: 45,
-    width: '40%',
+    width: "40%",
     paddingHorizontal: 10,
     fontSize: 16,
-    color: 'black'
+    color: "black",
   },
   btnSearch: {
-    backgroundColor: '#5100FF',
+    backgroundColor: "#5100FF",
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 13,
@@ -197,52 +180,44 @@ const styles = StyleSheet.create({
   },
 
   bottomContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 100,
-    width: '89%',
-    height: '25%',
+    width: "89%",
+    height: "25%",
     paddingTop: 10,
     paddingBottom: 10,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    marginLeft: '5.5%',
+    backgroundColor: "white",
+    alignItems: "center",
+    marginLeft: "5.5%",
     borderRadius: 13,
     borderWidth: 1.5,
     borderBottomWidth: 4,
     borderRightWidth: 4,
-
-
-
   },
   title: {
-    width: '50%',
-    textAlign: 'center',
-    fontFamily: 'Helvetica',
+    width: "50%",
+    textAlign: "center",
+    fontFamily: "Helvetica",
     fontSize: 25,
     marginBottom: 10,
   },
   roadmap: {
-    backgroundColor: 'white',
-    width: '90%',
-
-
+    backgroundColor: "white",
+    width: "90%",
   },
   textSearch: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   date: {
-    width: '90%',
+    width: "90%",
     height: 40,
-    borderColor: '#5100FF',
+    borderColor: "#5100FF",
     borderWidth: 1,
     borderBottomWidth: 4,
     borderRightWidth: 4,
     borderRadius: 10,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 5,
-
-
-  }
-
+  },
 });
