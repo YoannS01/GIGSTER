@@ -69,9 +69,6 @@ const TabNavigator = () => {
             ios: {
               marginBottom: -30,
             },
-            android: {
-              marginBottom: -20,
-            },
           }),
         },
         headerShown: false,
