@@ -141,13 +141,38 @@ export default function Step1(props) {
 
                             <Text style={styles.label}>Birthdate</Text>
 
-                            <DateTimePicker
-                                value={values.birthdate}
-                                mode="date"
-                                display="default"
-                                onChange={(event, selectedDate) => handleDateChange(event, selectedDate, setFieldValue)}
-                                locale="fr-FR"
-                            />
+                            {Platform.OS === 'ios' ? (
+                                <DateTimePicker
+                                    value={values.birthdate}
+                                    mode="date"
+                                    display="default"
+                                    onChange={(event, selectedDate) => handleDateChange(event, selectedDate, setFieldValue)}
+                                    locale="fr-FR"
+                                />
+                            ) : (
+                                <>
+                                    <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Select Birthdate"
+                                            value={values.birthdate.toDateString()}
+                                            editable={false} // Prevent direct editing
+                                        />
+                                    </TouchableOpacity>
+                                    {showDatePicker && (
+                                        <DateTimePicker
+                                            value={values.birthdate}
+                                            mode="date"
+                                            display="default"
+                                            onChange={(event, selectedDate) => {
+                                                handleDateChange(event, selectedDate, setFieldValue);
+                                                setShowDatePicker(false); // Close the picker after selecting a date
+                                            }}
+                                            locale="fr-FR"
+                                        />
+                                    )}
+                                </>
+                            )}
 
                             {touched.birthdate && errors.birthdate && <Text style={styles.error}>{errors.birthdate}</Text>}
                         </View>
