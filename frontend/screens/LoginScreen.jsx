@@ -69,17 +69,21 @@ export default function LoginScreen({ navigation }) {
           return;
         }
         updatedUser[key] = data[key];
+        console.log(updatedUser[key])
       });
 
       if (currentPage !== 4) {
         setCurrentPage(currentPage + 1);
       }
+      console.log(updatedUser)
+      setUser(updatedUser)
       return updatedUser;
+
     });
   }
 
   async function sendData() {
-    console.log("Utilisateur final : ", user);
+    console.log("Utilisateur final : ", u);
 
     console.log("Envoi des données vers le backend");
     const resp = await fetch(`http://${FRONT_IP}:3000/users/signup`, {

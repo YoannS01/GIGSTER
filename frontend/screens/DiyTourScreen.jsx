@@ -324,7 +324,11 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     backgroundColor: 'white',
-    flex: 0.4
+    flex: 0.4,
+    borderTopLeftRadius: 13,
+    borderTopRightRadius: 13,
+
+
   },
   btnSearch: {
     backgroundColor: '#5100FF',
@@ -335,7 +339,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderBottomWidth: 3,
-    borderRightWidth: 3
+    borderRightWidth: 3,
+
   }
 });
 

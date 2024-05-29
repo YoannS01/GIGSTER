@@ -142,6 +142,7 @@ export default function Step1(props) {
                             <Text style={styles.label}>Birthdate</Text>
 
                             {Platform.OS === 'ios' ? (
+                                //SI UTILISATEUR SOUS IOS
                                 <DateTimePicker
                                     value={values.birthdate}
                                     mode="date"
@@ -150,6 +151,7 @@ export default function Step1(props) {
                                     locale="fr-FR"
                                 />
                             ) : (
+                                //SI UTILISATEUR SOUS ANDROID
                                 <>
                                     <TouchableOpacity onPress={() => setShowDatePicker(true)}>
                                         <TextInput

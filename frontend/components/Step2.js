@@ -63,6 +63,7 @@ export default function Step2(props) {
                 <Text>Mon Profil</Text>
                 <View style={styles.stepContent}>
                     {props.user.isArtist ? (
+                        //inscription artiste
                         <>
                             <Text style={styles.label}>Artist name</Text>
                             <TextInput
@@ -114,6 +115,7 @@ export default function Step2(props) {
                             ) : null}
                         </>
                     ) : (
+                        //inscription hôte
                         <>
                             <Text style={styles.label}>Description</Text>
                             <TextInput
