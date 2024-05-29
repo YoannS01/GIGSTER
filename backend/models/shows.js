@@ -9,9 +9,9 @@ const addressSchema = mongoose.Schema({
 const showSchema = mongoose.Schema({
     tourID: { type: mongoose.Schema.Types.ObjectId, ref: 'tours' },
     date: Date,
-    createdAt: Date,
-    updatedAt: Date,
-    adress: addressSchema,
+    createdAt: Date, //dernier  
+    updatedAt: Date, //dernier
+    address: addressSchema,
     host: { type: Schema.Types.ObjectId, ref: 'user' },
     status: String,
     isValidated: Boolean,

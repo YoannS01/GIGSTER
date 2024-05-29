@@ -1,53 +1,130 @@
-/*var express = require("express");
-var router = express.Router();
-const moment = require('moment')
+const express = require("express");
+const router = express.Router();
 const { checkBody } = require('../modules/checkBody');
 const authMiddleware = require('../middleware/auth');
 const { Announce } = require("../models/announces");
-const fs = require('fs')
-const uniqid = require('uniqid')
+const { Show } = require("../models/shows");
+const { Tour } = require("../models/tours");
+const fs = require('fs');
+const uniqid = require('uniqid');
 const cloudinary = require('cloudinary').v2;
 
-router.post("/announce", authMiddleware, async (req, res) => {
-    if (!checkBody(req.body, ['street', 'city', 'zipCode', 'accomodation', 'instrumentsAvailable', 'locationType', 'availableDate', 'capacity', 'sleeping', 'restauration'])) {
-        res.json({ result: false, error: 'Missing or empty fields' });
-        return;
+router.post("/announces", authMiddleware, (req, res) => {
+    const requiredFields = ['street', 'city', 'zipcode', 'instrumentsAvailable', 'locationType', 'availableDate', 'capacity', 'sleeping', 'restauration', 'description'];
+    if (!checkBody(req.body, requiredFields)) {
+        return res.json({ result: false, error: 'Missing or empty fields' });
     }
 
     const photoPath = `./tmp/${uniqid()}.jpg`;
-    const resultMove = await req.files.photoFromFront.mv(photoPath);
 
-    const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+    req.files.photoFromFront.mv(photoPath)
+        .then(() => cloudinary.uploader.upload(photoPath))
+        .then(resultCloudinary => {
+            fs.unlinkSync(photoPath);
 
-    fs.unlinkSync(photoPath);
+            const username = req.auth.username;
 
-    if (!resultMove) {
-        res.json({
-            result: true,
-            url: resultCloudinary.secure_url
+            User.findOne({ username }).then(user => {
+                if (user) {
+                    const newAnnounce = new Announce({
+                        host: user._id,
+                        address: [{ street: req.body.street, city: req.body.city, zipcode: req.body.zipcode }],
+                        availableDates: [{
+                            startDateAt: req.body.startDateAt,
+                            endDateAt: req.body.endDateAt,
+                        }],
+                        locationType: req.body.locationType,
+                        instrumentsAvailable: req.body.instrumentsAvailable,
+                        capacity: req.body.capacity,
+                        description: req.body.description,
+                        media: [resultCloudinary.secure_url],
+                        accessibility: req.body.accessibility,
+                        accomodation: { sleeping: req.body.sleeping, restauration: req.body.restauration },
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    });
+
+                    newAnnounce.save().then(() => {
+                        res.json({ result: true, url: resultCloudinary.secure_url, newAnnounce });
+                    });
+                } else {
+                    res.json({ result: false, error: 'User not found' });
+                }
+            });
         });
-    } else {
-        res.json({ result: false, error: resultMove });
+});
+
+router.post("/tours", authMiddleware, (req, res) => {
+    const requiredFields = ['date', 'city', 'street', 'zipcode', 'status'];
+    if (!checkBody(req.body, requiredFields)) {
+        return res.json({ result: false, error: 'Missing or empty fields' });
     }
 
-    const username = req.auth.username
+    const username = req.auth.username;
 
-    User.findOne({ username }).then(announceData => {
-        if (announceData) {
-            const newAnnounce = {
-                host: [ObjectId],
-                locationType: req.body.locationType,
-                instrumentsAvailable: req.body.instrumentsAvailable,
-                capacity: req.body.capacity,
-                description: req.body.description,
-                accessibility: req.body.accessibility,
-                media: resultCloudinary.secure_url,
-            }
+    User.findOne({ username }).then(user => {
+        if (user) {
+            const newShow = new Show({
+                host: user._id,
+                date: req.body.date,
+                address: [{ street: req.body.street, city: req.body.city, zipcode: req.body.zipcode }],
+                status: req.body.status,
+                isValidated: req.body.isValidated,
+                isRefused: req.body.isRefused,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+
+            newShow.save().then(savedShow => {
+                const newTour = new Tour({
+                    artist: user._id,
+                    showsID: [savedShow._id],
+                    isValidated: req.body.isValidated,
+                    status: req.body.status,
+                    setDuration: req.body.setDuration,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                });
+
+                newTour.save().then(() => {
+                    res.json({ result: true, newTour });
+                });
+            });
+        } else {
+            res.json({ result: false, error: 'User not found' });
         }
-    })
-})
+    });
+});
 
+router.post("/shows", authMiddleware, (req, res) => {
+    const requiredFields = ['date', 'city', 'street', 'city', 'zipcode', 'status'];
+    if (!checkBody(req.body, requiredFields)) {
+        return res.json({ result: false, error: 'Missing or empty fields' });
+    }
 
-module.exports = router;*/
+    const username = req.auth.username;
 
+    User.findOne({ username }).then(user => {
+        if (user) {
+            const newShow = new Show({
+                host: user._id,
+                tourID: req.body.tourID,
+                date: req.body.date,
+                address: [{ street: req.body.street, city: req.body.city, zipcode: req.body.zipcode }],
+                status: req.body.status,
+                isValidated: req.body.isValidated,
+                isRefused: req.body.isRefused,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
 
+            newShow.save().then(() => {
+                res.json({ result: true, newShow });
+            });
+        } else {
+            res.json({ result: false, error: "User not found" });
+        }
+    });
+});
+
+module.exports = router;

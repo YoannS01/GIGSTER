@@ -15,7 +15,7 @@ const initialState = {
         birthdate: null,
         artist: {
             artistname: null,
-            member: 0,
+            members: 0,
             placeOrigin: null,
             genres: [],
         },
@@ -53,7 +53,7 @@ export const userSlice = createSlice({
             state.value.phoneNumber = action.payload;
         },
         getArtistInfos: (state, action) => {
-            state.value.artist = action.payload
+            state.value.artist = { ...state.value.artist, ...action.payload }
 
         },
         getHostInfos: (state, action) => {
