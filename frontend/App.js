@@ -8,7 +8,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import AddScreen from "./screens/AddScreen";
 
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -65,7 +65,14 @@ const TabNavigator = () => {
           elevation: 6,
         },
         tabBarItemStyle: {
-          marginBottom: -30,
+          ...Platform.select({
+            ios: {
+              marginBottom: -30,
+            },
+            android: {
+              marginBottom: -20,
+            },
+          }),
         },
         headerShown: false,
       })}
