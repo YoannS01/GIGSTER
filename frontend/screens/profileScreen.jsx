@@ -300,3 +300,5 @@ const styles = StyleSheet.create({
     width: "40%",
   },
 });
+
+console.log('debug')

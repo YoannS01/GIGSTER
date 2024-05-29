@@ -72,3 +72,5 @@ const styles = StyleSheet.create({
 
     }
 });
+
+console.log('debug')

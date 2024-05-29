@@ -338,3 +338,5 @@ const styles = StyleSheet.create({
     borderRightWidth: 3
   }
 });
+
+console.log('debug')
