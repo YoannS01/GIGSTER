@@ -437,7 +437,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 10,
   },
-<<<<<<< HEAD:frontend/screens/announceScreen.jsx
   selectedOption: {
     marginTop: 10,
     fontSize: 16,
@@ -468,8 +467,3 @@ const styles = StyleSheet.create({
 
 
 });
-=======
-});
-
-console.log('debug')
->>>>>>> 1f4c942d8b9c11df9a2bc10dd91dd8c558a91fb3:frontend/screens/AnnounceScreen.jsx
