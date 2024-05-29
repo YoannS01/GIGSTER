@@ -14,11 +14,21 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
+
+
 export default function HomeScreen() {
 
     const [modalDisplay, setModalDisplay] = useState(0);
     const [searching, setSearching] = useState(false)
     const navigation = useNavigation()
+
+    const [modalContent, setModalContent] = useState({
+        image: require("../assets/Felicita.png"),
+        title: 'La Felicita',
+        location: 'Paris 13',
+        availability: '06 Juin - 17 Juin',
+        note: '4.5'
+    })
 
     const cardsData = [
         {
@@ -58,8 +68,19 @@ export default function HomeScreen() {
         },
     ]
 
+
+
     const cardList = cardsData.map((data, i) => {
-        return <TouchableOpacity key={i} onPress={() => setModalDisplay(2)}>
+        return <TouchableOpacity key={i} onPress={() => {
+            setModalContent({
+                image: data.image,
+                title: data.title,
+                location: data.location,
+                availability: data.availability,
+                note: data.note
+            })
+            setModalDisplay(2)
+        }}>
             <AnnounceCard
                 key={i}
                 image={data.image}
@@ -72,7 +93,16 @@ export default function HomeScreen() {
     })
 
     const cardListSearch = cardsData.map((data, i) => {
-        return <TouchableOpacity key={i} onPress={() => setModalDisplay(2)}>
+        return <TouchableOpacity key={i} onPress={() => {
+            setModalContent({
+                image: data.image,
+                title: data.title,
+                location: data.location,
+                availability: data.availability,
+                note: data.note
+            })
+            setModalDisplay(2)
+        }}>
             <AnnounceCardSearch
                 key={i}
                 image={data.image}
@@ -82,6 +112,14 @@ export default function HomeScreen() {
                 note={data.note} />
         </TouchableOpacity>
     })
+
+    function createModalContent() {
+
+        return (
+            <Text>Yeet</Text>
+        )
+
+    }
 
     const topData = [
         {
@@ -199,23 +237,23 @@ export default function HomeScreen() {
             onSwipeComplete={() => setModalDisplay(0)}
         >
             <View style={styles.cardCenteredView}>
-                <Image style={styles.firstImage} source={require('../assets/Felicita.png')}></Image>
+                <Image style={styles.firstImage} source={modalContent.image}></Image>
                 <View style={styles.cardModalDesc}>
                     <View style={styles.titleModalDesc}>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>La Felicita</Text>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{modalContent.title}</Text>
                     </View>
                     <View style={styles.iconDesc}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 10 }}>
                             <FontAwesome name='star' size={40} color={'#d4a60f'} />
-                            <Text style={{ fontSize: 25, fontWeight: 'bold' }} >4.5</Text>
+                            <Text style={{ fontSize: 25, fontWeight: 'bold' }} >{modalContent.note}</Text>
                         </View>
                         <FontAwesome name='heart' size={35} />
                     </View>
                     <View style={styles.infoDesc}>
-                        <Text style={{ fontSize: 15, fontWeight: 'bold' }}>Paris 13</Text>
+                        <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{modalContent.location}</Text>
                         <View style={styles.modalAvailability}>
                             <Text>Dates of availability</Text>
-                            <Text style={{ fontWeight: 'bold' }}>06 Juin - 17 Juin</Text>
+                            <Text style={{ fontWeight: 'bold' }}>{modalContent.availability}</Text>
                         </View>
                         <Text style={styles.bioDesc}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni provident praesentium quasi impedit explicabo odio! Nam provident, perspiciatis saepe, suscipit voluptas deserunt minima quia, nisi et repellat qui a dolorum.
                             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus, atque iusto dicta odio maxime veritatis. Voluptatibus ex repudiandae cumque consequatur minus dolore fuga, facere eveniet nemo illum animi, beatae repellendus.
