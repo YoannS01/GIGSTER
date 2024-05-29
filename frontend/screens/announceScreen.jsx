@@ -378,3 +378,5 @@ const styles = StyleSheet.create({
     fontSize: "17px",
   },
 });
+
+console.log('debug')

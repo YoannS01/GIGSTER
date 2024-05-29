@@ -134,3 +134,5 @@ export default function LoginScreen({ navigation }) {
     </>
   );
 }
+
+console.log('debug')
