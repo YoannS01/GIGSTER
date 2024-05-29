@@ -11,7 +11,7 @@ import { FRONT_IP } from "../hide-ip";
 
 export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
-  const [mapRegion, setMapRegion] = useState(null);
+  const [mapRegion, setMapRegion] = useState('');
   const [searchCity, setSearchCity] = useState('')
   const [newMapRegion, setNewMapRegion] = useState('')
 
@@ -24,6 +24,7 @@ export default function DiyTourScreen() {
       if (status === "granted") {
         const location = await Location.getCurrentPositionAsync({});
         setCurrentPosition(location.coords);
+
         setMapRegion({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
@@ -103,8 +104,7 @@ export default function DiyTourScreen() {
         region={{
           latitude: newMapRegion.latitude,
           longitude: newMapRegion.longitude,
-          latitudeDelta: newMapRegion.latitudeDelta,
-          longitudeDelta: newMapRegion.longitudeDelta,
+
         }}
       // onRegionChange={(region) => setNewMapRegion(region)}
       >
