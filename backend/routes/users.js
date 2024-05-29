@@ -135,4 +135,10 @@ router.post("/refresh", (req, res) => {
     });
 });
 
+router.get('/all', (req, res) => {
+    User.find().then(bookings => {
+        res.json({ result: true, bookings })
+    })
+})
+
 module.exports = router;
