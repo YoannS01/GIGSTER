@@ -140,23 +140,15 @@ export default function Step1(props) {
                             {touched.phoneNumber && errors.phoneNumber && <Text style={styles.error}>{errors.phoneNumber}</Text>}
 
                             <Text style={styles.label}>Birthdate</Text>
-                            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Select Birthdate"
-                                    value={values.birthdate.toDateString()}
-                                    editable={false} // Empêcher l'édition directe
-                                />
-                            </TouchableOpacity>
-                            {showDatePicker && (
-                                <DateTimePicker
-                                    value={values.birthdate}
-                                    mode="date"
-                                    display="default"
-                                    onChange={(event, selectedDate) => handleDateChange(event, selectedDate, setFieldValue)}
-                                    locale="fr-FR"
-                                />
-                            )}
+
+                            <DateTimePicker
+                                value={values.birthdate}
+                                mode="date"
+                                display="default"
+                                onChange={(event, selectedDate) => handleDateChange(event, selectedDate, setFieldValue)}
+                                locale="fr-FR"
+                            />
+
                             {touched.birthdate && errors.birthdate && <Text style={styles.error}>{errors.birthdate}</Text>}
                         </View>
                         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
