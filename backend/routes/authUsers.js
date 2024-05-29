@@ -3,11 +3,9 @@ const router = express.Router();
 const { checkBody } = require('../modules/checkBody');
 const authMiddleware = require('../middleware/auth');
 const { Announce } = require("../models/announces");
-const { Show } = require("../models/shows");
-const { Tour } = require("../models/tours");
-const fs = require('fs');
-const uniqid = require('uniqid');
 const cloudinary = require('cloudinary').v2;
+const uniqid = require('uniqid');
+const fs = require('fs');
 
 router.post("/announces", authMiddleware, (req, res) => {
     const requiredFields = ['street', 'city', 'zipcode', 'instrumentsAvailable', 'locationType', 'availableDate', 'capacity', 'sleeping', 'restauration', 'description'];
@@ -15,44 +13,44 @@ router.post("/announces", authMiddleware, (req, res) => {
         return res.json({ result: false, error: 'Missing or empty fields' });
     }
 
-    const photoPath = `./tmp/${uniqid()}.jpg`;
+    const username = req.auth.username;
 
-    req.files.photoFromFront.mv(photoPath)
-        .then(() => cloudinary.uploader.upload(photoPath))
-        .then(resultCloudinary => {
-            fs.unlinkSync(photoPath);
+    User.findOne({ username }).then(user => {
+        if (!user) {
+            return res.json({ result: false, error: 'User not found' });
+        }
 
-            const username = req.auth.username;
-
-            User.findOne({ username }).then(user => {
-                if (user) {
-                    const newAnnounce = new Announce({
-                        host: user._id,
-                        address: [{ street: req.body.street, city: req.body.city, zipcode: req.body.zipcode }],
-                        availableDates: [{
-                            startDateAt: req.body.startDateAt,
-                            endDateAt: req.body.endDateAt,
-                        }],
-                        locationType: req.body.locationType,
-                        instrumentsAvailable: req.body.instrumentsAvailable,
-                        capacity: req.body.capacity,
-                        description: req.body.description,
-                        media: [resultCloudinary.secure_url],
-                        accessibility: req.body.accessibility,
-                        accomodation: { sleeping: req.body.sleeping, restauration: req.body.restauration },
-                        createdAt: new Date(),
-                        updatedAt: new Date()
-                    });
-
-                    newAnnounce.save().then(() => {
-                        res.json({ result: true, url: resultCloudinary.secure_url, newAnnounce });
-                    });
-                } else {
-                    res.json({ result: false, error: 'User not found' });
-                }
-            });
+        const newAnnounce = new Announce({
+            host: user._id,
+            address: [{ street: req.body.street, city: req.body.city, zipcode: req.body.zipcode }],
+            availableDates: [{
+                startDateAt: req.body.startDateAt,
+                endDateAt: req.body.endDateAt,
+            }],
+            locationType: req.body.locationType,
+            instrumentsAvailable: req.body.instrumentsAvailable,
+            capacity: req.body.capacity,
+            description: req.body.description,
+            media: [resultCloudinary.secure_url], // Utilisation de l'URL fournie par Cloudinary
+            accessibility: req.body.accessibility,
+            accomodation: { sleeping: req.body.sleeping, restauration: req.body.restauration },
+            createdAt: new Date(),
+            updatedAt: new Date()
         });
+
+        newAnnounce.save().then(() => {
+            res.json({ result: true, newAnnounce });
+        }).catch(error => {
+            res.json({ result: false, error: 'Error saving announce to database' });
+        });
+    }).catch(error => {
+        res.json({ result: false, error: 'Error finding user' });
+    });
 });
+
+
+module.exports = router;
+
 
 router.post("/tours", authMiddleware, (req, res) => {
     const requiredFields = ['date', 'city', 'street', 'zipcode', 'status'];

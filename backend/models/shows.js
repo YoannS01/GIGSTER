@@ -12,7 +12,7 @@ const showSchema = mongoose.Schema({
     createdAt: Date, //dernier  
     updatedAt: Date, //dernier
     address: addressSchema,
-    host: { type: Schema.Types.ObjectId, ref: 'user' },
+    host: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
     status: String,
     isValidated: Boolean,
     isRefused: Boolean,
