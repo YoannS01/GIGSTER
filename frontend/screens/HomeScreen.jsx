@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
 
+    const [modalVisible, setModalVisible] = useState(false);
     const [modalDisplay, setModalDisplay] = useState(0);
     const [searching, setSearching] = useState(false)
     const navigation = useNavigation()
@@ -80,6 +81,8 @@ export default function HomeScreen() {
                 note: data.note
             })
             setModalDisplay(2)
+            setModalVisible(true)
+
         }}>
             <AnnounceCard
                 key={i}
@@ -163,7 +166,7 @@ export default function HomeScreen() {
 
     const modalUserContent = (
         <Modal style={styles.modal}
-            isVisible={modalDisplay}
+            isVisible={modalVisible}
             swipeDirection="left"
             animationInTiming={500}
             animationIn="slideInLeft"
@@ -171,14 +174,23 @@ export default function HomeScreen() {
             hideModalContentWhileAnimating={true}
             backdropTransitionInTiming={500}
             backdropTransitionOutTiming={500}
-            onBackdropPress={() => setModalDisplay(0)}
-            onSwipeComplete={() => setModalDisplay(0)}
+            onBackdropPress={() => {
+                setModalDisplay(0)
+                setModalVisible(false)
+            }}
+            onSwipeComplete={() => {
+                setModalDisplay(0)
+                setModalVisible(false)
+            }}
         >
             <View style={styles.centeredView}>
                 <View>
                     <View style={styles.modalView}>
                         <Image style={styles.profilePic} source={require('../assets/Shulk.png')} />
-                        <FontAwesome name='times' onPress={() => setModalDisplay(0)} size={40} />
+                        <FontAwesome name='times' onPress={() => {
+                            setModalDisplay(0)
+                            setModalVisible(false)
+                        }} size={40} />
                     </View>
                     <View style={styles.modalNav}>
                         <View style={styles.modalSection}>
@@ -225,7 +237,7 @@ export default function HomeScreen() {
 
     const modalCardContent = (
         <Modal
-            isVisible={modalDisplay}
+            isVisible={modalVisible}
             swipeDirection="down"
             animationInTiming={500}
             animationIn="slideInUp"
@@ -233,8 +245,14 @@ export default function HomeScreen() {
             hideModalContentWhileAnimating={true}
             backdropTransitionInTiming={500}
             backdropTransitionOutTiming={500}
-            onBackdropPress={() => setModalDisplay(0)}
-            onSwipeComplete={() => setModalDisplay(0)}
+            onBackdropPress={() => {
+                setModalDisplay(0)
+                setModalVisible(false)
+            }}
+            onSwipeComplete={() => {
+                setModalDisplay(0)
+                setModalVisible(false)
+            }}
         >
             <View style={styles.cardCenteredView}>
                 <Image style={styles.firstImage} source={modalContent.image}></Image>
@@ -271,7 +289,11 @@ export default function HomeScreen() {
 
 
             <View style={styles.header}>
-                <TouchableOpacity style={styles.btnModal} onPress={() => setModalDisplay(1)}>
+                <TouchableOpacity style={styles.btnModal} onPress={() => {
+                    setModalDisplay(1)
+                    setModalVisible(true)
+                }
+                }>
                     <Image style={styles.profilePicMenu} source={require('../assets/Shulk.png')} />
                 </TouchableOpacity>
                 <View style={styles.searchField}>
@@ -377,7 +399,7 @@ const styles = StyleSheet.create({
     },
     recoZone: {
         width: '100%',
-        height: '40%',
+        height: '35%',
         flexDirection: 'row'
     },
     recoZoneSearching: {
@@ -387,7 +409,7 @@ const styles = StyleSheet.create({
     },
     topZone: {
         width: '100%',
-        height: '28%',
+        height: '23%',
         flexDirection: 'row'
     },
     btnModal: {
