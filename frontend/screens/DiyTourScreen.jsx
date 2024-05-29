@@ -35,7 +35,7 @@ export default function DiyTourScreen() {
         });
       }
     })();
-  }, []);
+  }, [searchCity]);
 
   if (!mapRegion) {
     return (
@@ -70,15 +70,11 @@ export default function DiyTourScreen() {
    const dispoMarkers = Dates.map((date) => date.startDateAt > date)
   */
 
-  function getCityLocation() {
-    if (searchCity.length === 0) {
-      return;
-    }
 
+  function getCityLocation() {
     fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log('RETOUR API', data.features[0].geometry.coordinates[1])
         if (data.features.length === 0) {
           return;
         }
@@ -87,12 +83,11 @@ export default function DiyTourScreen() {
         setMapRegion({
           latitude: foundCity.geometry.coordinates[1],
           longitude: foundCity.geometry.coordinates[0],
-        })
-
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        });
       });
   }
-
-
 
   return (
     <View style={styles.container}>
@@ -105,6 +100,13 @@ export default function DiyTourScreen() {
           latitudeDelta: mapRegion.latitudeDelta,
           longitudeDelta: mapRegion.longitudeDelta,
         }}
+        region={{
+          latitude: mapRegion.latitude,
+          longitude: mapRegion.longitude,
+          latitudeDelta: mapRegion.latitudeDelta,
+          longitudeDelta: mapRegion.longitudeDelta,
+        }}
+        onRegionChange={(region) => setMapRegion(region)}
       >
         {currentPosition && (
           <Marker coordinate={currentPosition} title="Me!" pinColor="#fecb2d" />
@@ -120,7 +122,9 @@ export default function DiyTourScreen() {
           value={searchCity}
         />
 
-        <TouchableOpacity style={styles.btnSearch} onPress={() => getCityLocation()}>
+        <TouchableOpacity
+          style={styles.btnSearch}
+          onPress={() => getCityLocation()}>
           <Text style={styles.textSearch}>
             Go
           </Text>
