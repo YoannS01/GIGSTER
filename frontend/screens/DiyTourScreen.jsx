@@ -13,6 +13,7 @@ export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
   const [searchCity, setSearchCity] = useState('')
+  const [newMapRegion, setNewMapRegion] = useState('')
 
 
 
@@ -35,7 +36,7 @@ export default function DiyTourScreen() {
         });
       }
     })();
-  }, [searchCity]);
+  }, []);
 
   if (!mapRegion) {
     return (
@@ -80,7 +81,7 @@ export default function DiyTourScreen() {
         }
 
         const foundCity = data.features[0];
-        setMapRegion({
+        setNewMapRegion({
           latitude: foundCity.geometry.coordinates[1],
           longitude: foundCity.geometry.coordinates[0],
           latitudeDelta: 0.1,
@@ -93,7 +94,6 @@ export default function DiyTourScreen() {
     <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFillObject}
-
         initialRegion={{
           latitude: mapRegion.latitude,
           longitude: mapRegion.longitude,
@@ -101,12 +101,12 @@ export default function DiyTourScreen() {
           longitudeDelta: mapRegion.longitudeDelta,
         }}
         region={{
-          latitude: mapRegion.latitude,
-          longitude: mapRegion.longitude,
-          latitudeDelta: mapRegion.latitudeDelta,
-          longitudeDelta: mapRegion.longitudeDelta,
+          latitude: newMapRegion.latitude,
+          longitude: newMapRegion.longitude,
+          latitudeDelta: newMapRegion.latitudeDelta,
+          longitudeDelta: newMapRegion.longitudeDelta,
         }}
-        onRegionChange={(region) => setMapRegion(region)}
+      // onRegionChange={(region) => setNewMapRegion(region)}
       >
         {currentPosition && (
           <Marker coordinate={currentPosition} title="Me!" pinColor="#fecb2d" />
