@@ -309,7 +309,7 @@ export default function HomeScreen() {
                 </View>
             </View>
             {!searching ?
-                <>
+                <View>
                     <Text style={styles.welcome}>Welcome JustneedVic</Text>
                     <Text style={styles.discover}>Discover...</Text>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone} >
@@ -319,7 +319,7 @@ export default function HomeScreen() {
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.topZone}>
                         {topList}
                     </ScrollView>
-                </> :
+                </View> :
 
                 <ScrollView style={styles.recoZoneSearching} >
                     <View style={styles.searchTitle}>
@@ -329,6 +329,7 @@ export default function HomeScreen() {
                     {cardListSearch}
                 </ScrollView>
 
+
             }
         </View >
     );
@@ -336,7 +337,8 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#F0E7F6'
+        backgroundColor: '#F0E7F6',
+        height: '100%'
     },
     header: {
         width: '100%',
@@ -383,7 +385,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: 25,
         marginBottom: 10,
-        height: '4%'
+        height: '5%'
     },
     discover: {
         fontSize: 15,
@@ -395,7 +397,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         marginLeft: 25,
-        height: '5%'
+        height: '6%'
     },
     recoZone: {
         width: '100%',
@@ -542,5 +544,9 @@ const styles = StyleSheet.create({
         height: '10%',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    belowNavbar: {
+        height: '10%',
+        backgroundColor: 'green'
     }
 });

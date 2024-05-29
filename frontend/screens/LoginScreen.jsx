@@ -83,10 +83,14 @@ export default function LoginScreen({ navigation }) {
         setCurrentPage(currentPage + 1);
       }
       return updatedUser;
-
     });
   }
+  // Mécanique permettant de send les data après le re-render
+  if (currentPage === 5) {
+    sendData();
+  }
 
+  console.log("Utilisateur Final:", user);
   async function sendData() {
     console.log("Envoi des données vers le backend");
     console.log("Utilisateur Final:", user);
@@ -121,11 +125,6 @@ export default function LoginScreen({ navigation }) {
       dispatch(updateHost(user.isHost));
       navigation.navigate("TabNavigator", { screen: "Home" });
     }
-  }
-
-  // Mécanique permettant de send les data après le re-render
-  if (currentPage === 5) {
-    sendData();
   }
 
   return (
