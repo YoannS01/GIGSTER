@@ -68,24 +68,44 @@ export default function LoginScreen({ navigation }) {
           updatedUser[key] = new Date(data[key]);
           return;
         }
+<<<<<<< HEAD
         updatedUser[key] = data[key];
         console.log(updatedUser[key])
+=======
+
+        if (typeof data[key] === "object" && !Array.isArray(data[key])) {
+          updatedUser[key] = {
+            ...previousUser[key],
+            ...data[key],
+          };
+        } else {
+          updatedUser[key] = data[key];
+        }
+>>>>>>> 8b04c6d9b58bd2333932ddc61a8761247b0bde2d
       });
 
       if (currentPage !== 4) {
         setCurrentPage(currentPage + 1);
       }
+<<<<<<< HEAD
       console.log(updatedUser)
       setUser(updatedUser)
+=======
+
+>>>>>>> 8b04c6d9b58bd2333932ddc61a8761247b0bde2d
       return updatedUser;
 
     });
   }
 
   async function sendData() {
+<<<<<<< HEAD
     console.log("Utilisateur final : ", u);
 
+=======
+>>>>>>> 8b04c6d9b58bd2333932ddc61a8761247b0bde2d
     console.log("Envoi des données vers le backend");
+    console.log("Utilisateur Final:", user);
     const resp = await fetch(`http://${FRONT_IP}:3000/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -94,7 +114,14 @@ export default function LoginScreen({ navigation }) {
 
     const data = await resp.json();
 
-    console.log("Retour du backend : ", data.result, data.token);
+    console.log(
+      "Retour du backend :",
+      data.result,
+      "/ token:",
+      data.token,
+      "/ error message:",
+      data.error
+    );
     if (data.result) {
       dispatch(updateToken(data.token));
       dispatch(updateUsername(user.username));
@@ -110,6 +137,11 @@ export default function LoginScreen({ navigation }) {
       dispatch(updateHost(user.isHost));
       navigation.navigate("TabNavigator", { screen: "Home" });
     }
+  }
+
+  // Mécanique permettant de send les data après le re-render
+  if (currentPage === 5) {
+    sendData();
   }
 
   return (
@@ -138,5 +170,3 @@ export default function LoginScreen({ navigation }) {
     </>
   );
 }
-
-console.log('debug')

@@ -1,26 +1,38 @@
-import React from 'react';
-import { Alert, StyleSheet, TextInput, TouchableOpacity, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
+import React from "react";
+import {
+    Alert,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
+    Text,
+    KeyboardAvoidingView,
+    Platform,
+} from "react-native";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 export default function Step2(props) {
     // Validation schema for artist
     const artistSchema = yup.object().shape({
-        artistname: yup.string().required('Artist name is required'),
-        members: yup.number().required('Members is required').min(1, 'Must be at least 1 member'),
-        genres: yup.string().required('Genre is required'),
-        placeOrigin: yup.string().required('Place of origin is required'),
+        artistname: yup.string().required("Artist name is required"),
+        members: yup
+            .number()
+            .required("Members is required")
+            .min(1, "Must be at least 1 member"),
+        genres: yup.string().required("Genre is required"),
+        placeOrigin: yup.string().required("Place of origin is required"),
     });
 
     // Validation schema for host
     const hostSchema = yup.object().shape({
-        description: yup.string().required('Description is required'),
-        favoriteGenre: yup.string().required('Favorite genre is required'),
+        description: yup.string().required("Description is required"),
+        favoritesGenres: yup.string().required("Favorite genre is required"),
     });
 
     const initialValues = props.user.isArtist
-        ? { artistname: '', members: '', genres: '', placeOrigin: '' }
-        : { description: '', favoriteGenre: '' };
+        ? { artistname: "", members: "", genres: "", placeOrigin: "" }
+        : { description: "", favoritesGenres: "" };
 
     const validationSchema = props.user.isArtist ? artistSchema : hostSchema;
 
@@ -34,18 +46,18 @@ export default function Step2(props) {
                         artistname: values.artistname,
                         members: parseInt(values.members, 10),
                         placeOrigin: values.placeOrigin,
-                        genres: values.genres.split(','),
+                        genres: values.genres.split(","),
                     },
                 });
             } else if (props.user.isHost) {
                 props.updateUser({
                     host: {
                         description: values.description,
-                        favoriteGenre: values.favoriteGenre.split(','),
+                        favoritesGenres: values.favoritesGenres.split(","),
                     },
                 });
             }
-            props.sendData();
+            props.getNextPage(5);
         },
     });
 
@@ -63,14 +75,13 @@ export default function Step2(props) {
                 <Text>Mon Profil</Text>
                 <View style={styles.stepContent}>
                     {props.user.isArtist ? (
-                        //inscription artiste
                         <>
                             <Text style={styles.label}>Artist name</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder="name"
-                                onChangeText={formik.handleChange('artistname')}
-                                onBlur={formik.handleBlur('artistname')}
+                                onChangeText={formik.handleChange("artistname")}
+                                onBlur={formik.handleBlur("artistname")}
                                 value={formik.values.artistname}
                             />
                             {formik.touched.artistname && formik.errors.artistname ? (
@@ -82,8 +93,8 @@ export default function Step2(props) {
                                 style={styles.input}
                                 placeholder="Number"
                                 keyboardType="numeric"
-                                onChangeText={formik.handleChange('members')}
-                                onBlur={formik.handleBlur('members')}
+                                onChangeText={formik.handleChange("members")}
+                                onBlur={formik.handleBlur("members")}
                                 value={formik.values.members}
                             />
                             {formik.touched.members && formik.errors.members ? (
@@ -94,8 +105,8 @@ export default function Step2(props) {
                             <TextInput
                                 style={styles.input}
                                 placeholder="Genre"
-                                onChangeText={formik.handleChange('genres')}
-                                onBlur={formik.handleBlur('genres')}
+                                onChangeText={formik.handleChange("genres")}
+                                onBlur={formik.handleBlur("genres")}
                                 value={formik.values.genres}
                             />
                             {formik.touched.genres && formik.errors.genres ? (
@@ -106,8 +117,8 @@ export default function Step2(props) {
                             <TextInput
                                 style={styles.input}
                                 placeholder="City"
-                                onChangeText={formik.handleChange('placeOrigin')}
-                                onBlur={formik.handleBlur('placeOrigin')}
+                                onChangeText={formik.handleChange("placeOrigin")}
+                                onBlur={formik.handleBlur("placeOrigin")}
                                 value={formik.values.placeOrigin}
                             />
                             {formik.touched.placeOrigin && formik.errors.placeOrigin ? (
@@ -115,14 +126,13 @@ export default function Step2(props) {
                             ) : null}
                         </>
                     ) : (
-                        //inscription hôte
                         <>
                             <Text style={styles.label}>Description</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder="Description"
-                                onChangeText={formik.handleChange('description')}
-                                onBlur={formik.handleBlur('description')}
+                                onChangeText={formik.handleChange("description")}
+                                onBlur={formik.handleBlur("description")}
                                 value={formik.values.description}
                             />
                             {formik.touched.description && formik.errors.description ? (
@@ -133,8 +143,8 @@ export default function Step2(props) {
                             <TextInput
                                 style={styles.input}
                                 placeholder="Favorite genre"
-                                onChangeText={formik.handleChange('favoriteGenre')}
-                                onBlur={formik.handleBlur('favoriteGenre')}
+                                onChangeText={formik.handleChange("favoriteGenre")}
+                                onBlur={formik.handleBlur("favoriteGenre")}
                                 value={formik.values.favoriteGenre}
                             />
                             {formik.touched.favoriteGenre && formik.errors.favoriteGenre ? (
@@ -157,12 +167,12 @@ export default function Step2(props) {
 
 const styles = StyleSheet.create({
     mainSelect: {
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        backgroundColor: "white",
+        alignItems: "center",
+        justifyContent: "center",
     },
     label: {
         fontSize: 16,
@@ -170,7 +180,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     input: {
-        backgroundColor: 'white',
+        backgroundColor: "white",
         paddingTop: 6,
         paddingBottom: 6,
         paddingLeft: 10,
@@ -182,7 +192,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     btn: {
-        backgroundColor: '#5100FF',
+        backgroundColor: "#5100FF",
         paddingTop: 6,
         paddingBottom: 6,
         paddingLeft: 10,
@@ -197,26 +207,17 @@ const styles = StyleSheet.create({
         marginVertical: 20,
     },
     textBtn: {
-        color: 'white',
-        textAlign: 'center',
+        color: "white",
+        textAlign: "center",
         fontSize: 16,
     },
     error: {
-        color: 'red',
+        color: "red",
         fontSize: 12,
         marginHorizontal: 5,
         marginTop: 5,
     },
 });
-
-
-
-
-
-
-
-
-
 
 /*import { useState } from "react";
 import {
