@@ -1,15 +1,30 @@
 import Login from "../components/Login";
-import Step1 from "../components/Step1"
-import Step2 from "../components/Step2"
+import Step1 from "../components/Step1";
+import Step2 from "../components/Step2";
 import React, { useState } from "react";
 import { FRONT_IP } from "../hide-ip";
 import StatusScreen from "./StatusScreen";
-import { updateToken } from "../reducers/user";
+import {
+  updateToken,
+  updateUsername,
+  updateEmail,
+  updateFirstname,
+  updateLastname,
+  updateAddress,
+  updatePhoneNumber,
+  getArtistInfos,
+  getHostInfos,
+  updateBirthdate,
+  updateArtist,
+  updateHost,
+} from "../reducers/user";
 import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import moment from "moment/moment";
 
 export default function LoginScreen({ navigation }) {
-  const dispatch = useDispatch()
-  const [currentPage, setCurrentPage] = useState(1)
+  const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
   const [user, setUser] = useState({
     username: null,
     email: null,
@@ -36,15 +51,15 @@ export default function LoginScreen({ navigation }) {
     isArtist: false,
     isHost: false,
     medias: [],
-    token: null
-  })
+    token: null,
+  });
 
   function getNextPage(numPage) {
-    setCurrentPage(numPage)
+    setCurrentPage(numPage);
   }
 
   function updateUser(data) {
-    console.log("datas à mettre à jour : ", data)
+    console.log("datas à mettre à jour : ", data);
     setUser((previousUser) => {
       const updatedUser = { ...previousUser };
 
@@ -54,46 +69,70 @@ export default function LoginScreen({ navigation }) {
           return;
         }
         updatedUser[key] = data[key];
-
       });
 
       if (currentPage !== 4) {
-        setCurrentPage(currentPage + 1)
+        setCurrentPage(currentPage + 1);
       }
       return updatedUser;
     });
-
   }
 
   async function sendData() {
-
-    console.log("Utilisateur final : ", user)
-    console.log("Date relevée : ", user.birthdate)
-    console.log("Envoi des données vers le backend")
-    const resp = await fetch(`http://192.168.1.95:3000/users/signup`, {
+    console.log("Utilisateur final : ", user);
+    console.log("Date relevée : ", user.birthdate);
+    console.log("Envoi des données vers le backend");
+    const resp = await fetch(`http://${FRONT_IP}:3000/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user)
-    })
+      body: JSON.stringify(user),
+    });
 
-    const data = await resp.json()
+    const data = await resp.json();
 
-    console.log("Retour du backend : ", data.result, data.token)
+    console.log("Retour du backend : ", data.result, data.token);
     if (data.result) {
-      dispatch(updateToken(data.token))
-      console.log('hello')
+      dispatch(updateToken(data.token));
+      dispatch(updateUsername(user.username));
+      dispatch(updateEmail(user.email));
+      dispatch(updateFirstname(user.firstname));
+      dispatch(updateLastname(user.lastname));
+      dispatch(updateAddress(user.address));
+      dispatch(updatePhoneNumber(user.phoneNumber));
+      dispatch(getArtistInfos(user.artist));
+      dispatch(getHostInfos(user.host));
+      dispatch(updateBirthdate(moment(user.birthdate).format("DD/MM/YYYY")));
+      dispatch(updateArtist(user.isArtist));
+      dispatch(updateHost(user.isHost));
       navigation.navigate("TabNavigator", { screen: "Home" });
     }
   }
 
-
   return (
     <>
-      {currentPage === 1 && <Login getNextPage={getNextPage} updateUser={updateUser} user={user} />}
-      {currentPage === 2 && <StatusScreen getNextPage={getNextPage} updateUser={updateUser} user={user} />}
-      {currentPage === 3 && <Step1 getNextPage={getNextPage} updateUser={updateUser} user={user} />}
-      {currentPage === 4 && <Step2 getNextPage={getNextPage} updateUser={updateUser} sendData={sendData} user={user} />}
+      {currentPage === 1 && (
+        <Login getNextPage={getNextPage} updateUser={updateUser} user={user} />
+      )}
+      {currentPage === 2 && (
+        <StatusScreen
+          getNextPage={getNextPage}
+          updateUser={updateUser}
+          user={user}
+        />
+      )}
+      {currentPage === 3 && (
+        <Step1 getNextPage={getNextPage} updateUser={updateUser} user={user} />
+      )}
+      {currentPage === 4 && (
+        <Step2
+          getNextPage={getNextPage}
+          updateUser={updateUser}
+          sendData={sendData}
+          user={user}
+        />
+      )}
     </>
-
-  )
+  );
 }
+
+console.log('debug')

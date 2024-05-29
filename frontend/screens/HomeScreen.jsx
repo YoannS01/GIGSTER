@@ -357,3 +357,5 @@ const styles = StyleSheet.create({
         marginLeft: 20
     }
 });
+
+console.log('debug')

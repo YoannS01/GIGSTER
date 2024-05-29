@@ -16,11 +16,21 @@ import {
     updateToken,
     updateArtist,
     updateHost,
+    updateBirthdate,
+    updateFirstname,
+    updateLastname,
+    updateAddress,
+    updatePhoneNumber,
+    getArtistInfos,
+    getHostInfos,
+
+
 } from "../reducers/user";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { FRONT_IP } from "../hide-ip";
 import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
 
 // Définir les schémas de validation avec Yup
 
@@ -46,13 +56,13 @@ const signUpSchema = Yup.object().shape({
         .required("Confirm Password is required"),
 });
 
-export default function Login(props) {
+export default function Login(props, navigate) {
     const navigation = useNavigation()
     const dispatch = useDispatch();
     const [isSignIn, setIsSignIn] = useState(false);
 
     const handleSubmitSignIn = (values, { setSubmitting, setErrors }) => {
-        fetch(`http://192.168.1.95:3000/users/signin`, {
+        fetch(`http://${FRONT_IP}:3000/users/signin`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -62,19 +72,29 @@ export default function Login(props) {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("REPONSE DU BACK", data.result)
+                console.log("REPONSE DU BACK", data.data)
                 setSubmitting(false);
                 if (!data.result) {
                     setErrors({ general: data.error });
                 } else {
-                    //navigation est undefined
+                    delete data.data.artist._id;
+
+                    dispatch(updateToken(data.data.token));
+                    dispatch(updateUsername(data.data.username));
+                    dispatch(updateEmail(data.email));
+                    dispatch(updateFirstname(data.data.firstname));
+                    dispatch(updateLastname(data.data.lastname));
+                    dispatch(updateAddress(data.data.address));
+                    dispatch(updatePhoneNumber(data.data.phoneNumber));
+                    dispatch(getArtistInfos(data.data.artist));
+                    dispatch(getHostInfos(data.data.host));
+                    dispatch(updateBirthdate(moment(data.data.birthdate).format("DD/MM/YYYY")));
+                    dispatch(updateArtist(data.data.isArtist));
+                    dispatch(updateHost(data.data.isHost));
+
                     navigation.navigate("TabNavigator", { screen: "Home" });
-                    /* dispatch(updateUsername(data.data.username));
-                     dispatch(updateEmail(data.data.email));
-                     dispatch(updateToken(data.data.token));
-                     dispatch(updateArtist(data.data.isArtist));
-                     dispatch(updateHost(data.data.isHost));
- */
+
+
                 }
             })
 
@@ -98,7 +118,7 @@ export default function Login(props) {
 
     return (
         <KeyboardAvoidingView
-            style={styles.container}
+            style={styles.KeyboardAvoidingViewContainer}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
         >
@@ -118,12 +138,12 @@ export default function Login(props) {
                             touched,
                             isSubmitting,
                         }) => (
-                            <View>
+                            <View style={StyleSheet.signInContainer}>
                                 <Text style={styles.signin}>Sign In</Text>
                                 <Text style={styles.titles}>Email</Text>
                                 <TextInput
                                     placeholder="name@example.com"
-                                    style={styles.input_email}
+                                    style={styles.input}
                                     onChangeText={handleChange("email")}
                                     onBlur={handleBlur("email")}
                                     value={values.email}
@@ -135,7 +155,7 @@ export default function Login(props) {
                                 <TextInput
                                     secureTextEntry
                                     placeholder="Insert your password"
-                                    style={styles.input_password}
+                                    style={styles.input}
                                     onChangeText={handleChange("password")}
                                     onBlur={handleBlur("password")}
                                     value={values.password}
@@ -152,12 +172,12 @@ export default function Login(props) {
                                     disabled={isSubmitting}
                                 >
                                     <Text style={styles.text_signin}>Sign In</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity >
                                 <Text>or use one of your social profiles</Text>
                                 <View style={styles.bottom}>
                                     <Text style={styles.bottom_text}>Pas encore inscrit ?</Text>
                                     <Text
-                                        style={styles.bottom_signup}
+
                                         onPress={() => setIsSignIn(true)}
                                     >
                                         Sign Up
@@ -187,11 +207,11 @@ export default function Login(props) {
                             isSubmitting,
                         }) => (
                             <View>
-                                <Text style={styles.signup}>Sign Up</Text>
-                                <Text style={styles.titles}>Username</Text>
+                                <Text style={styles.title}>Sign Up</Text>
+                                <Text style={styles.inputTitle}>Username</Text>
                                 <TextInput
                                     placeholder="Username"
-                                    style={styles.input_username}
+                                    style={styles.input}
                                     onChangeText={handleChange("username")}
                                     onBlur={handleBlur("username")}
                                     value={values.username}
@@ -202,7 +222,7 @@ export default function Login(props) {
                                 <Text style={styles.titles}>Email</Text>
                                 <TextInput
                                     placeholder="name@example.com"
-                                    style={styles.input_email}
+                                    style={styles.input}
                                     onChangeText={handleChange("email")}
                                     onBlur={handleBlur("email")}
                                     value={values.email}
@@ -214,7 +234,7 @@ export default function Login(props) {
                                 <TextInput
                                     secureTextEntry
                                     placeholder="Insert your password"
-                                    style={styles.input_password}
+                                    style={styles.input}
                                     onChangeText={handleChange("password")}
                                     onBlur={handleBlur("password")}
                                     value={values.password}
@@ -226,7 +246,7 @@ export default function Login(props) {
                                 <TextInput
                                     secureTextEntry
                                     placeholder="Confirm your password"
-                                    style={styles.input_password}
+                                    style={styles.input}
                                     onChangeText={handleChange("confirmPassword")}
                                     onBlur={handleBlur("confirmPassword")}
                                     value={values.confirmPassword}
@@ -263,17 +283,27 @@ export default function Login(props) {
 }
 
 const styles = StyleSheet.create({
-    container: {
+
+    KeyboardAvoidingViewContainer: {
         flex: 1,
-        backgroundColor: "#e1f5ff",
-        alignItems: "center",
-        justifyContent: "center",
+        backgroundColor: "white",
+        width: '100%',
+        paddingTop: 33
     },
     scrollViewContainer: {
         flexGrow: 1,
         alignItems: "center",
-        justifyContent: "center",
+        backgroundColor: "white"
+        ,
     },
+    container: {
+        flex: 1,
+
+        width: '100%',
+        paddingTop: 33
+
+    },
+
     signup: {
         fontWeight: "bold",
         fontSize: 50,
@@ -288,6 +318,22 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 20,
         marginTop: 15,
+    },
+    input: {
+        height: 50,
+        width: 300,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingTop: 10,
+        marginTop: 20,
+        marginBottom: 10,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderBottomWidth: 3,
+        borderRightWidth: 3,
+        marginTop: 20,
+        backgroundColor: 'white',
+        padding: 10
     },
     input_username: {
         height: 40,
@@ -349,6 +395,12 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         marginTop: 20,
         marginBottom: 10,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderBottomWidth: 3,
+        borderRightWidth: 3,
+        marginTop: 20,
+        backgroundColor: 'white',
     },
     bottom: {
         alignItems: "space-between",

@@ -50,7 +50,7 @@ export default function Step2(props) {
     });
 
     const previousPage = () => {
-        props.getNextPage(2);
+        props.getNextPage(3);
     };
 
     return (

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, View, Text, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import { useDispatch } from "react-redux";
 import { getNextPage } from "../reducers/stepper";
 import DatePicker from '@react-native-community/datetimepicker'
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {
     updateAddress,
     updateBirthdate,
@@ -26,6 +27,8 @@ const validationSchema = yup.object().shape({
 
 export default function Step1(props) {
 
+    const [showDatePicker, setShowDatePicker] = useState(false);
+
     function nextStep(values) {
         console.log("date venant de l'input : ", values.birthdate)
         props.updateUser({
@@ -45,6 +48,13 @@ export default function Step1(props) {
         const {
             nativeEvent: { timestamp, utcOffset },
         } = event;
+    };
+
+    const handleDateChange = (event, selectedDate, setFieldValue) => {
+        setShowDatePicker(false);
+        if (selectedDate) {
+            setFieldValue('birthdate', selectedDate);
+        }
     };
 
     return (
@@ -110,6 +120,7 @@ export default function Step1(props) {
 
                             <TextInput
                                 style={styles.input}
+                                keyboardType="numeric"
                                 placeholder="Zipcode"
                                 onChangeText={handleChange('zipcode')}
                                 onBlur={handleBlur('zipcode')}
@@ -129,15 +140,15 @@ export default function Step1(props) {
                             {touched.phoneNumber && errors.phoneNumber && <Text style={styles.error}>{errors.phoneNumber}</Text>}
 
                             <Text style={styles.label}>Birthdate</Text>
-                            <DatePicker
-                                style={styles.datePicker}
-                                value={new Date(values.birthdate)}
+
+                            <DateTimePicker
+                                value={values.birthdate}
                                 mode="date"
-                                positiveButton={{ label: 'OK', textColor: 'green' }}
-                                negativeButton={{ label: 'Cancel', textColor: 'red' }}
-                                onChange={(event, date) => { setFieldValue('birthdate', new Date(date)) }}
-                                locale='fr-FR'
+                                display="default"
+                                onChange={(event, selectedDate) => handleDateChange(event, selectedDate, setFieldValue)}
+                                locale="fr-FR"
                             />
+
                             {touched.birthdate && errors.birthdate && <Text style={styles.error}>{errors.birthdate}</Text>}
                         </View>
                         <TouchableOpacity style={styles.btn} onPress={handleSubmit}>

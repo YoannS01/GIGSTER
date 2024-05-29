@@ -2,10 +2,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import HomeScreen from "./screens/homeScreen";
+import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen"
-import ProfileScreen from "./screens/profileScreen";
-import AddScreen from "./screens/addScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import AddScreen from "./screens/AddScreen";
 
 
 import { StatusBar } from "expo-status-bar";
