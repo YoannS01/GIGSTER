@@ -110,6 +110,7 @@ export default function HomeScreen() {
                 note: data.note
             })
             setModalDisplay(2)
+            setModalVisible(true)
         }}>
             <AnnounceCardSearch
                 key={i}
@@ -120,14 +121,6 @@ export default function HomeScreen() {
                 note={data.note} />
         </TouchableOpacity>
     })
-
-    function createModalContent() {
-
-        return (
-            <Text>Yeet</Text>
-        )
-
-    }
 
     const topData = [
         {
