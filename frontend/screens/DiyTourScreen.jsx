@@ -104,6 +104,7 @@ export default function DiyTourScreen() {
     fetch(`http://${FRONT_IP}:3000/allAnnounces`)
       .then(response => response.json())
       .then(data => {
+        console.log(data.announces[0])
         const hostsAvailable = []
         for (let elem of data.announces) {
 
@@ -114,21 +115,21 @@ export default function DiyTourScreen() {
         }
 
         setHosts(hostsAvailable)
-
+        console.log('Host', hosts)
         //Cherche les coordinnées de l'adresse de l'annonce:
-        const coordinates = []
+        const coords = []
         for (let elem of hosts) {
 
           const addresse = elem.address[0].street.split(" ").join("+")
-          console.log(addresse)
+          console.log("ADD", addresse)
 
           fetch(`https://api-adresse.data.gouv.fr/search/?q=${addresse}&zipcode=${elem.address[0].zipcode}`)
             .then(response => response.json())
             .then(data => {
-              console.log(data)
+              console.log("API", data.features)
 
               const foundCoords = data.features[0];
-              coordinates.push({
+              coords.push({
 
                 name: elem.host.firstname,
                 description: elem.description,
@@ -139,7 +140,7 @@ export default function DiyTourScreen() {
               })
             })
         }
-        setCoordinates(coordinates)
+        setCoordinates([...coordinates, coords])
 
 
       })
