@@ -1,19 +1,35 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView, Platform, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView, Platform, Button, ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 
 import AnnounceCard from '../components/AnnounceCard'
+import AnnounceCardSearch from '../components/AnnounceCardSearch';
 import TopCard from '../components/TopCard'
+
+import ProfileScreen from "./ProfileScreen";
+import { useNavigation } from '@react-navigation/native';
+
+
 
 
 
 export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalDisplay, setModalDisplay] = useState(0);
     const [searching, setSearching] = useState(false)
+    const navigation = useNavigation()
+
+    const [modalContent, setModalContent] = useState({
+        image: require("../assets/Felicita.png"),
+        title: 'La Felicita',
+        location: 'Paris 13',
+        availability: '06 Juin - 17 Juin',
+        note: '4.5'
+    })
 
     const cardsData = [
         {
@@ -53,16 +69,60 @@ export default function HomeScreen() {
         },
     ]
 
-    const cardList = cardsData.map((data, i) => {
-        return <AnnounceCard
-            key={i}
-            image={data.image}
-            title={data.title}
-            location={data.location}
-            availability={data.availability}
-            note={data.note} />
 
+
+    const cardList = cardsData.map((data, i) => {
+        return <TouchableOpacity key={i} onPress={() => {
+            setModalContent({
+                image: data.image,
+                title: data.title,
+                location: data.location,
+                availability: data.availability,
+                note: data.note
+            })
+            setModalDisplay(2)
+            setModalVisible(true)
+
+        }}>
+            <AnnounceCard
+                key={i}
+                image={data.image}
+                title={data.title}
+                location={data.location}
+                availability={data.availability}
+                note={data.note}
+            />
+        </TouchableOpacity>
     })
+
+    const cardListSearch = cardsData.map((data, i) => {
+        return <TouchableOpacity key={i} onPress={() => {
+            setModalContent({
+                image: data.image,
+                title: data.title,
+                location: data.location,
+                availability: data.availability,
+                note: data.note
+            })
+            setModalDisplay(2)
+        }}>
+            <AnnounceCardSearch
+                key={i}
+                image={data.image}
+                title={data.title}
+                location={data.location}
+                availability={data.availability}
+                note={data.note} />
+        </TouchableOpacity>
+    })
+
+    function createModalContent() {
+
+        return (
+            <Text>Yeet</Text>
+        )
+
+    }
 
     const topData = [
         {
@@ -95,91 +155,145 @@ export default function HomeScreen() {
 
     })
 
-    //   const [image, setImage] = useState(null);
+    function navigateModal() {
+        navigation.navigate("TabNavigator", { screen: "Profile" });
+        setModalVisible(!modalVisible)
+    }
 
-    //    const pickImage = async () => {
-    //         // Request permission to access media library
-    //         if (Platform.OS !== 'web') {
-    //             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    //             if (status !== 'granted') {
-    //                 alert('Sorry, we need camera roll permissions to make this work!');
-    //                 return;
-    //             }
-    //         }
+    function logout() {
+        navigation.navigate("LoginScreen");
+    }
 
-    // Open the image picker
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //     allowsEditing: true,
-    //     aspect: [4, 3],
-    //     quality: 1,
-    // });
-
-    //     if (!result.canceled) {
-    //         setImage(result.assets[0].uri);
-    //     }
-    // };
-
-    // <Button title="Pick an image from camera roll" onPress={pickImage} />
-    // {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-
-    return (
-        <View style={styles.container}>
-            <Modal style={styles.modal}
-                isVisible={modalVisible}
-                swipeDirection="left"
-                animationInTiming={500}
-                animationIn="slideInLeft"
-                animationOut="slideOutLeft"
-                hideModalContentWhileAnimating={true}
-                backdropTransitionInTiming={500}
-                backdropTransitionOutTiming={500}
-                onBackdropPress={() => setModalVisible(false)} // Fermeture du modal lors du clic sur le backdrop
-                onSwipeComplete={() => setModalVisible(false)} // Fermeture du modal lors du swipe
-            >
-                <View style={styles.centeredView}>
-                    <View>
-                        <View style={styles.modalView}>
-                            <Image style={styles.profilePic} source={require('../assets/Shulk.png')} />
-                            <FontAwesome name='times' onPress={() => setModalVisible(!modalVisible)} size={40} />
-                        </View>
-                        <View style={styles.modalNav}>
-                            <View style={styles.modalSection}>
-                                <FontAwesome name='user' size={35} />
-                                <View style={styles.modalAlign}>
-                                    <Text style={styles.modalText}>My gigs</Text>
-                                </View>
-                            </View>
-                            <View style={styles.modalSection}>
-                                <FontAwesome name='bell' size={28} />
-                                <View style={styles.modalAlign}>
-                                    <Text style={styles.modalText}>Notifications</Text>
-                                </View>
-                            </View>
-                            <View style={styles.modalSection}>
-                                <FontAwesome name='globe' size={35} />
-                                <View style={styles.modalAlign}>
-                                    <Text style={styles.modalText}>Mon compte</Text>
-                                </View>
-                            </View>
-                            <View style={styles.lastModalSection}>
-                                <FontAwesome name='heart' size={30} />
-                                <View style={styles.modalAlign}>
-                                    <Text style={styles.modalText}>Saved</Text>
-                                </View>
-                            </View>
-                        </View>
+    const modalUserContent = (
+        <Modal style={styles.modal}
+            isVisible={modalVisible}
+            swipeDirection="left"
+            animationInTiming={500}
+            animationIn="slideInLeft"
+            animationOut="slideOutLeft"
+            hideModalContentWhileAnimating={true}
+            backdropTransitionInTiming={500}
+            backdropTransitionOutTiming={500}
+            onBackdropPress={() => {
+                setModalDisplay(0)
+                setModalVisible(false)
+            }}
+            onSwipeComplete={() => {
+                setModalDisplay(0)
+                setModalVisible(false)
+            }}
+        >
+            <View style={styles.centeredView}>
+                <View>
+                    <View style={styles.modalView}>
+                        <Image style={styles.profilePic} source={require('../assets/Shulk.png')} />
+                        <FontAwesome name='times' onPress={() => {
+                            setModalDisplay(0)
+                            setModalVisible(false)
+                        }} size={40} />
                     </View>
-                    <View style={styles.settings}>
-                        <FontAwesome name='gear' size={50} />
-                        <View style={styles.modalAlign}>
-                            <Text style={styles.settingText}>Paramètres</Text>
+                    <View style={styles.modalNav}>
+                        <View style={styles.modalSection}>
+                            <FontAwesome name='user' size={35} />
+                            <View style={styles.modalAlign}>
+                                <Text style={styles.modalText} onPress={() => navigateModal()} >Profile</Text>
+                            </View>
+                        </View>
+                        <View style={styles.modalSection}>
+                            <FontAwesome name={true ? 'globe' : 'music'} size={35} />
+                            <View style={styles.modalAlign}>
+                                <Text style={styles.modalText}>{true ? 'My tours' : 'My bookings'}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.modalSection}>
+                            <FontAwesome name='heart' size={28} />
+                            <View style={styles.modalAlign}>
+                                <Text style={styles.modalText}>{true ? 'Liked hosts' : 'Liked artists'}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.modalSection}>
+                            <FontAwesome name='star' size={30} />
+                            <View style={styles.modalAlign}>
+                                <Text style={styles.modalText}>Preferences</Text>
+                            </View>
+                        </View>
+                        <View style={styles.lastModalSection}>
+                            <FontAwesome name='close' size={30} />
+                            <View style={styles.modalAlign}>
+                                <Text style={styles.modalText} onPress={() => logout()}>Log out</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </Modal>
+                <View style={styles.settings}>
+                    <FontAwesome name='gear' size={50} />
+                    <View style={styles.modalAlign}>
+                        <Text style={styles.settingText}>Settings</Text>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    )
+
+    const modalCardContent = (
+        <Modal
+            isVisible={modalVisible}
+            swipeDirection="down"
+            animationInTiming={500}
+            animationIn="slideInUp"
+            animationOut="slideOutUp"
+            hideModalContentWhileAnimating={true}
+            backdropTransitionInTiming={500}
+            backdropTransitionOutTiming={500}
+            onBackdropPress={() => {
+                setModalDisplay(0)
+                setModalVisible(false)
+            }}
+            onSwipeComplete={() => {
+                setModalDisplay(0)
+                setModalVisible(false)
+            }}
+        >
+            <View style={styles.cardCenteredView}>
+                <Image style={styles.firstImage} source={modalContent.image}></Image>
+                <View style={styles.cardModalDesc}>
+                    <View style={styles.titleModalDesc}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{modalContent.title}</Text>
+                    </View>
+                    <View style={styles.iconDesc}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 10 }}>
+                            <FontAwesome name='star' size={40} color={'#d4a60f'} />
+                            <Text style={{ fontSize: 25, fontWeight: 'bold' }} >{modalContent.note}</Text>
+                        </View>
+                        <FontAwesome name='heart' size={35} />
+                    </View>
+                    <View style={styles.infoDesc}>
+                        <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{modalContent.location}</Text>
+                        <View style={styles.modalAvailability}>
+                            <Text>Dates of availability</Text>
+                            <Text style={{ fontWeight: 'bold' }}>{modalContent.availability}</Text>
+                        </View>
+                        <Text style={styles.bioDesc}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni provident praesentium quasi impedit explicabo odio! Nam provident, perspiciatis saepe, suscipit voluptas deserunt minima quia, nisi et repellat qui a dolorum.
+                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus, atque iusto dicta odio maxime veritatis. Voluptatibus ex repudiandae cumque consequatur minus dolore fuga, facere eveniet nemo illum animi, beatae repellendus.
+                            Lorem</Text>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    )
+
+    return (
+        <View style={styles.container}>
+            {modalDisplay === 1 && modalUserContent}
+            {modalDisplay === 2 && modalCardContent}
+
+
             <View style={styles.header}>
-                <TouchableOpacity style={styles.btnModal} onPress={() => setModalVisible(!modalVisible)}>
+                <TouchableOpacity style={styles.btnModal} onPress={() => {
+                    setModalDisplay(1)
+                    setModalVisible(true)
+                }
+                }>
                     <Image style={styles.profilePicMenu} source={require('../assets/Shulk.png')} />
                 </TouchableOpacity>
                 <View style={styles.searchField}>
@@ -187,29 +301,44 @@ export default function HomeScreen() {
                         placeholder="Find your future hosts"
                         style={styles.input}
                     ></TextInput>
-                    <TouchableOpacity style={styles.btnSearch}>
+                    <TouchableOpacity style={styles.btnSearch} onPress={() => setSearching(true)}>
                         <Text style={styles.textSearch}>
                             Search
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <Text style={styles.welcome}>Welcome JustneedVic</Text>
-            <Text style={styles.discover}>Discover...</Text>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone} >
-                {cardList}
-            </ScrollView>
-            <Text style={styles.titleRanking}>Top Artist</Text>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.topZone}>
-                {topList}
-            </ScrollView>
+            {!searching ?
+                <View>
+                    <Text style={styles.welcome}>Welcome JustneedVic</Text>
+                    <Text style={styles.discover}>Discover...</Text>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone} >
+                        {cardList}
+                    </ScrollView>
+                    <Text style={styles.titleRanking}>Top Artist</Text>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.topZone}>
+                        {topList}
+                    </ScrollView>
+                </View> :
+
+                <ScrollView style={styles.recoZoneSearching} >
+                    <View style={styles.searchTitle}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Results for Bordeaux : </Text>
+                        <FontAwesome name='close' size={30} onPress={() => setSearching(false)} />
+                    </View>
+                    {cardListSearch}
+                </ScrollView>
+
+
+            }
         </View >
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#F0E7F6'
+        backgroundColor: '#F0E7F6',
+        height: '100%'
     },
     header: {
         width: '100%',
@@ -256,7 +385,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: 25,
         marginBottom: 10,
-        height: '4%'
+        height: '5%'
     },
     discover: {
         fontSize: 15,
@@ -268,16 +397,21 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         marginLeft: 25,
-        height: '5%'
+        height: '6%'
     },
     recoZone: {
         width: '100%',
-        height: '40%',
+        height: '35%',
         flexDirection: 'row'
+    },
+    recoZoneSearching: {
+        width: '100%',
+        height: '80%',
+        marginLeft: '2%'
     },
     topZone: {
         width: '100%',
-        height: '28%',
+        height: '23%',
         flexDirection: 'row'
     },
     btnModal: {
@@ -285,13 +419,22 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     modal: {
-        margin: 0
+        margin: 0,
     },
     centeredView: {
         backgroundColor: '#E6E6E6',
         width: '80%',
         height: '100%',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+    },
+    cardCenteredView: {
+        backgroundColor: '#E6E6E6',
+        width: '100%',
+        height: '95%',
+        justifyContent: 'space-between',
+        borderRadius: 15,
+        borderWidth: 6,
+        overflow: 'hidden'
     },
     modalView: {
         flexDirection: 'row',
@@ -355,7 +498,55 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         marginLeft: 20
+    },
+    searchTitle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: '5%',
+        paddingRight: '12%',
+    },
+    firstImage: {
+        height: '25%',
+        objectFit: 'cover',
+        width: '100%',
+    },
+    cardModalDesc: {
+        height: '75%',
+        width: '100%',
+        backgroundColor: '#E6E6E6',
+        borderTopWidth: 3
+    },
+    infoDesc: {
+        height: '80%',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingLeft: '5%',
+        paddingRight: '5%',
+    },
+    bioDesc: {
+        height: '60%',
+        textAlign: 'justify',
+        overflow: 'hidden'
+    },
+    modalAvailability: {
+        alignItems: 'center'
+    },
+    iconDesc: {
+        height: '10%',
+        paddingLeft: '5%',
+        paddingRight: '5%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    titleModalDesc: {
+        height: '10%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    belowNavbar: {
+        height: '10%',
+        backgroundColor: 'green'
     }
 });
-
-console.log('debug')

@@ -3,19 +3,17 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomeScreen from "./screens/HomeScreen";
-import LoginScreen from "./screens/LoginScreen"
+import LoginScreen from "./screens/LoginScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import AddScreen from "./screens/AddScreen";
 
-
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 import stepper from "./reducers/stepper";
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,8 +39,38 @@ const TabNavigator = () => {
 
           return <FontAwesome name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#ec6e5b",
+        tabBarActiveTintColor: "#5100FF",
         tabBarInactiveTintColor: "#335561",
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: "absolute",
+          height: 60,
+          width: "90%",
+          borderColor: "black",
+          borderRadius: 15,
+          borderWidth: 2,
+          borderTopWidth: 2,
+          borderTopColor: "black",
+          borderBottomWidth: 4,
+          borderRightWidth: 4,
+          marginBottom: "3%",
+          marginLeft: "5%",
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 3,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 6,
+          elevation: 6,
+        },
+        tabBarItemStyle: {
+          ...Platform.select({
+            ios: {
+              marginBottom: -30,
+            },
+          }),
+        },
         headerShown: false,
       })}
     >
@@ -75,9 +103,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+<<<<<<< HEAD
 
 
 
 
 
 
+=======
+>>>>>>> afcc5d6376126d5d89bb69f67f09e0228a68c867

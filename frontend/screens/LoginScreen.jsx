@@ -68,7 +68,15 @@ export default function LoginScreen({ navigation }) {
           updatedUser[key] = new Date(data[key]);
           return;
         }
-        updatedUser[key] = data[key];
+
+        if (typeof data[key] === "object" && !Array.isArray(data[key])) {
+          updatedUser[key] = {
+            ...previousUser[key],
+            ...data[key],
+          };
+        } else {
+          updatedUser[key] = data[key];
+        }
       });
 
       if (currentPage !== 4) {
@@ -77,11 +85,15 @@ export default function LoginScreen({ navigation }) {
       return updatedUser;
     });
   }
+  // Mécanique permettant de send les data après le re-render
+  if (currentPage === 5) {
+    sendData();
+  }
 
+  console.log("Utilisateur Final:", user);
   async function sendData() {
-    console.log("Utilisateur final : ", user);
-    console.log("Date relevée : ", user.birthdate);
     console.log("Envoi des données vers le backend");
+    console.log("Utilisateur Final:", user);
     const resp = await fetch(`http://${FRONT_IP}:3000/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -90,7 +102,14 @@ export default function LoginScreen({ navigation }) {
 
     const data = await resp.json();
 
-    console.log("Retour du backend : ", data.result, data.token);
+    console.log(
+      "Retour du backend :",
+      data.result,
+      "/ token:",
+      data.token,
+      "/ error message:",
+      data.error
+    );
     if (data.result) {
       dispatch(updateToken(data.token));
       dispatch(updateUsername(user.username));
@@ -134,5 +153,3 @@ export default function LoginScreen({ navigation }) {
     </>
   );
 }
-
-console.log('debug')
