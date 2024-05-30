@@ -103,3 +103,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+<<<<<<< HEAD
+
+
+
+
+
+
+=======
+>>>>>>> afcc5d6376126d5d89bb69f67f09e0228a68c867
