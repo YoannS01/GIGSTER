@@ -6,6 +6,7 @@ import { FRONT_IP } from "../hide-ip";
 import StatusScreen from "./StatusScreen";
 import {
   updateToken,
+  updateId,
   updateUsername,
   updateEmail,
   updateFirstname,
@@ -26,6 +27,7 @@ export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [user, setUser] = useState({
+    _id: null,
     username: null,
     email: null,
     password: null,
@@ -59,7 +61,6 @@ export default function LoginScreen({ navigation }) {
   }
 
   function updateUser(data) {
-    console.log("datas à mettre à jour : ", data);
     setUser((previousUser) => {
       const updatedUser = { ...previousUser };
 
@@ -104,13 +105,16 @@ export default function LoginScreen({ navigation }) {
 
     console.log(
       "Retour du backend :",
-      data.result,
+      data,
       "/ token:",
       data.token,
+      "/ ID:",
+      data.data._id,
       "/ error message:",
       data.error
     );
     if (data.result) {
+      dispatch(updateId(data.data._id));
       dispatch(updateToken(data.token));
       dispatch(updateUsername(user.username));
       dispatch(updateEmail(user.email));

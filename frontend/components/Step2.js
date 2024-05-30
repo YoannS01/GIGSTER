@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Step2(props) {
   // Validation schema for artist
@@ -64,6 +65,19 @@ export default function Step2(props) {
 
   const previousPage = () => {
     props.getNextPage(3);
+  };
+
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log(result);
+    } else {
+      alert('Aucune image sélectionnée !');
+    }
   };
 
   return (
@@ -149,13 +163,23 @@ export default function Step2(props) {
                 value={formik.values.favoritesGenres}
               />
               {formik.touched.favoritesGenres &&
-              formik.errors.favoritesGenres ? (
+                formik.errors.favoritesGenres ? (
                 <Text style={styles.error}>
                   {formik.errors.favoritesGenres}
                 </Text>
               ) : null}
             </>
+
+
           )}
+        </View>
+
+        {/*Ajout de photos via la galerie du téléphone*/}
+        <View>
+          <Text style={styles.label}>Ajoutez une image à profil :</Text>
+          <TouchableOpacity style={styles.btn} title="Choisir mon image" onPress={pickImageAsync}>
+            <Text style={styles.textBtn}>Choisir image</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.btn} onPress={formik.handleSubmit}>
@@ -294,7 +318,7 @@ export default function Step2(props) {
     };
 
 
-  
+
 
     const previousPage = () => {
         props.getNextPage(2);
@@ -409,5 +433,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
     },
-}); 
+});
 */
