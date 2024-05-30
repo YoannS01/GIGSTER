@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         margin: 10,
         borderRadius: 20,
+        overflow: 'hidden'
     },
     recoImage: {
         width: '100%',

@@ -20,8 +20,12 @@ import moment from "moment";
 import { CalendarList, LocaleConfig } from "react-native-calendars";
 import { eachDayOfInterval, format, isBefore } from "date-fns";
 import { useSelector } from "react-redux";
+import { FRONT_IP } from "../hide-ip";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AnnounceScreen() {
+  const navigation = useNavigation();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -38,13 +42,13 @@ export default function AnnounceScreen() {
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState([]);
   const [accessibilityCheckbox, setAccessibilityCheckbox] = useState(false);
   const [accomodation, setAccomodation] = useState([]);
   const [instrumentList, setInstrumentList] = useState([]);
   const [sliderValue, setSliderValue] = useState(10);
-  const [selectionStart, setSelectionStart] = useState(null);
-  const [selectionEnd, setSelectionEnd] = useState(null);
+  const [selectionStart, setSelectionStart] = useState("");
+  const [selectionEnd, setSelectionEnd] = useState("");
 
   // Import du Token et ID de l'utilisateur connecté
   const userToken = useSelector((state) => state.user.value.token);
@@ -226,11 +230,11 @@ export default function AnnounceScreen() {
         ],
         availableDates: [
           {
-            startDateAt: moment.utc(selectionStart),
-            endDateAt: moment.utc(selectionEnd),
+            startDateAt: new Date(selectionStart),
+            endDateAt: new Date(selectionEnd),
           },
         ],
-        locationType: selectedOption,
+        locationType: [selectedOption],
         instrumentsAvailable: instrumentList,
         capacity: sliderValue,
         description: description,
@@ -242,7 +246,14 @@ export default function AnnounceScreen() {
         createdAt: new Date(),
         updatedAt: new Date(),
       }),
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("Announce created");
+          navigation.navigate("TabNavigator", { screen: "Home" });
+        }
+      });
   };
 
   return (
