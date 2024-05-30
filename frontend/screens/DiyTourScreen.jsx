@@ -87,6 +87,7 @@ export default function DiyTourScreen() {
       </View>
     );
   }
+  const formattedDate = moment(date).format('DD/MM/YYYY');
 
   return (
     <View style={styles.container}>
@@ -122,7 +123,7 @@ export default function DiyTourScreen() {
         ) : (
           <>
             <TouchableOpacity style={styles.btnSearch} onPress={showDatePicker}>
-              <Text>{moment(date).format('DD/MM/YYYY')}</Text>
+              <Text>{formattedDate}</Text>
             </TouchableOpacity>
             <DateTimePicker
               value={date}
