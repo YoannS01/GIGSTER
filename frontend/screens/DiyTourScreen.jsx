@@ -21,6 +21,7 @@ export default function DiyTourScreen() {
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [hosts, setHosts] = useState([])
 
   useEffect(() => {
     (async () => {
@@ -46,6 +47,11 @@ export default function DiyTourScreen() {
     })();
   }, []);
 
+
+  //FORMATTE LA DATE EN STRING
+  const formattedDate = moment(date).format('DD/MM/YYYY');
+
+  //VARIABLE MECHANISME DU CALENDRIER
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -61,8 +67,9 @@ export default function DiyTourScreen() {
     hideDatePicker();
   };
 
+  //RECHERCHE LA VILLE VIA L'INPUT
   const getCityLocation = () => {
-    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
+    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}&type='city `)
       .then((response) => response.json())
       .then((data) => {
         if (data.features.length === 0) {
@@ -87,6 +94,19 @@ export default function DiyTourScreen() {
       </View>
     );
   }
+
+  //RECHERCHE ET AFFICHE LES HOTES DISPONIBLE 
+  function displayAvailableHost() {
+
+    fetch(`http://${FRONT_IP}:3000/authUsers/announces`)
+      .then(response => response.json())
+      .then(data => {
+        const hostsAvailable = data.filter(elem => elem.availableDates.startDateAt < date && elem.availableDates.endDateAt > date)
+        setHosts(hostsAvailable)
+      })
+  }
+
+
 
   return (
     <View style={styles.container}>
@@ -122,7 +142,7 @@ export default function DiyTourScreen() {
         ) : (
           <>
             <TouchableOpacity style={styles.btnSearch} onPress={showDatePicker}>
-              <Text>{moment(date).format('DD/MM/YYYY')}</Text>
+              <Text>{formattedDate}</Text>
             </TouchableOpacity>
             <DateTimePicker
               value={date}
@@ -156,6 +176,9 @@ export default function DiyTourScreen() {
     </View>
   );
 }
+
+
+
 
 const styles = StyleSheet.create({
   container: {
