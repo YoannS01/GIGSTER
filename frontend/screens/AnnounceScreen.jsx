@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { Modal, ScrollView, StyleSheet, Text, View, TextInput, SafeAreaView, StatusBar, Button, TouchableOpacity, ImageViewer, Pressable } from 'react-native';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -8,8 +8,11 @@ import Slider from '@react-native-community/slider';
 
 import { CalendarList, LocaleConfig } from 'react-native-calendars';
 import { eachDayOfInterval, format, isBefore } from 'date-fns';
+import { initialState, dateReducer } from '../reducers/date';
+import moment from "moment";
 
 export default function AnnounceScreen() {
+  const [state, dispatch] = useReducer(dateReducer, initialState);
   const [instrumentList, setInstrumentList] = useState([]);
   const [accomodation, setAccomodation] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
@@ -66,7 +69,7 @@ export default function AnnounceScreen() {
     if (!result.canceled) {
       console.log(result);
     } else {
-      alert('You did not select any image.');
+      alert('Aucune image sélectionnée !');
     }
   };
 
@@ -113,28 +116,79 @@ export default function AnnounceScreen() {
   //const [selected, setSelected] = useState('');
 
   const [markedDates, setMarkedDates] = useState({});
-  const [selectionStart, setSelectionStart] = useState(null);
-  const [selectionEnd, setSelectionEnd] = useState(null);
+  //const [selectionStart, setSelectionStart] = useState(null);
+  //const [selectionEnd, setSelectionEnd] = useState(null);
 
+  {/* 
   const onDayPress = (day) => {
     const selectedDate = day.dateString;
     if (!selectionStart || (selectionStart && selectionEnd)) {
       // Début nouvelle période
       setSelectionStart(selectedDate);
+      console.log('start-period', selectedDate)
       setSelectionEnd(null);
+
       setMarkedDates({
-        [selectedDate]: { selected: true, startingDay: true, endingDay: true, color: 'blue' }
+        [selectedDate]: { selected: true, startingDay: true, endingDay: true, color: '#5100FF' }
       });
     } else {
       // Complète la sélection de la période
       const newSelectionEnd = selectedDate;
       if (isBefore(new Date(newSelectionEnd), new Date(selectionStart))) {
         setSelectionStart(newSelectionEnd);
+
         setSelectionEnd(selectionStart);
+
       } else {
         setSelectionEnd(newSelectionEnd);
       }
       markPeriod(selectionStart, newSelectionEnd);
+      console.log('end-period', newSelectionEnd)
+    }
+  };
+
+  const markPeriod = (start, end) => {
+    const interval = eachDayOfInterval({
+      start: new Date(start),
+      end: new Date(end)
+    });
+
+    const newMarkedDates = {};
+    interval.forEach((date, index) => {
+      const formattedDate = format(date, 'yyyy-MM-dd');
+      newMarkedDates[formattedDate] = {
+        selected: true,
+        startingDay: index === 0,
+        endingDay: index === interval.length - 1,
+        color: 'blue'
+      };
+    });
+
+    setMarkedDates(newMarkedDates);
+  };
+*/}
+
+  //Envoi des données dates début et date fin au reducer :
+  const onDayPress = (day) => {
+    const selectedDate = day.dateString;
+    if (!state.selectionStart || (state.selectionStart && state.selectionEnd)) {
+      // Début nouvelle période
+      dispatch({ type: 'START_SELECTION', payload: moment.utc(selectedDate) });
+      console.log('start-period', moment.utc(selectedDate));
+      setMarkedDates({
+        [selectedDate]: { selected: true, startingDay: true, endingDay: true, color: '#5100FF' }
+      });
+    } else {
+      // Complète la sélection de la période
+      const newSelectionEnd = selectedDate;
+      if (isBefore(new Date(newSelectionEnd), new Date(state.selectionStart))) {
+        dispatch({ type: 'START_SELECTION', payload: moment.utc(newSelectionEnd) });
+        dispatch({ type: 'END_SELECTION', payload: { start: moment.utc(newSelectionEnd), end: state.selectionStart } });
+      } else {
+        dispatch({ type: 'END_SELECTION', payload: { start: state.selectionStart, end: moment.utc(newSelectionEnd) } });
+      }
+
+      console.log('end-period', moment.utc(newSelectionEnd));
     }
   };
 
@@ -159,6 +213,8 @@ export default function AnnounceScreen() {
   };
 
 
+
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -166,12 +222,13 @@ export default function AnnounceScreen() {
           <Text style={styles.title}>Adresse de votre lieu d'accueil :</Text>
           <TextInput placeholder="Indiquez la rue" style={styles.input_address} />
           <TextInput placeholder="Indiquez la ville" style={styles.input_address} />
-          <TextInput placeholder="Indiquez le code postale" style={styles.input_address} />
+          <TextInput placeholder="Indiquez le code postale" style={styles.input_address}
+            keyboardType="numeric" />
         </View>
 
         <View>
           <Text style={styles.title}>Décrivez votre lieu d'accueil :</Text>
-          <TextInput placeholder="Description du lieu d'accueil" style={styles.input_description} />
+          <TextInput placeholder="Description du lieu d'accueil" style={styles.input_description} multiline={true} />
         </View>
 
         {/*Dropdown list concernant le type de lieu d'accueil*/}
@@ -191,13 +248,14 @@ export default function AnnounceScreen() {
           <Text style={styles.title}>Accessibilité :</Text>
           <BouncyCheckbox
             size={25}
-            fillColor="green"
+            fillColor="#5100FF"
             unFillColor="#FFFFFF"
             text="Lieu accessible aux handicapés"
             iconStyle={{ borderColor: "red" }}
             innerIconStyle={{ borderWidth: 2 }}
-            textStyle={{ fontFamily: "JosefinSans-Regular" }}
+            textStyle={{ fontFamily: "JosefinSans-Regular", fontWeight: '600', textDecorationLine: "none" }}
             onPress={(isChecked) => { console.log(isChecked) }}
+
           />
         </View>
 
@@ -291,6 +349,22 @@ export default function AnnounceScreen() {
             onDayPress={onDayPress}
             markedDates={markedDates}
             markingType={'period'}
+            theme={{
+              monthTextColor: '#5100FF',
+              todayTextColor: '#5100FF',
+              dayTextColor: '#2d4150',
+              indicatorColor: '#5100FF',
+              textDayFontFamily: 'monospace',
+              textMonthFontFamily: 'monospace',
+              textDayHeaderFontFamily: 'monospace',
+              textDayFontWeight: '300',
+              textMonthFontWeight: 'bold',
+              textDayHeaderFontWeight: '300',
+              textDayFontSize: 16,
+              textMonthFontSize: 16,
+              textDayHeaderFontSize: 16
+            }}
+
           />
         </View>
 

@@ -1,11 +1,5 @@
 var express = require("express");
 var router = express.Router();
-const { checkBody } = require('../modules/checkBody');
-const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
-const secretKey = process.env.SECRETKEY;
-const { User } = require('../models/users');
-const moment = require('moment');
 
 router.post("/signup", (req, res) => {
     /*if (req.body.password !== req.body.confirmPassword) {
@@ -135,10 +129,6 @@ router.post("/refresh", (req, res) => {
     });
 });
 
-router.get('/all', (req, res) => {
-    User.find().then(bookings => {
-        res.json({ result: true, bookings })
-    })
-})
+router.get("/allAnnounces", (req, res) => { })
 
 module.exports = router;
