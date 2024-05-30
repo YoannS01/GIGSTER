@@ -8,6 +8,8 @@ const cors = require('cors');
 require('./models/connection');
 const usersRouter = require('./routes/users');
 const announcesRouter = require('./routes/announces');
+const toursRouter = require("./routes/tours")
+const showsRouter = require("./routes/shows")
 
 const app = express();
 const fileUpload = require('express-fileupload');
@@ -22,5 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
 app.use('/', announcesRouter);
+app.use('/tours', toursRouter)
+app.use('/shows', showsRouter)
 
 module.exports = app;

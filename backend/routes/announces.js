@@ -48,12 +48,9 @@ router.post("/announces", authMiddleware, (req, res) => {
 
 router.get("/allAnnounces", (req, res) => {
     Announce.find()
+        .populate('host')
         .then(announces => {
-            if (announces.length > 0) {
-                res.json({ result: true, announces });
-            } else {
-                res.json({ result: false, error: "No announces" });
-            }
+            res.json({ result: true, announces })
         })
 })
 
