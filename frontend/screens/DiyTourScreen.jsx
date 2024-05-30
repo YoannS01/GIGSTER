@@ -99,38 +99,33 @@ export default function DiyTourScreen() {
 
   //RECHERCHE ET AFFICHE LES HÔTES DISPONIBLE 
   function displayAvailableHost() {
-    console.log('hello')
+
     //Recherche toutes les annonces correspondantes à la date choisie:
     fetch(`http://${FRONT_IP}:3000/allAnnounces`)
       .then(response => response.json())
       .then(data => {
-
-
         const hostsAvailable = []
         for (let elem of data.announces) {
-          console.log("DATE=>", date)
-          console.log("ENDDATE=>", elem)
-          console.log("STARTDATE=>", elem.availableDates[0].startDateAt)
+
           if (new Date(elem.availableDates[0].startDateAt) <= date && date <= new Date(elem.availableDates[0].endDateAt)) {
 
             hostsAvailable.push(elem)
           }
         }
 
-
-
-
-
-
-
         setHosts(hostsAvailable)
-        console.log('HOST=>=', hostsAvailable)
+
         //Cherche les coordinnées de l'adresse de l'annonce:
         const coordinates = []
         for (let elem of hosts) {
-          fetch(`https://api-adresse.data.gouv.fr/search/?q=${elem.address.street}&zipcode=${elem.address.zipcode}`)
+
+          const addresse = elem.address[0].street.split(" ").join("+")
+          console.log(addresse)
+
+          fetch(`https://api-adresse.data.gouv.fr/search/?q=${addresse}&zipcode=${elem.address[0].zipcode}`)
             .then(response => response.json())
             .then(data => {
+              console.log(data)
 
               const foundCoords = data.features[0];
               coordinates.push({
