@@ -70,7 +70,7 @@ export default function DiyTourScreen() {
 
   //RECHERCHE LA VILLE VIA L'INPUT
   const getCityLocation = () => {
-    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}&type='city `)
+    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.features.length === 0) {
@@ -192,7 +192,7 @@ export default function DiyTourScreen() {
 
         <TouchableOpacity
           style={styles.btnSearch}
-          onPress={() => { getCityLocation(); setIsOpen(false); }}
+          onPress={() => { getCityLocation() }}
         >
           <Text style={styles.textSearch}>Go</Text>
         </TouchableOpacity>
@@ -203,8 +203,18 @@ export default function DiyTourScreen() {
         <Text style={styles.title}>Mon Parcours</Text>
         <ScrollView style={styles.roadmap} showsVerticalScrollIndicator={false}>
           <TouchableOpacity style={styles.date}>
-            <Text>HELLO</Text>
+            <Text>{formattedDate}</Text>
+            <Text>{searchCity}</Text>
+            <TouchableOpacity
+              style={styles.btnDate}
+            //onPress={() =>  }
+            >
+              <Text style={styles.textSearch}>Go</Text>
+            </TouchableOpacity>
+
+
           </TouchableOpacity>
+
         </ScrollView>
       </View>
     </View>
@@ -231,7 +241,6 @@ const styles = StyleSheet.create({
     top: 40,
     width: "80%",
     marginLeft: "15%",
-
     height: 50,
     borderColor: "black",
     borderWidth: 1,
@@ -243,6 +252,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "white",
+    shadowColor: '#000000',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
   },
   subTopContainer: {
     position: "absolute",
@@ -260,6 +273,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     backgroundColor: "white",
+
   },
   textInput: {
     color: "#000",
@@ -291,6 +305,10 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderBottomWidth: 4,
     borderRightWidth: 4,
+    shadowColor: '#000000',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
   },
   title: {
     width: "50%",
@@ -307,6 +325,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   date: {
+    flexDirection: 'row',
     width: "90%",
     height: 40,
     borderColor: "#5100FF",
@@ -314,7 +333,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderRightWidth: 4,
     borderRadius: 10,
-    justifyContent: "center",
+    alignItems: 'center',
     padding: 5,
   },
   calendar: {
