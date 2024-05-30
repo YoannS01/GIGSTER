@@ -46,6 +46,13 @@ export default function DiyTourScreen() {
     })();
   }, []);
 
+
+
+
+  //FORMATTE LA DATE EN STRING
+  const formattedDate = moment(date).format('DD/MM/YYYY');
+
+  //VARIABLE MECHANISME DU CALENDRIER
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -61,6 +68,7 @@ export default function DiyTourScreen() {
     hideDatePicker();
   };
 
+  //RECHERCHE LA VILLE VIA L'INPUT
   const getCityLocation = () => {
     fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
       .then((response) => response.json())
@@ -87,7 +95,8 @@ export default function DiyTourScreen() {
       </View>
     );
   }
-  const formattedDate = moment(date).format('DD/MM/YYYY');
+
+
 
   return (
     <View style={styles.container}>
