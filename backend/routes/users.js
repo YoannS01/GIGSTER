@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRETKEY;
 const { User } = require('../models/users');
-const moment = require('moment');
 
 router.post("/signup", (req, res) => {
     /*if (req.body.password !== req.body.confirmPassword) {
@@ -135,10 +134,15 @@ router.post("/refresh", (req, res) => {
     });
 });
 
-router.get('/all', (req, res) => {
-    User.find().then(bookings => {
-        res.json({ result: true, bookings })
-    })
+router.get("/allAnnounces", (req, res) => {
+    Announce.find()
+        .then(announces => {
+            if (announces.length > 0) {
+                res.json({ result: true, announces });
+            } else {
+                res.json({ result: false, error: "No announces" });
+            }
+        })
 })
 
 module.exports = router;

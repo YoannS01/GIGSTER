@@ -3,9 +3,6 @@ const router = express.Router();
 const { checkBody } = require('../modules/checkBody');
 const authMiddleware = require('../middleware/auth');
 const { Announce } = require("../models/announces");
-const cloudinary = require('cloudinary').v2;
-const uniqid = require('uniqid');
-const fs = require('fs');
 
 router.post("/announces", authMiddleware, (req, res) => {
     const requiredFields = ['street', 'city', 'zipcode', 'instrumentsAvailable', 'locationType', 'availableDate', 'capacity', 'sleeping', 'restauration', 'description'];
@@ -31,7 +28,7 @@ router.post("/announces", authMiddleware, (req, res) => {
             instrumentsAvailable: req.body.instrumentsAvailable,
             capacity: req.body.capacity,
             description: req.body.description,
-            media: [resultCloudinary.secure_url], // Utilisation de l'URL fournie par Cloudinary
+            //media: [resultCloudinary.secure_url], // Utilisation de l'URL fournie par Cloudinary
             accessibility: req.body.accessibility,
             accomodation: { sleeping: req.body.sleeping, restauration: req.body.restauration },
             createdAt: new Date(),
@@ -47,10 +44,6 @@ router.post("/announces", authMiddleware, (req, res) => {
         res.json({ result: false, error: 'Error finding user' });
     });
 });
-
-
-module.exports = router;
-
 
 router.post("/tours", authMiddleware, (req, res) => {
     const requiredFields = ['date', 'city', 'street', 'zipcode', 'status'];

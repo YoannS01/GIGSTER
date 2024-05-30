@@ -18,7 +18,7 @@ const artistSchema = mongoose.Schema({
     artistName: String,
     genres: [String],
     members: Number,
-    medias: [String],
+    //medias: [String],
     description: String,
     placeOrigin: String,
     tours: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tour' }],
@@ -38,6 +38,7 @@ const userSchema = mongoose.Schema({
     isHost: Boolean,
     artist: artistSchema,
     host: hostSchema,
+    //image: [String],
     phoneNumber: String,
     birthdate: Date,
     createdAt: { type: Date, default: Date.now },
@@ -47,4 +48,4 @@ const userSchema = mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = { User }; 
+module.exports = { User };
