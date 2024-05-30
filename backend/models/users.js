@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const addressSchema = mongoose.Schema({
   street: { type: String, required: true },
   city: { type: String, required: true },
-  zipcode: { type: String, required: true },
+  zipcode: String,
 });
 
 const hostSchema = mongoose.Schema({
