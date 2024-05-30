@@ -22,6 +22,8 @@ export default function DiyTourScreen() {
   const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [hosts, setHosts] = useState([])
+  const [coordinates, setCoordinates] = useState([])
+
 
   useEffect(() => {
     (async () => {
@@ -95,16 +97,44 @@ export default function DiyTourScreen() {
     );
   }
 
-  //RECHERCHE ET AFFICHE LES HOTES DISPONIBLE 
+  //RECHERCHE ET AFFICHE LES HÔTES DISPONIBLE 
   function displayAvailableHost() {
-
-    fetch(`http://${FRONT_IP}:3000/authUsers/announces`)
+    //Recherche toutes les annonces correspondantes à la date choisie:
+    fetch(`http://${FRONT_IP}:3000/announces/allAnnounces`)
       .then(response => response.json())
       .then(data => {
-        const hostsAvailable = data.filter(elem => elem.availableDates.startDateAt < date && elem.availableDates.endDateAt > date)
+        const hostsAvailable = data.newAnnounce.filter(elem => elem.availableDates.startDateAt < date && elem.availableDates.endDateAt > date)
         setHosts(hostsAvailable)
+        //Cherche les coordinnées de l'adresse de l'annonce:
+        const coordinates = []
+        for (let elem of hostsAvailable) {
+          fetch(`https://api-adresse.data.gouv.fr/search/?q=${elem.address.street}&zipcode=${elem.address.zipcode}`)
+            .then(response => response.json())
+            .then(data => {
+
+              const foundCoords = data.features[0];
+              coordinates.push({
+                name: elem.host.firstname,
+                coords: {
+                  latitude: foundCoords.geometry.coordinates[1],
+                  longitude: foundCoords.geometry.coordinates[0]
+                }
+              })
+            })
+        }
+        setCoordinates(coordinates)
+
+
       })
+
   }
+
+  const hostsPins = coordinates.map((elem, i) => {
+    return (
+      <Marker coordinate={elem.coords} title={elem.name} pinColor="#5100FF" key={i} />
+    )
+  })
+
 
 
 
@@ -117,6 +147,7 @@ export default function DiyTourScreen() {
         {currentPosition && (
           <Marker coordinate={currentPosition} title="Me!" pinColor="#fecb2d" />
         )}
+        {hostsPins}
       </MapView>
 
       <View style={styles.topContainer}>
@@ -144,14 +175,16 @@ export default function DiyTourScreen() {
             <TouchableOpacity style={styles.btnSearch} onPress={showDatePicker}>
               <Text>{formattedDate}</Text>
             </TouchableOpacity>
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={handleConfirm}
-              style={styles.calendar}
-              isVisible={isDatePickerVisible}
-            />
+            {isDatePickerVisible &&
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="default"
+                onChange={handleConfirm}
+                style={styles.calendar}
+                isVisible={isDatePickerVisible}
+              />
+            }
           </>
 
         )}

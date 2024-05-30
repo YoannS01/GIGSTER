@@ -15,27 +15,34 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 import * as ImagePicker from "expo-image-picker";
 import Slider from "@react-native-community/slider";
+import moment from "moment";
 
 import { CalendarList, LocaleConfig } from "react-native-calendars";
 import { eachDayOfInterval, format, isBefore } from "date-fns";
 import { useSelector } from "react-redux";
-import user from "../reducers/user";
 
 export default function AnnounceScreen() {
-  const [instrumentList, setInstrumentList] = useState([]);
-  const [accomodation, setAccomodation] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [markedDates, setMarkedDates] = useState({});
   const [items, setItems] = useState([
     { label: "Bar", value: "bar" },
     { label: "Maison", value: "maison" },
     { label: "Restaurant", value: "restaurant" },
     { label: "Appartement", value: "appartement" },
   ]);
+
+  // Variable d'état des inputs
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [description, setDescription] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+  const [accessibilityCheckbox, setAccessibilityCheckbox] = useState(false);
+  const [accomodation, setAccomodation] = useState([]);
+  const [instrumentList, setInstrumentList] = useState([]);
   const [sliderValue, setSliderValue] = useState(10);
-  const [markedDates, setMarkedDates] = useState({});
   const [selectionStart, setSelectionStart] = useState(null);
   const [selectionEnd, setSelectionEnd] = useState(null);
 
@@ -202,35 +209,35 @@ export default function AnnounceScreen() {
 
   // fetch vers la DB pour envoyer les données des inputs
   const handleSubmit = () => {
-    fetch(`http://${FRONT_IP}:3000/authUsers/announces`, {
+    fetch(`http://${FRONT_IP}:3000/announces`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userToken}`,
       },
       body: JSON.stringify({
-        host: user._id,
+        host: userId,
         address: [
           {
-            street: req.body.street,
-            city: req.body.city,
-            zipcode: req.body.zipcode,
+            street: street,
+            city: city,
+            zipcode: zipCode,
           },
         ],
         availableDates: [
           {
-            startDateAt: req.body.startDateAt,
-            endDateAt: req.body.endDateAt,
+            startDateAt: moment.utc(selectionStart),
+            endDateAt: moment.utc(selectionEnd),
           },
         ],
-        locationType: req.body.locationType,
-        instrumentsAvailable: req.body.instrumentsAvailable,
-        capacity: req.body.capacity,
-        description: req.body.description,
-        accessibility: req.body.accessibility,
+        locationType: selectedOption,
+        instrumentsAvailable: instrumentList,
+        capacity: sliderValue,
+        description: description,
+        accessibility: accessibilityCheckbox,
         accomodation: {
-          sleeping: req.body.sleeping,
-          restauration: req.body.restauration,
+          sleeping: accomodation.includes("Hébergement"),
+          restauration: accomodation.includes("Restauration"),
         },
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -246,15 +253,21 @@ export default function AnnounceScreen() {
           <TextInput
             placeholder="Indiquez la rue"
             style={styles.input_address}
+            onChangeText={setStreet}
+            value={street}
           />
           <TextInput
             placeholder="Indiquez la ville"
             style={styles.input_address}
+            onChangeText={setCity}
+            value={city}
           />
           <TextInput
             placeholder="Indiquez le code postale"
             style={styles.input_address}
             keyboardType="numeric"
+            onChangeText={setZipCode}
+            value={zipCode}
           />
         </View>
 
@@ -264,6 +277,8 @@ export default function AnnounceScreen() {
             placeholder="Description du lieu d'accueil"
             style={styles.input_description}
             multiline={true}
+            onChangeText={setDescription}
+            value={description}
           />
         </View>
 
@@ -302,9 +317,8 @@ export default function AnnounceScreen() {
               fontWeight: "600",
               textDecorationLine: "none",
             }}
-            onPress={(isChecked) => {
-              console.log(isChecked);
-            }}
+            isChecked={accessibilityCheckbox}
+            onPress={() => setAccessibilityCheckbox(!accessibilityCheckbox)}
           />
         </View>
 

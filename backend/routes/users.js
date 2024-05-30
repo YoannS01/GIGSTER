@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const { checkBody } = require('../modules/checkBody');
+const authMiddleware = require("../middleware/auth")
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRETKEY;
@@ -104,7 +105,7 @@ router.post("/signin", (req, res) => {
     });
 });
 
-router.post("/refresh", (req, res) => {
+router.post("/refresh", authMiddleware, (req, res) => {
     const token = req.body.token;
     if (!token) {
         res.json({ result: false, error: "Token is required" });
@@ -133,16 +134,5 @@ router.post("/refresh", (req, res) => {
         });
     });
 });
-
-router.get("/allAnnounces", (req, res) => {
-    Announce.find()
-        .then(announces => {
-            if (announces.length > 0) {
-                res.json({ result: true, announces });
-            } else {
-                res.json({ result: false, error: "No announces" });
-            }
-        })
-})
 
 module.exports = router;
