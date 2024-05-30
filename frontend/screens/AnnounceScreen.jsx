@@ -1,36 +1,53 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { Modal, ScrollView, StyleSheet, Text, View, TextInput, SafeAreaView, StatusBar, Button, TouchableOpacity, ImageViewer, Pressable } from 'react-native';
+import React, { useState, useEffect } from "react";
+import {
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  SafeAreaView,
+  StatusBar,
+  TouchableOpacity,
+} from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from "react-native-dropdown-picker";
 
-import * as ImagePicker from 'expo-image-picker';
-import Slider from '@react-native-community/slider';
+import * as ImagePicker from "expo-image-picker";
+import Slider from "@react-native-community/slider";
 
-import { CalendarList, LocaleConfig } from 'react-native-calendars';
-import { eachDayOfInterval, format, isBefore } from 'date-fns';
-import { initialState, dateReducer } from '../reducers/date';
-import moment from "moment";
+import { CalendarList, LocaleConfig } from "react-native-calendars";
+import { eachDayOfInterval, format, isBefore } from "date-fns";
+import { useSelector } from "react-redux";
+import user from "../reducers/user";
 
 export default function AnnounceScreen() {
-  const [state, dispatch] = useReducer(dateReducer, initialState);
   const [instrumentList, setInstrumentList] = useState([]);
   const [accomodation, setAccomodation] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Bar', value: 'bar' },
-    { label: 'Maison', value: 'maison' },
-    { label: 'Restaurant', value: 'restaurant' },
-    { label: 'Appartement', value: 'appartement' },
+    { label: "Bar", value: "bar" },
+    { label: "Maison", value: "maison" },
+    { label: "Restaurant", value: "restaurant" },
+    { label: "Appartement", value: "appartement" },
   ]);
+  const [sliderValue, setSliderValue] = useState(10);
+  const [markedDates, setMarkedDates] = useState({});
+  const [selectionStart, setSelectionStart] = useState(null);
+  const [selectionEnd, setSelectionEnd] = useState(null);
+
+  // Import du Token et ID de l'utilisateur connecté
+  const userToken = useSelector((state) => state.user.value.token);
+  const userId = useSelector((state) => state.user.value._id);
 
   const handleOnPress = (instru) => {
     if (!instrumentList.includes(instru)) {
       setInstrumentList([...instrumentList, instru]);
     } else {
-      setInstrumentList(instrumentList.filter(e => e !== instru));
+      setInstrumentList(instrumentList.filter((e) => e !== instru));
     }
   };
 
@@ -38,7 +55,7 @@ export default function AnnounceScreen() {
     if (!accomodation.includes(accom)) {
       setAccomodation([...accomodation, accom]);
     } else {
-      setAccomodation(accomodation.filter(e => e !== accom));
+      setAccomodation(accomodation.filter((e) => e !== accom));
     }
   };
 
@@ -48,17 +65,16 @@ export default function AnnounceScreen() {
 
   const handleValueChange = (value) => {
     setValue(value);
-    const selectedItem = items.find(item => item.value === value);
-    setSelectedOption(selectedItem ? selectedItem.label : '');
+    const selectedItem = items.find((item) => item.value === value);
+    setSelectedOption(selectedItem ? selectedItem.label : "");
   };
 
   useEffect(() => {
     if (value !== null) {
-      const selectedItem = items.find(item => item.value === value);
-      setSelectedOption(selectedItem ? selectedItem.label : '');
+      const selectedItem = items.find((item) => item.value === value);
+      setSelectedOption(selectedItem ? selectedItem.label : "");
     }
   }, [value]);
-
 
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -69,67 +85,85 @@ export default function AnnounceScreen() {
     if (!result.canceled) {
       console.log(result);
     } else {
-      alert('Aucune image sélectionnée !');
+      alert("Aucune image sélectionnée !");
     }
   };
 
-  const [sliderValue, setSliderValue] = useState(10);
-
   //Calendrier :
 
-  LocaleConfig.locales['fr'] = {
+  LocaleConfig.locales["fr"] = {
     monthNames: [
-      'Janvier',
-      'Février',
-      'Mars',
-      'Avril',
-      'Mai',
-      'Juin',
-      'Juillet',
-      'Août',
-      'Septembre',
-      'Octobre',
-      'Novembre',
-      'Décembre'
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
     ],
     monthNames: [
-      'Janvier',
-      'Février',
-      'Mars',
-      'Avril',
-      'Mai',
-      'Juin',
-      'Juillet',
-      'Août',
-      'Septembre',
-      'Octobre',
-      'Novembre',
-      'Décembre'
+      "Janvier",
+      "Février",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juillet",
+      "Août",
+      "Septembre",
+      "Octobre",
+      "Novembre",
+      "Décembre",
     ],
-    monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
-    dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-    dayNamesShort: ['Di.', 'Lu.', 'Ma.', 'Me.', 'Je.', 'Ve.', 'Sa.'],
-    today: "Aujourd'hui"
+    monthNamesShort: [
+      "Janv.",
+      "Févr.",
+      "Mars",
+      "Avril",
+      "Mai",
+      "Juin",
+      "Juil.",
+      "Août",
+      "Sept.",
+      "Oct.",
+      "Nov.",
+      "Déc.",
+    ],
+    dayNames: [
+      "Dimanche",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi",
+    ],
+    dayNamesShort: ["Di.", "Lu.", "Ma.", "Me.", "Je.", "Ve.", "Sa."],
+    today: "Aujourd'hui",
   };
 
-  LocaleConfig.defaultLocale = 'fr';
-  //const [selected, setSelected] = useState('');
+  LocaleConfig.defaultLocale = "fr";
 
-  const [markedDates, setMarkedDates] = useState({});
-  //const [selectionStart, setSelectionStart] = useState(null);
-  //const [selectionEnd, setSelectionEnd] = useState(null);
-
-  {/* 
   const onDayPress = (day) => {
     const selectedDate = day.dateString;
     if (!selectionStart || (selectionStart && selectionEnd)) {
       // Début nouvelle période
       setSelectionStart(selectedDate);
-      console.log('start-period', selectedDate)
+      console.log("start-period", selectedDate);
       setSelectionEnd(null);
 
       setMarkedDates({
-        [selectedDate]: { selected: true, startingDay: true, endingDay: true, color: '#5100FF' }
+        [selectedDate]: {
+          selected: true,
+          startingDay: true,
+          endingDay: true,
+          color: "#5100FF",
+        },
       });
     } else {
       // Complète la sélection de la période
@@ -138,108 +172,118 @@ export default function AnnounceScreen() {
         setSelectionStart(newSelectionEnd);
 
         setSelectionEnd(selectionStart);
-
       } else {
         setSelectionEnd(newSelectionEnd);
       }
       markPeriod(selectionStart, newSelectionEnd);
-      console.log('end-period', newSelectionEnd)
+      console.log("end-period", newSelectionEnd);
     }
   };
 
   const markPeriod = (start, end) => {
     const interval = eachDayOfInterval({
       start: new Date(start),
-      end: new Date(end)
+      end: new Date(end),
     });
 
     const newMarkedDates = {};
     interval.forEach((date, index) => {
-      const formattedDate = format(date, 'yyyy-MM-dd');
+      const formattedDate = format(date, "yyyy-MM-dd");
       newMarkedDates[formattedDate] = {
         selected: true,
         startingDay: index === 0,
         endingDay: index === interval.length - 1,
-        color: 'blue'
-      };
-    });
-
-    setMarkedDates(newMarkedDates);
-  };
-*/}
-
-  //Envoi des données dates début et date fin au reducer :
-  const onDayPress = (day) => {
-    const selectedDate = day.dateString;
-    if (!state.selectionStart || (state.selectionStart && state.selectionEnd)) {
-      // Début nouvelle période
-      dispatch({ type: 'START_SELECTION', payload: moment.utc(selectedDate) });
-      console.log('start-period', moment.utc(selectedDate));
-      setMarkedDates({
-        [selectedDate]: { selected: true, startingDay: true, endingDay: true, color: '#5100FF' }
-      });
-    } else {
-      // Complète la sélection de la période
-      const newSelectionEnd = selectedDate;
-      if (isBefore(new Date(newSelectionEnd), new Date(state.selectionStart))) {
-        dispatch({ type: 'START_SELECTION', payload: moment.utc(newSelectionEnd) });
-        dispatch({ type: 'END_SELECTION', payload: { start: moment.utc(newSelectionEnd), end: state.selectionStart } });
-      } else {
-        dispatch({ type: 'END_SELECTION', payload: { start: state.selectionStart, end: moment.utc(newSelectionEnd) } });
-      }
-
-      console.log('end-period', moment.utc(newSelectionEnd));
-    }
-  };
-
-  const markPeriod = (start, end) => {
-    const interval = eachDayOfInterval({
-      start: new Date(start),
-      end: new Date(end)
-    });
-
-    const newMarkedDates = {};
-    interval.forEach((date, index) => {
-      const formattedDate = format(date, 'yyyy-MM-dd');
-      newMarkedDates[formattedDate] = {
-        selected: true,
-        startingDay: index === 0,
-        endingDay: index === interval.length - 1,
-        color: 'blue'
+        color: "blue",
       };
     });
 
     setMarkedDates(newMarkedDates);
   };
 
-
-
+  // fetch vers la DB pour envoyer les données des inputs
+  const handleSubmit = () => {
+    fetch(`http://${FRONT_IP}:3000/authUsers/announces`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+      body: JSON.stringify({
+        host: user._id,
+        address: [
+          {
+            street: req.body.street,
+            city: req.body.city,
+            zipcode: req.body.zipcode,
+          },
+        ],
+        availableDates: [
+          {
+            startDateAt: req.body.startDateAt,
+            endDateAt: req.body.endDateAt,
+          },
+        ],
+        locationType: req.body.locationType,
+        instrumentsAvailable: req.body.instrumentsAvailable,
+        capacity: req.body.capacity,
+        description: req.body.description,
+        accessibility: req.body.accessibility,
+        accomodation: {
+          sleeping: req.body.sleeping,
+          restauration: req.body.restauration,
+        },
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }),
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View>
           <Text style={styles.title}>Adresse de votre lieu d'accueil :</Text>
-          <TextInput placeholder="Indiquez la rue" style={styles.input_address} />
-          <TextInput placeholder="Indiquez la ville" style={styles.input_address} />
-          <TextInput placeholder="Indiquez le code postale" style={styles.input_address}
-            keyboardType="numeric" />
+          <TextInput
+            placeholder="Indiquez la rue"
+            style={styles.input_address}
+          />
+          <TextInput
+            placeholder="Indiquez la ville"
+            style={styles.input_address}
+          />
+          <TextInput
+            placeholder="Indiquez le code postale"
+            style={styles.input_address}
+            keyboardType="numeric"
+          />
         </View>
 
         <View>
           <Text style={styles.title}>Décrivez votre lieu d'accueil :</Text>
-          <TextInput placeholder="Description du lieu d'accueil" style={styles.input_description} multiline={true} />
+          <TextInput
+            placeholder="Description du lieu d'accueil"
+            style={styles.input_description}
+            multiline={true}
+          />
         </View>
 
         {/*Dropdown list concernant le type de lieu d'accueil*/}
         <View style={styles.block_container}>
-          <Text style={styles.title}>Choisissez le type de votre lieu d'accueil :</Text>
+          <Text style={styles.title}>
+            Choisissez le type de votre lieu d'accueil :
+          </Text>
 
-          <TouchableOpacity style={styles.button} title="Choisir" onPress={() => setModalVisible(true)} >
+          <TouchableOpacity
+            style={styles.button}
+            title="Choisir"
+            onPress={() => setModalVisible(true)}
+          >
             <Text style={styles.button_text}>Choisir</Text>
           </TouchableOpacity>
           {selectedOption ? (
-            <Text style={styles.selectedOption}>Type de lieu choisi : {selectedOption}</Text>
+            <Text style={styles.selectedOption}>
+              Type de lieu choisi : {selectedOption}
+            </Text>
           ) : null}
         </View>
 
@@ -253,24 +297,45 @@ export default function AnnounceScreen() {
             text="Lieu accessible aux handicapés"
             iconStyle={{ borderColor: "red" }}
             innerIconStyle={{ borderWidth: 2 }}
-            textStyle={{ fontFamily: "JosefinSans-Regular", fontWeight: '600', textDecorationLine: "none" }}
-            onPress={(isChecked) => { console.log(isChecked) }}
-
+            textStyle={{
+              fontFamily: "JosefinSans-Regular",
+              fontWeight: "600",
+              textDecorationLine: "none",
+            }}
+            onPress={(isChecked) => {
+              console.log(isChecked);
+            }}
           />
         </View>
 
         {/*Bloc sur les services mis à disposition des artistes par l'hôte*/}
         <View style={styles.block_container}>
-          <Text style={styles.title}>Sélectionnez les services disponibles :</Text>
+          <Text style={styles.title}>
+            Sélectionnez les services disponibles :
+          </Text>
           <TouchableOpacity
-            style={[styles.accomodationButton, { borderColor: accomodation.includes('Restauration') ? 'green' : 'black' }]}
-            onPress={() => handleOnPressTwo('Restauration')}
+            style={[
+              styles.accomodationButton,
+              {
+                borderColor: accomodation.includes("Restauration")
+                  ? "green"
+                  : "black",
+              },
+            ]}
+            onPress={() => handleOnPressTwo("Restauration")}
           >
             <Text style={styles.instrument_text}>Restauration 🍽</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.accomodationButton, { borderColor: accomodation.includes('Hébergement') ? 'green' : 'black' }]}
-            onPress={() => handleOnPressTwo('Hébergement')}
+            style={[
+              styles.accomodationButton,
+              {
+                borderColor: accomodation.includes("Hébergement")
+                  ? "green"
+                  : "black",
+              },
+            ]}
+            onPress={() => handleOnPressTwo("Hébergement")}
           >
             <Text style={styles.instrument_text}>Hébergement 🛏</Text>
           </TouchableOpacity>
@@ -278,34 +343,72 @@ export default function AnnounceScreen() {
 
         {/*Bloc instruments mis à la disponibilité des artistes par l'hôte*/}
         <View style={styles.block_container}>
-          <Text style={styles.title}>Sélectionnez les instruments que vous pouvez mettre à disposition des artistes :</Text>
+          <Text style={styles.title}>
+            Sélectionnez les instruments que vous pouvez mettre à disposition
+            des artistes :
+          </Text>
           <TouchableOpacity
-            style={[styles.instrumentButton, { borderColor: instrumentList.includes('Piano') ? 'green' : 'black' }]}
-            onPress={() => handleOnPress('Piano')}
+            style={[
+              styles.instrumentButton,
+              {
+                borderColor: instrumentList.includes("Piano")
+                  ? "green"
+                  : "black",
+              },
+            ]}
+            onPress={() => handleOnPress("Piano")}
           >
             <Text style={styles.instrument_text}>Piano</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.instrumentButton, { borderColor: instrumentList.includes('Batterie') ? 'green' : 'black' }]}
-            onPress={() => handleOnPress('Batterie')}
+            style={[
+              styles.instrumentButton,
+              {
+                borderColor: instrumentList.includes("Batterie")
+                  ? "green"
+                  : "black",
+              },
+            ]}
+            onPress={() => handleOnPress("Batterie")}
           >
             <Text style={styles.instrument_text}>Batterie</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.instrumentButton, { borderColor: instrumentList.includes('Ampli') ? 'green' : 'black' }]}
-            onPress={() => handleOnPress('Ampli')}
+            style={[
+              styles.instrumentButton,
+              {
+                borderColor: instrumentList.includes("Ampli")
+                  ? "green"
+                  : "black",
+              },
+            ]}
+            onPress={() => handleOnPress("Ampli")}
           >
             <Text style={styles.instrument_text}>Ampli</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.instrumentButton, { borderColor: instrumentList.includes('Système son') ? 'green' : 'black' }]}
-            onPress={() => handleOnPress('Système son')}
+            style={[
+              styles.instrumentButton,
+              {
+                borderColor: instrumentList.includes("Système son")
+                  ? "green"
+                  : "black",
+              },
+            ]}
+            onPress={() => handleOnPress("Système son")}
           >
             <Text style={styles.instrument_text}>Système son</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.instrumentButton, { borderColor: instrumentList.includes('Table de mixage') ? 'green' : 'black' }]}
-            onPress={() => handleOnPress('Table de mixage')}
+            style={[
+              styles.instrumentButton,
+              {
+                borderColor: instrumentList.includes("Table de mixage")
+                  ? "green"
+                  : "black",
+              },
+            ]}
+            onPress={() => handleOnPress("Table de mixage")}
           >
             <Text style={styles.instrument_text}>Table de mixage</Text>
           </TouchableOpacity>
@@ -314,7 +417,11 @@ export default function AnnounceScreen() {
         {/*Ajout de photos via la galerie du téléphone*/}
         <View style={styles.block_container}>
           <Text style={styles.title}>Ajoutez une image à votre annonce :</Text>
-          <TouchableOpacity style={styles.button} title="Choisir mon image" onPress={pickImageAsync}>
+          <TouchableOpacity
+            style={styles.button}
+            title="Choisir mon image"
+            onPress={pickImageAsync}
+          >
             <Text style={styles.button_text}>Choisir</Text>
           </TouchableOpacity>
         </View>
@@ -333,42 +440,51 @@ export default function AnnounceScreen() {
             maximumTrackTintColor="#000000"
             step={10}
             value={sliderValue}
-            onValueChange={
-              (sliderValue) => setSliderValue(sliderValue)
-            }
+            onValueChange={(sliderValue) => setSliderValue(sliderValue)}
           />
         </View>
 
         {/* Calendrier */}
         <View style={styles.block_container}>
-          <Text style={styles.title}>Indiquez les plages de disponibilité de votre lieu d'accueil:</Text>
+          <Text style={styles.title}>
+            Indiquez les plages de disponibilité de votre lieu d'accueil:
+          </Text>
           <CalendarList
             horizontal={true}
             pagingEnabled={true}
             calendarWidth={350}
             onDayPress={onDayPress}
             markedDates={markedDates}
-            markingType={'period'}
+            markingType={"period"}
             theme={{
-              monthTextColor: '#5100FF',
-              todayTextColor: '#5100FF',
-              dayTextColor: '#2d4150',
-              indicatorColor: '#5100FF',
-              textDayFontFamily: 'monospace',
-              textMonthFontFamily: 'monospace',
-              textDayHeaderFontFamily: 'monospace',
-              textDayFontWeight: '300',
-              textMonthFontWeight: 'bold',
-              textDayHeaderFontWeight: '300',
+              monthTextColor: "#5100FF",
+              todayTextColor: "#5100FF",
+              dayTextColor: "#2d4150",
+              indicatorColor: "#5100FF",
+              textDayFontFamily: "monospace",
+              textMonthFontFamily: "monospace",
+              textDayHeaderFontFamily: "monospace",
+              textDayFontWeight: "300",
+              textMonthFontWeight: "bold",
+              textDayHeaderFontWeight: "300",
               textDayFontSize: 16,
               textMonthFontSize: 16,
-              textDayHeaderFontSize: 16
+              textDayHeaderFontSize: 16,
             }}
-
           />
         </View>
 
+        {/*    BUTTON SUBMIT    */}
 
+        <View style={styles.block_container_submit}>
+          <TouchableOpacity
+            style={styles.button}
+            title="Submit"
+            onPress={() => handleSubmit()}
+          >
+            <Text style={styles.button_text}>Submit</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
 
       {/* Modal pour le DropDownPicker */}
@@ -379,7 +495,9 @@ export default function AnnounceScreen() {
         onRequestClose={handleCloseModal}
       >
         <View style={styles.modalView}>
-          <Text style={styles.title}>Choisissez votre type lieu d'accueil :</Text>
+          <Text style={styles.title}>
+            Choisissez votre type lieu d'accueil :
+          </Text>
           <DropDownPicker
             open={open}
             value={value}
@@ -388,9 +506,17 @@ export default function AnnounceScreen() {
             setValue={setValue}
             setItems={setItems}
             placeholder={"Type de lieu d'accueil..."}
-            containerStyle={{ height: open ? 200 : 40, marginTop: 10, marginBottom: 10 }}
+            containerStyle={{
+              height: open ? 200 : 40,
+              marginTop: 10,
+              marginBottom: 10,
+            }}
           />
-          <TouchableOpacity style={styles.button} title="Fermer" onPress={handleCloseModal}>
+          <TouchableOpacity
+            style={styles.button}
+            title="Fermer"
+            onPress={handleCloseModal}
+          >
             <Text style={styles.button_text}>Fermer</Text>
           </TouchableOpacity>
         </View>
@@ -411,10 +537,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   button: {
-
-    backgroundColor: '#5100FF',
-    justifyContent: 'center',
-    alignContent: 'center',
+    backgroundColor: "#5100FF",
+    justifyContent: "center",
+    alignContent: "center",
     height: 40,
     paddingTop: 6,
     paddingBottom: 6,
@@ -426,16 +551,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderBottomWidth: 3,
-    borderRightWidth: 3
+    borderRightWidth: 3,
   },
   button_text: {
-    color: 'white',
+    color: "white",
     fontSize: 15,
     paddingLeft: 5,
     paddingRight: 5,
   },
   input_address: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingTop: 6,
     paddingBottom: 6,
     paddingLeft: 10,
@@ -444,10 +569,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderBottomWidth: 3,
     borderRightWidth: 3,
-    marginTop: 5
+    marginTop: 5,
   },
   input_description: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingTop: 20,
     paddingBottom: 20,
     paddingLeft: 10,
@@ -462,28 +587,28 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   dropdownlist_lieu_accueil: {
-    width: '100%',
+    width: "100%",
     marginBottom: 10,
     marginTop: 10,
     zIndex: 1000,
   },
   accesibility: {
-    width: '90%',
+    width: "90%",
     marginBottom: 10,
     marginTop: 10,
     zIndex: 10,
   },
   block_container: {
     flexDirection: "row",
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignContent: 'center',
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignContent: "center",
     marginTop: 10,
     marginBottom: 10,
     zIndex: 10,
   },
   accomodationButton: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingTop: 6,
     paddingBottom: 6,
     paddingLeft: 10,
@@ -492,10 +617,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderBottomWidth: 3,
-    borderRightWidth: 3
+    borderRightWidth: 3,
   },
   instrumentButton: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingTop: 6,
     paddingBottom: 6,
     paddingLeft: 10,
@@ -504,17 +629,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderBottomWidth: 3,
-    borderRightWidth: 3
+    borderRightWidth: 3,
   },
   title: {
-    fontWeight: '700',
+    fontWeight: "700",
     fontSize: 17,
     marginTop: 10,
   },
   selectedOption: {
     marginTop: 10,
     fontSize: 16,
-    color: 'blue',
+    color: "blue",
   },
   modalView: {
     marginTop: 200,
@@ -524,20 +649,28 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
-    shadowOpacity: 0.50,
+    shadowOpacity: 0.5,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   add_image: {
     marginTop: 5,
     marginBottom: 10,
   },
-
-
+  block_container_submit: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignContent: "center",
+    marginTop: 10,
+    marginBottom: 10,
+    zIndex: 10,
+    paddingBottom: 100,
+  },
 });
