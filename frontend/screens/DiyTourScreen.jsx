@@ -12,6 +12,7 @@ import {
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment'
 
 export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -121,7 +122,7 @@ export default function DiyTourScreen() {
         ) : (
           <>
             <TouchableOpacity style={styles.btnSearch} onPress={showDatePicker}>
-              <Text>{date.toISOString().split('T')[0]}</Text>
+              <Text>{moment(date).format('DD/MM/YYYY')}</Text>
             </TouchableOpacity>
             <DateTimePicker
               value={date}
@@ -134,10 +135,6 @@ export default function DiyTourScreen() {
           </>
 
         )}
-
-
-
-
 
         <TouchableOpacity
           style={styles.btnSearch}
