@@ -30,6 +30,7 @@ import * as Yup from "yup";
 import { FRONT_IP } from "../hide-ip";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
+import { LinearGradient } from "expo-linear-gradient";
 
 // Définir les schémas de validation avec Yup
 
@@ -121,155 +122,162 @@ export default function Login(props, navigate) {
       keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
     >
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        {!isSignIn ? (
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            validationSchema={signInSchema}
-            onSubmit={handleSubmitSignIn}
-          >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-              isSubmitting,
-            }) => (
-              <View style={styles.signInContainer}>
-                <Text style={styles.signin}>Sign In</Text>
-                <Text style={styles.titles}>Email</Text>
-                <TextInput
-                  placeholder="name@example.com"
-                  style={styles.input}
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  value={values.email}
-                />
-                {touched.email && errors.email && (
-                  <Text style={styles.error}>{errors.email}</Text>
-                )}
-                <Text style={styles.titles}>Password</Text>
-                <TextInput
-                  secureTextEntry
-                  placeholder="Insert your password"
-                  style={styles.input}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  value={values.password}
-                />
-                {touched.password && errors.password && (
-                  <Text style={styles.error}>{errors.password}</Text>
-                )}
-                {errors.general && (
-                  <Text style={styles.error}>{errors.general}</Text>
-                )}
-                <TouchableOpacity
-                  style={styles.input_signin_button}
-                  onPress={handleSubmit}
-                  disabled={isSubmitting}
-                >
-                  <Text style={styles.text_signin}>Sign in</Text>
-                </TouchableOpacity>
-                <Text>or use one of your social profiles</Text>
-                <View style={styles.bottom}>
-                  <Text style={styles.bottom_text}>Pas encore inscrit ?</Text>
-                  <Text onPress={() => setIsSignIn(true)} style={styles.bottom_signup}>Sign Up</Text>
-                </View>
-              </View>
-            )}
-          </Formik>
-        ) : (
-          <Formik
-            initialValues={{
-              username: "",
-              email: "",
-              password: "",
-              confirmPassword: "",
-            }}
-            validationSchema={signUpSchema}
-            onSubmit={handleSubmitSignUp}
-          >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              errors,
-              touched,
-              isSubmitting,
-            }) => (
-              <View style={styles.signInContainer}>
-                <Text style={styles.signin}>Sign Up</Text>
-                <Text style={styles.titles}>Username</Text>
-                <TextInput
-                  placeholder="Username"
-                  style={styles.input}
-                  onChangeText={handleChange("username")}
-                  onBlur={handleBlur("username")}
-                  value={values.username}
-                />
-                {touched.username && errors.username && (
-                  <Text style={styles.error}>{errors.username}</Text>
-                )}
-                <Text style={styles.titles}>Email</Text>
-                <TextInput
-                  placeholder="name@example.com"
-                  style={styles.input}
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  value={values.email}
-                />
-                {touched.email && errors.email && (
-                  <Text style={styles.error}>{errors.email}</Text>
-                )}
-                <Text style={styles.titles}>Password</Text>
-                <TextInput
-                  secureTextEntry
-                  placeholder="Insert your password"
-                  style={styles.input}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  value={values.password}
-                />
-                {touched.password && errors.password && (
-                  <Text style={styles.error}>{errors.password}</Text>
-                )}
-                <Text style={styles.titles}>Confirm your Password</Text>
-                <TextInput
-                  secureTextEntry
-                  placeholder="Confirm your password"
-                  style={styles.input}
-                  onChangeText={handleChange("confirmPassword")}
-                  onBlur={handleBlur("confirmPassword")}
-                  value={values.confirmPassword}
-                />
-                {touched.confirmPassword && errors.confirmPassword && (
-                  <Text style={styles.error}>{errors.confirmPassword}</Text>
-                )}
-                {errors.general && (
-                  <Text style={styles.error}>{errors.general}</Text>
-                )}
-                <TouchableOpacity
-                  style={styles.input_signup_button}
-                  onPress={handleSubmit}
-                  disabled={isSubmitting}
-                >
-                  <Text style={styles.text_signup}>Sign Up</Text>
-                </TouchableOpacity>
-                <View style={styles.bottomSignup}>
-                  <Text style={styles.bottom_text}>Déjà inscrit ?</Text>
-                  <Text
-                    style={styles.bottom_signup}
-                    onPress={() => setIsSignIn(false)}
+        <LinearGradient
+          colors={['#6600ff', '#f4fcfe']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1.6, y: 0.7 }}
+          style={styles.gradient}
+        >
+          {!isSignIn ? (
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              validationSchema={signInSchema}
+              onSubmit={handleSubmitSignIn}
+            >
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+                isSubmitting,
+              }) => (
+                <View style={styles.signInContainer}>
+                  <Text style={styles.signin}>Sign In</Text>
+                  <Text style={styles.titles}>Email</Text>
+                  <TextInput
+                    placeholder="name@example.com"
+                    style={styles.input}
+                    onChangeText={handleChange("email")}
+                    onBlur={handleBlur("email")}
+                    value={values.email}
+                  />
+                  {touched.email && errors.email && (
+                    <Text style={styles.error}>{errors.email}</Text>
+                  )}
+                  <Text style={styles.titles}>Password</Text>
+                  <TextInput
+                    secureTextEntry
+                    placeholder="Insert your password"
+                    style={styles.input}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    value={values.password}
+                  />
+                  {touched.password && errors.password && (
+                    <Text style={styles.error}>{errors.password}</Text>
+                  )}
+                  {errors.general && (
+                    <Text style={styles.error}>{errors.general}</Text>
+                  )}
+                  <TouchableOpacity
+                    style={styles.input_signin_button}
+                    onPress={handleSubmit}
+                    disabled={isSubmitting}
                   >
-                    Sign In
-                  </Text>
+                    <Text style={styles.text_signin}>Sign in</Text>
+                  </TouchableOpacity>
+                  <Text>or use one of your social profiles</Text>
+                  <View style={styles.bottom}>
+                    <Text style={styles.bottom_text}>Pas encore inscrit ?</Text>
+                    <Text onPress={() => setIsSignIn(true)} style={styles.bottom_signup}>Sign Up</Text>
+                  </View>
                 </View>
-              </View>
-            )}
-          </Formik>
-        )}
+              )}
+            </Formik>
+          ) : (
+            <Formik
+              initialValues={{
+                username: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+              }}
+              validationSchema={signUpSchema}
+              onSubmit={handleSubmitSignUp}
+            >
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+                isSubmitting,
+              }) => (
+                <View style={styles.signInContainer}>
+                  <Text style={styles.signin}>Sign Up</Text>
+                  <Text style={styles.titles}>Username</Text>
+                  <TextInput
+                    placeholder="Username"
+                    style={styles.input}
+                    onChangeText={handleChange("username")}
+                    onBlur={handleBlur("username")}
+                    value={values.username}
+                  />
+                  {touched.username && errors.username && (
+                    <Text style={styles.error}>{errors.username}</Text>
+                  )}
+                  <Text style={styles.titles}>Email</Text>
+                  <TextInput
+                    placeholder="name@example.com"
+                    style={styles.input}
+                    onChangeText={handleChange("email")}
+                    onBlur={handleBlur("email")}
+                    value={values.email}
+                  />
+                  {touched.email && errors.email && (
+                    <Text style={styles.error}>{errors.email}</Text>
+                  )}
+                  <Text style={styles.titles}>Password</Text>
+                  <TextInput
+                    secureTextEntry
+                    placeholder="Insert your password"
+                    style={styles.input}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    value={values.password}
+                  />
+                  {touched.password && errors.password && (
+                    <Text style={styles.error}>{errors.password}</Text>
+                  )}
+                  <Text style={styles.titles}>Confirm your Password</Text>
+                  <TextInput
+                    secureTextEntry
+                    placeholder="Confirm your password"
+                    style={styles.input}
+                    onChangeText={handleChange("confirmPassword")}
+                    onBlur={handleBlur("confirmPassword")}
+                    value={values.confirmPassword}
+                  />
+                  {touched.confirmPassword && errors.confirmPassword && (
+                    <Text style={styles.error}>{errors.confirmPassword}</Text>
+                  )}
+                  {errors.general && (
+                    <Text style={styles.error}>{errors.general}</Text>
+                  )}
+                  <TouchableOpacity
+                    style={styles.input_signup_button}
+                    onPress={handleSubmit}
+                    disabled={isSubmitting}
+                  >
+                    <Text style={styles.text_signup}>Sign Up</Text>
+                  </TouchableOpacity>
+                  <View style={styles.bottomSignup}>
+                    <Text style={styles.bottom_text}>Déjà inscrit ?</Text>
+                    <Text
+                      style={styles.bottom_signup}
+                      onPress={() => setIsSignIn(false)}
+                    >
+                      Sign In
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </Formik>
+          )}
+        </LinearGradient>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -286,6 +294,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: "center",
     backgroundColor: "white",
+  },
+  gradient: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
   },
   container: {
     flex: 1,
@@ -308,11 +321,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 50,
     marginTop: 10,
+    color: "#f4fcfe",
+    textShadowColors: 'black',
+    textShadowOffset: { width: 3, height: 5 },
+    textShadowRadius: 4,
+    // Effet d'ombre pour les appareils Android
+    elevation: 4,
   },
   titles: {
     fontWeight: "bold",
     fontSize: 20,
     marginTop: 15,
+    color: '#f4fcfe',
+    textShadowColors: 'black',
+    textShadowOffset: { width: 3, height: 5 },
+    textShadowRadius: 4,
+    // Effet d'ombre pour les appareils Android
+    elevation: 4,
   },
   input: {
     height: 50,
@@ -352,7 +377,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   text_signin: {
-    backgroundColor: "#ec2761",
+    backgroundColor: "#5100FF",
     color: "#FFFFFF",
     fontWeight: "bold",
     fontSize: 16,
