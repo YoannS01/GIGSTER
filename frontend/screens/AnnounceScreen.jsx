@@ -249,6 +249,7 @@ export default function AnnounceScreen() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data.result) {
           console.log("Announce created");
           navigation.navigate("TabNavigator", { screen: "Home" });

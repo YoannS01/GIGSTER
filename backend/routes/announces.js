@@ -13,63 +13,47 @@ router.post("/announces", authMiddleware, (req, res) => {
     "capacity",
     "locationType",
     "description",
+    "availableDates",
   ];
   if (!checkBody(req.body, requiredFields)) {
     return res.json({ result: false, error: "Missing or empty fields" });
   }
 
+  console.log(req.body);
   const username = req.auth.username;
 
-  User.findOne({ username })
-    .then((user) => {
-      if (!user) {
-        return res.json({ result: false, error: "User not found" });
-      }
+  User.findOne({ username }).then((user) => {
+    if (!user) {
+      return res.json({ result: false, error: "User not found" });
+    }
 
-      const newAnnounce = new Announce({
-        host: user._id,
-        address: [
-          {
-            street: req.body.street,
-            city: req.body.city,
-            zipcode: req.body.zipcode,
-          },
-        ],
-        availableDates: [
-          {
-            startDateAt: req.body.startDateAt,
-            endDateAt: req.body.endDateAt,
-          },
-        ],
-        locationType: req.body.locationType,
-        instrumentsAvailable: req.body.instrumentsAvailable,
-        capacity: req.body.capacity,
-        description: req.body.description,
-        //media: [resultCloudinary.secure_url], // Utilisation de l'URL fournie par Cloudinary
-        accessibility: req.body.accessibility,
-        accomodation: {
-          sleeping: req.body.sleeping,
-          restauration: req.body.restauration,
-        },
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-
-      newAnnounce
-        .save()
-        .then(() => {
-          res.json({ result: true, newAnnounce });
-        })
-        .catch((error) => {
-          res.json({
-            result: false,
-            error: "Error saving announce to database",
-          });
-        });
-    })
-    .catch((error) => {
-      res.json({ result: false, error: "Error finding user" });
+    const newAnnounce = new Announce({
+      host: user._id,
+      address: req.body.address,
+      availableDates: req.body.availableDates,
+      locationType: req.body.locationType,
+      instrumentsAvailable: req.body.instrumentsAvailable,
+      capacity: req.body.capacity,
+      description: req.body.description,
+      //media: [resultCloudinary.secure_url], // Utilisation de l'URL fournie par Cloudinary
+      accessibility: req.body.accessibility,
+      accomodation: req.body.accomodation,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
+
+    newAnnounce
+      .save()
+      .then(() => {
+        res.json({ result: true, newAnnounce });
+      })
+      .catch((error) => {
+        res.json({
+          result: false,
+          error,
+        });
+      });
+  });
 });
 
 router.get("/allAnnounces", (req, res) => {

@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const tourSchema = mongoose.Schema({
-    showsID: [{ type: mongoose.Schema.Types.ObjectId, ref: 'shows' }],
-    artist: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-    createdAt: Date,
-    updatedAt: Date,
-    isValidated: Boolean,
-    status: String,
-    setDuration: String,
+  showsID: [{ type: mongoose.Schema.Types.ObjectId, ref: "shows" }],
+  artist: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  isValidated: { type: Boolean, default: false },
+  status: { type: String, default: "Brouillon" },
+  setDuration: { type: Number, required: true },
 });
 
-const Tour = mongoose.model('tours', tourSchema);
+const Tour = mongoose.model("tours", tourSchema);
 
 module.exports = { Tour };
