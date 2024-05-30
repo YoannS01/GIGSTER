@@ -7,8 +7,14 @@ const addressSchema = mongoose.Schema({
 });
 
 const availableDateSchema = mongoose.Schema({
-    startDateAt: Date,
-    endDateAt: Date,
+    startDateAt: {
+        type: Date,
+        required: true,
+    },
+    endDateAt: {
+        type: Date,
+        required: true,
+    }
 });
 
 const accomodationSchema = mongoose.Schema({

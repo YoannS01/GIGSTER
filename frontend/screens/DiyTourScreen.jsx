@@ -104,12 +104,25 @@ export default function DiyTourScreen() {
     fetch(`http://${FRONT_IP}:3000/allAnnounces`)
       .then(response => response.json())
       .then(data => {
-        console.log("DATA D'UN OBJET", data.announces[0].availableDates[0].endDateAt)
-        console.log(date)
-        console.log('HEEEEY',)
-        const hostsAvailable = data.announces.filter(elem =>
-          elem.availableDates[0].startDateAt <= date && elem.availableDates[0].endDateAt >= date
-        )
+
+
+        const hostsAvailable = []
+        for (let elem of data.announces) {
+          console.log("DATE=>", date)
+          console.log("ENDDATE=>", elem)
+          console.log("STARTDATE=>", elem.availableDates[0].startDateAt)
+          if (new Date(elem.availableDates[0].startDateAt) <= date && date <= new Date(elem.availableDates[0].endDateAt)) {
+
+            hostsAvailable.push(elem)
+          }
+        }
+
+
+
+
+
+
+
         setHosts(hostsAvailable)
         console.log('HOST=>=', hostsAvailable)
         //Cherche les coordinnées de l'adresse de l'annonce:
