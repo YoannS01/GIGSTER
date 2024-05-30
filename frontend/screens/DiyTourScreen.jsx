@@ -122,7 +122,7 @@ export default function DiyTourScreen() {
         ) : (
           <>
             <TouchableOpacity style={styles.btnSearch} onPress={showDatePicker}>
-              <Text>{date.toDateString}</Text>
+              <Text>{moment(date).format('DD/MM/YYYY')}</Text>
             </TouchableOpacity>
             <DateTimePicker
               value={date}
