@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -10,32 +10,73 @@ import {
 
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { useEffect } from "react";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
   const [searchCity, setSearchCity] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status === "granted") {
-        const location = await Location.getCurrentPositionAsync({});
-        setCurrentPosition(location.coords);
-
-        setMapRegion({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        });
-
-        Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
-          setCurrentPosition(location.coords);
-        });
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
       }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setCurrentPosition(location.coords);
+
+      setMapRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.1,
+        longitudeDelta: 0.1,
+      });
+
+      Location.watchPositionAsync({ distanceInterval: 10 }, (location) => {
+        setCurrentPosition(location.coords);
+      });
     })();
   }, []);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (event, selectedDate) => {
+    if (selectedDate) {
+      setDate(selectedDate);
+    }
+    hideDatePicker();
+  };
+
+  const getCityLocation = () => {
+    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.features.length === 0) {
+          console.log("City not found");
+          return;
+        }
+
+        const foundCity = data.features[0];
+        setMapRegion({
+          latitude: foundCity.geometry.coordinates[1],
+          longitude: foundCity.geometry.coordinates[0],
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        });
+      });
+  };
 
   if (!mapRegion) {
     return (
@@ -45,57 +86,11 @@ export default function DiyTourScreen() {
     );
   }
 
-  /* fetch(`http://${FRONT_IP}:3000/users/all`)
-     .then(response => response.json())
-     .then(data => {
-       console.log("RETOUR DE TOUT LES USERS:", data)
-       const host = data.bookings.filter(element => element.isHost !== false)
-       console.log("HOST FILTRES=>", host.announces)
- 
-     })
- 
-   const Dates = [
-     {
-       latitude: "yes",
-       longitude: "yes",
-       startDateAt: "2024-06-10T15:53:01.409+00:00",
-       endDateAt: "2024-06-17T15:53:01.409+00:00"
-     },
-     {
-       startDateAt: "2024-07-10T15:53:01.409+00:00",
-       endDateAt: "2024-07-17T15:53:01.409+00:00"
-     },
-   ] 
-  
-   const dispoMarkers = Dates.map((date) => date.startDateAt > date)
-  */
-
-  function getCityLocation() {
-    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.features.length === 0) {
-          return;
-        }
-
-        const foundCity = data.features[0];
-        setMapRegion({
-          latitude: foundCity.geometry.coordinates[1],
-          longitude: foundCity.geometry.coordinates[0],
-        });
-      });
-  }
-
   return (
     <View style={styles.container}>
       <MapView
         style={StyleSheet.absoluteFillObject}
-        region={{
-          latitude: mapRegion.latitude,
-          longitude: mapRegion.longitude,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1,
-        }}
+        region={mapRegion}
       >
         {currentPosition && (
           <Marker coordinate={currentPosition} title="Me!" pinColor="#fecb2d" />
@@ -103,21 +98,36 @@ export default function DiyTourScreen() {
       </MapView>
 
       <View style={styles.topContainer}>
+
         <TextInput
           style={styles.textInput}
-          placeholder={"Search... "}
+          placeholder={"Where ?"}
           placeholderTextColor={"#666"}
-          onChangeText={(value) => setSearchCity(value)}
+          onChangeText={setSearchCity}
           value={searchCity}
+          onFocus={() => setIsOpen(true)}
         />
+
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={handleConfirm}
+          style={styles.calendar}
+        />
+
+
+
+
 
         <TouchableOpacity
           style={styles.btnSearch}
-          onPress={() => getCityLocation()}
+          onPress={() => { getCityLocation(); setIsOpen(false); }}
         >
           <Text style={styles.textSearch}>Go</Text>
         </TouchableOpacity>
       </View>
+
 
       <View style={styles.bottomContainer}>
         <Text style={styles.title}>Mon Parcours</Text>
@@ -135,7 +145,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center,",
+    alignItems: "center",
   },
   loading: {
     flex: 1,
@@ -146,16 +156,31 @@ const styles = StyleSheet.create({
   topContainer: {
     position: "absolute",
     top: 40,
-    width: "70%",
+    width: "80%",
     marginLeft: "15%",
-    marginRight: "15%",
     height: 50,
     borderColor: "black",
     borderWidth: 1,
     borderBottomWidth: 4,
     borderRightWidth: 4,
     borderRadius: 13,
-    margin: 10,
+    padding: 5,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "white",
+  },
+  subTopContainer: {
+    position: "absolute",
+    top: 100,
+    width: "50%",
+    marginLeft: "25%",
+    height: 50,
+    borderColor: "black",
+    borderWidth: 1,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
+    borderRadius: 13,
     padding: 5,
     alignItems: "center",
     flexDirection: "row",
@@ -165,10 +190,9 @@ const styles = StyleSheet.create({
   textInput: {
     color: "#000",
     height: 45,
-    width: "40%",
-    paddingHorizontal: 10,
+    width: "34%",
+    paddingLeft: 10,
     fontSize: 16,
-    color: "black",
   },
   btnSearch: {
     backgroundColor: "#5100FF",
@@ -179,7 +203,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     borderRightWidth: 3,
   },
-
   bottomContainer: {
     position: "absolute",
     bottom: 100,
@@ -198,7 +221,6 @@ const styles = StyleSheet.create({
   title: {
     width: "50%",
     textAlign: "center",
-    fontFamily: "Helvetica",
     fontSize: 25,
     marginBottom: 10,
   },
@@ -221,4 +243,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 5,
   },
+  calendar: {
+    backgroundColor: 'white',
+    color: 'white'
+
+  }
 });
+
