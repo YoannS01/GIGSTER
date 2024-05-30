@@ -8,7 +8,7 @@ const addressSchema = mongoose.Schema({
 
 const availableDateSchema = mongoose.Schema({
     startDateAt: Date,
-    endDateAt: Date
+    endDateAt: Date,
 });
 
 const accomodationSchema = mongoose.Schema({
@@ -17,14 +17,13 @@ const accomodationSchema = mongoose.Schema({
 });
 
 const announceSchema = mongoose.Schema({
-    host: { type: mongoose.Schema.Types.ObjectId, ref: 'host' },
+    host: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },  // Corrigé ici pour référencer 'User'
     address: [addressSchema],
     availableDates: [availableDateSchema],
     locationType: [String],
     instrumentsAvailable: [String],
     capacity: Number,
     description: String,
-    //media: [String],
     accessibility: Boolean,
     placeRanking: Number,
     accomodation: accomodationSchema,
@@ -32,6 +31,6 @@ const announceSchema = mongoose.Schema({
     updatedAt: { type: Date, default: Date.now },
 });
 
-const Announce = mongoose.model('announces', announceSchema);
+const Announce = mongoose.model('Announce', announceSchema);
 
-module.exports = { Announce }
+module.exports = { Announce };
