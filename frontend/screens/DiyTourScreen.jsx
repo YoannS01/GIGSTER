@@ -12,6 +12,7 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
+import { FRONT_IP } from "../hide-ip";
 
 export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -98,12 +99,19 @@ export default function DiyTourScreen() {
 
   //RECHERCHE ET AFFICHE LES HÔTES DISPONIBLE 
   function displayAvailableHost() {
+    console.log('hello')
     //Recherche toutes les annonces correspondantes à la date choisie:
-    fetch(`http://${FRONT_IP}:3000/announces/allAnnounces`)
+    fetch(`http://${FRONT_IP}:3000/allAnnounces`)
       .then(response => response.json())
       .then(data => {
-        const hostsAvailable = data.newAnnounce.filter(elem => elem.availableDates.startDateAt < date && elem.availableDates.endDateAt > date)
+        console.log("DATA D'UN OBJET", data.announces[0].availableDates[0].endDateAt)
+        console.log(date)
+        console.log('HEEEEY',)
+        const hostsAvailable = data.announces.filter(elem =>
+          elem.availableDates[0].startDateAt <= date && elem.availableDates[0].endDateAt >= date
+        )
         setHosts(hostsAvailable)
+        console.log('HOST=>=', hostsAvailable)
         //Cherche les coordinnées de l'adresse de l'annonce:
         const coordinates = []
         for (let elem of hosts) {
@@ -192,7 +200,7 @@ export default function DiyTourScreen() {
 
         <TouchableOpacity
           style={styles.btnSearch}
-          onPress={() => { getCityLocation() }}
+          onPress={() => { getCityLocation(); displayAvailableHost() }}
         >
           <Text style={styles.textSearch}>Go</Text>
         </TouchableOpacity>
