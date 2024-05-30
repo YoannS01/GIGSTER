@@ -278,14 +278,14 @@ export default function Login(props, navigate) {
 const styles = StyleSheet.create({
   KeyboardAvoidingViewContainer: {
     flex: 1,
-    backgroundColor: "#c2eaed",
+    backgroundColor: "white",
     width: "100%",
     paddingTop: 33,
   },
   scrollViewContainer: {
     flexGrow: 1,
     alignItems: "center",
-    backgroundColor: "#c2eaed",
+    backgroundColor: "white",
   },
   container: {
     flex: 1,
@@ -387,12 +387,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 20,
     marginBottom: 10,
-    borderRadius: 8,
+    borderColor: "black",
     borderWidth: 1,
-    borderBottomWidth: 3,
-    borderRightWidth: 3,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
+    borderRadius: 13,
 
-    backgroundColor: "#ec2761",
+    backgroundColor: "#5100FF",
   },
   bottom: {
     alignItems: "space-between",
@@ -412,9 +413,10 @@ const styles = StyleSheet.create({
     color: 'white',
     padding: 5,
     borderRadius: 5
+
   },
   bottom_signup: {
-    color: "#ec2761",
+    color: "#5100FF",
     fontWeight: "bold",
     fontSize: 15
   },
