@@ -8,7 +8,7 @@ import Slider from '@react-native-community/slider';
 
 import { CalendarList, LocaleConfig } from 'react-native-calendars';
 import { eachDayOfInterval, format, isBefore } from 'date-fns';
-import { initialState, dateReducer } from './reducers/date';
+import { initialState, dateReducer } from '../reducers/date';
 import moment from "moment";
 
 export default function AnnounceScreen() {
