@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   topContainer: {
     position: "absolute",
     top: 40,
-    width: "%",
+    width: "80%",
     marginLeft: "15%",
 
     height: 50,
