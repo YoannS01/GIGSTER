@@ -11,6 +11,7 @@ import TopCard from '../components/TopCard'
 
 import ProfileScreen from "./ProfileScreen";
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 
 
@@ -22,6 +23,10 @@ export default function HomeScreen() {
     const [modalDisplay, setModalDisplay] = useState(0);
     const [searching, setSearching] = useState(false)
     const navigation = useNavigation()
+
+    const user = useSelector(state => state.user.value)
+
+    console.log(user)
 
     const [modalContent, setModalContent] = useState({
         image: require("../assets/Felicita.png"),
@@ -193,22 +198,24 @@ export default function HomeScreen() {
                         }} size={40} />
                     </View>
                     <View style={styles.modalNav}>
-                        <View style={styles.modalSection}>
-                            <FontAwesome name='user' size={35} />
-                            <View style={styles.modalAlign}>
-                                <Text style={styles.modalText} onPress={() => navigateModal()} >Profile</Text>
+                        <TouchableOpacity onPress={() => navigateModal()}>
+                            <View style={styles.modalSection}>
+                                <FontAwesome name='user' size={35} />
+                                <View style={styles.modalAlign}>
+                                    <Text style={styles.modalText}  >Profile</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.modalSection}>
-                            <FontAwesome name={true ? 'globe' : 'music'} size={35} />
+                            <FontAwesome name={user.isArtist ? 'globe' : 'music'} size={35} />
                             <View style={styles.modalAlign}>
-                                <Text style={styles.modalText}>{true ? 'My tours' : 'My bookings'}</Text>
+                                <Text style={styles.modalText}>{user.isArtist ? 'My tours' : 'My bookings'}</Text>
                             </View>
                         </View>
                         <View style={styles.modalSection}>
                             <FontAwesome name='heart' size={28} />
                             <View style={styles.modalAlign}>
-                                <Text style={styles.modalText}>{true ? 'Liked hosts' : 'Liked artists'}</Text>
+                                <Text style={styles.modalText}>{user.isArtist ? 'Liked hosts' : 'Liked artists'}</Text>
                             </View>
                         </View>
                         <View style={styles.modalSection}>
@@ -217,12 +224,14 @@ export default function HomeScreen() {
                                 <Text style={styles.modalText}>Preferences</Text>
                             </View>
                         </View>
-                        <View style={styles.lastModalSection}>
-                            <FontAwesome name='close' size={30} />
-                            <View style={styles.modalAlign}>
-                                <Text style={styles.modalText} onPress={() => logout()}>Log out</Text>
+                        <TouchableOpacity onPress={() => logout()}>
+                            <View style={styles.lastModalSection}>
+                                <FontAwesome name='close' size={30} />
+                                <View style={styles.modalAlign}>
+                                    <Text style={styles.modalText}>Log out</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={styles.settings}>
@@ -298,7 +307,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
                 <View style={styles.searchField}>
                     <TextInput
-                        placeholder="Find your future hosts"
+                        placeholder={user.isArtist ? "Find your future hosts" : "Find your future artists"}
                         style={styles.input}
                     ></TextInput>
                     <TouchableOpacity style={styles.btnSearch} onPress={() => setSearching(true)}>
@@ -310,7 +319,7 @@ export default function HomeScreen() {
             </View>
             {!searching ?
                 <View>
-                    <Text style={styles.welcome}>Welcome JustneedVic</Text>
+                    <Text style={styles.welcome}>Welcome {user.username}</Text>
                     <Text style={styles.discover}>Discover...</Text>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.recoZone} >
                         {cardList}
