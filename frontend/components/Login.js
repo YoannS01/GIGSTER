@@ -9,7 +9,7 @@ import {
     Platform,
     ScrollView,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     updateEmail,
     updateUsername,
@@ -59,6 +59,7 @@ const signUpSchema = Yup.object().shape({
 export default function Login(props, navigate) {
     const navigation = useNavigation()
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.value)
     const [isSignIn, setIsSignIn] = useState(false);
 
     const handleSubmitSignIn = (values, { setSubmitting, setErrors }) => {
@@ -72,12 +73,13 @@ export default function Login(props, navigate) {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("REPONSE DU BACK", data.data)
+                console.log("REPONSE DU BACK", data)
                 setSubmitting(false);
                 if (!data.result) {
                     setErrors({ general: data.error });
                 } else {
                     delete data.data.artist._id;
+
 
                     dispatch(updateToken(data.data.token));
                     dispatch(updateUsername(data.data.username));
@@ -91,6 +93,7 @@ export default function Login(props, navigate) {
                     dispatch(updateBirthdate(moment(data.data.birthdate).format("DD/MM/YYYY")));
                     dispatch(updateArtist(data.data.isArtist));
                     dispatch(updateHost(data.data.isHost));
+                    console.log(data)
 
                     navigation.navigate("TabNavigator", { screen: "Home" });
 

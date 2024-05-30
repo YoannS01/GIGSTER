@@ -146,7 +146,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#F0E7F6",
-        height: "100%",
+        height: "89%",
     },
     profileContainer: {
         width: "100%",
@@ -266,6 +266,7 @@ const styles = StyleSheet.create({
     },
     btnRecap: {
         width: "60%",
+        height: '70%',
         alignItems: "center",
         borderWidth: 1,
         borderRadius: 4,
@@ -300,5 +301,3 @@ const styles = StyleSheet.create({
         width: "40%",
     },
 });
-
-console.log('debug')
