@@ -121,7 +121,7 @@ export default function DiyTourScreen() {
         ) : (
           <>
             <TouchableOpacity style={styles.btnSearch} onPress={showDatePicker}>
-              <Text>{date}</Text>
+              <Text>{date.toISOString().split('T')[0]}</Text>
             </TouchableOpacity>
             <DateTimePicker
               value={date}
@@ -175,8 +175,9 @@ const styles = StyleSheet.create({
   topContainer: {
     position: "absolute",
     top: 40,
-    width: "80%",
+    width: "%",
     marginLeft: "15%",
+
     height: 50,
     borderColor: "black",
     borderWidth: 1,
