@@ -136,7 +136,7 @@ export default function Login(props, navigate) {
               touched,
               isSubmitting,
             }) => (
-              <View style={StyleSheet.signInContainer}>
+              <View style={styles.signInContainer}>
                 <Text style={styles.signin}>Sign In</Text>
                 <Text style={styles.titles}>Email</Text>
                 <TextInput
@@ -169,12 +169,12 @@ export default function Login(props, navigate) {
                   onPress={handleSubmit}
                   disabled={isSubmitting}
                 >
-                  <Text style={styles.text_signin}>Sign In</Text>
+                  <Text style={styles.text_signin}>Sign in</Text>
                 </TouchableOpacity>
                 <Text>or use one of your social profiles</Text>
                 <View style={styles.bottom}>
                   <Text style={styles.bottom_text}>Pas encore inscrit ?</Text>
-                  <Text onPress={() => setIsSignIn(true)}>Sign Up</Text>
+                  <Text onPress={() => setIsSignIn(true)} style={styles.bottom_signup}>Sign Up</Text>
                 </View>
               </View>
             )}
@@ -199,9 +199,9 @@ export default function Login(props, navigate) {
               touched,
               isSubmitting,
             }) => (
-              <View>
-                <Text style={styles.title}>Sign Up</Text>
-                <Text style={styles.inputTitle}>Username</Text>
+              <View style={styles.signInContainer}>
+                <Text style={styles.signin}>Sign Up</Text>
+                <Text style={styles.titles}>Username</Text>
                 <TextInput
                   placeholder="Username"
                   style={styles.input}
@@ -257,7 +257,7 @@ export default function Login(props, navigate) {
                 >
                   <Text style={styles.text_signup}>Sign Up</Text>
                 </TouchableOpacity>
-                <View style={styles.bottom}>
+                <View style={styles.bottomSignup}>
                   <Text style={styles.bottom_text}>Déjà inscrit ?</Text>
                   <Text
                     style={styles.bottom_signup}
@@ -278,14 +278,14 @@ export default function Login(props, navigate) {
 const styles = StyleSheet.create({
   KeyboardAvoidingViewContainer: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#c2eaed",
     width: "100%",
     paddingTop: 33,
   },
   scrollViewContainer: {
     flexGrow: 1,
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#c2eaed",
   },
   container: {
     flex: 1,
@@ -293,7 +293,12 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingTop: 33,
   },
-
+  signInContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%'
+  },
   signup: {
     fontWeight: "bold",
     fontSize: 50,
@@ -311,7 +316,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    width: 300,
+    width: '75%',
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 10,
@@ -327,21 +332,21 @@ const styles = StyleSheet.create({
   },
   input_username: {
     height: 40,
-    width: 300,
+    width: '75%',
     backgroundColor: "#FFFFFF",
     padding: 10,
     marginTop: 5,
   },
   input_email: {
     height: 40,
-    width: 300,
+    width: '75%',
     backgroundColor: "#FFFFFF",
     padding: 10,
     marginTop: 5,
   },
   input_password: {
     height: 40,
-    width: 300,
+    width: '75%',
     backgroundColor: "#FFFFFF",
     padding: 10,
     marginTop: 5,
@@ -353,24 +358,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingBottom: 8,
     paddingTop: 8,
-    paddingLeft: 130,
-    paddingRight: 130,
     height: "100%",
+    width: '100%',
+    textAlign: 'center',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderBottomWidth: 3,
+    borderRightWidth: 3,
   },
   text_signup: {
-    backgroundColor: "#ec2761",
     color: "#FFFFFF",
     fontWeight: "bold",
     fontSize: 16,
-    paddingBottom: 8,
-    paddingTop: 8,
-    paddingLeft: 130,
-    paddingRight: 130,
-    height: "100%",
   },
   input_signin_button: {
     height: 50,
-    width: 350,
+    width: '75%',
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 10,
@@ -379,32 +382,47 @@ const styles = StyleSheet.create({
   },
   input_signup_button: {
     height: 50,
-    width: 350,
+    width: '75%',
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 10,
     marginTop: 20,
     marginBottom: 10,
     borderRadius: 8,
     borderWidth: 1,
     borderBottomWidth: 3,
     borderRightWidth: 3,
-    marginTop: 20,
-    backgroundColor: "white",
+
+    backgroundColor: "#ec2761",
   },
   bottom: {
     alignItems: "space-between",
     paddingTop: 100,
+    flexDirection: 'row',
   },
   bottom_text: {
-    marginRight: 200,
+    marginRight: '20%',
+    width: '40%',
+    fontWeight: 'bold',
+    fontSize: 15
+  },
+  bottom_btn: {
+    backgroundColor: '#ec2761',
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'white',
+    padding: 5,
+    borderRadius: 5
   },
   bottom_signup: {
     color: "#ec2761",
     fontWeight: "bold",
+    fontSize: 15
   },
   error: {
     color: "red",
     marginTop: 10,
   },
+  bottomSignup: {
+    flexDirection: 'row'
+  }
 });
