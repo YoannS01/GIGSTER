@@ -24,7 +24,7 @@ const announceSchema = mongoose.Schema({
     instrumentsAvailable: [String],
     capacity: Number,
     description: String,
-    media: [String],
+    //media: [String],
     accessibility: Boolean,
     placeRanking: Number,
     accomodation: accomodationSchema,

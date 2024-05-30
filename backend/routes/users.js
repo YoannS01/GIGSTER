@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const { Announce } = require("../models/announces")
 
 router.post("/signup", (req, res) => {
     /*if (req.body.password !== req.body.confirmPassword) {
@@ -129,6 +130,15 @@ router.post("/refresh", (req, res) => {
     });
 });
 
-router.get("/allAnnounces", (req, res) => { })
+router.get("/allAnnounces", (req, res) => {
+    Announce.find()
+        .then(announces => {
+            if (announces.length > 0) {
+                res.json({ result: true, announces });
+            } else {
+                res.json({ result: false, error: "No announces" });
+            }
+        })
+})
 
 module.exports = router;
