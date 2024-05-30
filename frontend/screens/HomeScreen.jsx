@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, ScrollView, Platform, Button, ImageBackground } from 'react-native';
 import Modal from 'react-native-modal';
@@ -21,12 +21,14 @@ export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalDisplay, setModalDisplay] = useState(0);
+    const [cardsLiked, setCardsLiked] = useState([]);
+    const [styleLike, setStyleLike] = useState({})
     const [searching, setSearching] = useState(false)
     const navigation = useNavigation()
 
     const user = useSelector(state => state.user.value)
 
-    console.log(user)
+    console.log(cardsLiked)
 
     const [modalContent, setModalContent] = useState({
         image: require("../assets/Felicita.png"),
@@ -162,6 +164,15 @@ export default function HomeScreen() {
         navigation.navigate("LoginScreen");
     }
 
+    function handleLike(title) {
+        if (!cardsLiked.some(e => e === title)) {
+            setCardsLiked([...cardsLiked, title])
+        } else {
+            setCardsLiked(cardsLiked.filter(e => e !== title))
+        }
+    }
+
+
     const modalUserContent = (
         <Modal style={styles.modal}
             isVisible={modalVisible}
@@ -267,7 +278,8 @@ export default function HomeScreen() {
                             <FontAwesome name='star' size={40} color={'#d4a60f'} />
                             <Text style={{ fontSize: 25, fontWeight: 'bold' }} >{modalContent.note}</Text>
                         </View>
-                        <FontAwesome name='heart' size={35} />
+                        <FontAwesome name='heart' size={35} onPress={() => handleLike(modalContent.title)}
+                            style={cardsLiked.includes(modalContent.title) && { color: 'red' }} />
                     </View>
                     <View style={styles.infoDesc}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{modalContent.location}</Text>
