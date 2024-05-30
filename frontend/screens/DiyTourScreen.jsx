@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -88,7 +87,7 @@ export default function DiyTourScreen() {
         });
       });
   };
-
+  //ECRAN DE CHARGEMENT AVANT LA MAP
   if (!mapRegion) {
     return (
       <View style={styles.loading}>
@@ -107,14 +106,16 @@ export default function DiyTourScreen() {
         setHosts(hostsAvailable)
         //Cherche les coordinnées de l'adresse de l'annonce:
         const coordinates = []
-        for (let elem of hostsAvailable) {
+        for (let elem of hosts) {
           fetch(`https://api-adresse.data.gouv.fr/search/?q=${elem.address.street}&zipcode=${elem.address.zipcode}`)
             .then(response => response.json())
             .then(data => {
 
               const foundCoords = data.features[0];
               coordinates.push({
+
                 name: elem.host.firstname,
+                description: elem.description,
                 coords: {
                   latitude: foundCoords.geometry.coordinates[1],
                   longitude: foundCoords.geometry.coordinates[0]
@@ -131,7 +132,7 @@ export default function DiyTourScreen() {
 
   const hostsPins = coordinates.map((elem, i) => {
     return (
-      <Marker coordinate={elem.coords} title={elem.name} pinColor="#5100FF" key={i} />
+      <Marker coordinate={elem.coords} title={elem.name} description={elem.description} pinColor="#5100FF" key={i} />
     )
   })
 
