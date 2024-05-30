@@ -1,6 +1,10 @@
 var express = require("express");
 var router = express.Router();
-const { Announce } = require("../models/announces")
+const { checkBody } = require('../modules/checkBody');
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.SECRETKEY;
+const { User } = require('../models/users');
 
 router.post("/signup", (req, res) => {
     /*if (req.body.password !== req.body.confirmPassword) {

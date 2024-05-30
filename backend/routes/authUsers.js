@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { checkBody } = require('../modules/checkBody');
 const authMiddleware = require('../middleware/auth');
 const { Announce } = require("../models/announces");
 
