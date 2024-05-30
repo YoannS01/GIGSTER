@@ -6,10 +6,8 @@ const logger = require('morgan');
 const cors = require('cors');
 
 require('./models/connection');
-const auth = require('./middleware/auth');
-const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const authUsersRouter = require('./routes/authUsers');
+const announcesRouter = require('./routes/announces');
 
 const app = express();
 const fileUpload = require('express-fileupload');
@@ -22,8 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/authUsers', auth, authUsersRouter);
+app.use('/', announcesRouter);
 
 module.exports = app;

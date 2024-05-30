@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +12,7 @@ import {
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment'
 
 export default function DiyTourScreen() {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -19,6 +21,7 @@ export default function DiyTourScreen() {
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [hosts, setHosts] = useState([])
 
   useEffect(() => {
     (async () => {
@@ -44,6 +47,11 @@ export default function DiyTourScreen() {
     })();
   }, []);
 
+
+  //FORMATTE LA DATE EN STRING
+  const formattedDate = moment(date).format('DD/MM/YYYY');
+
+  //VARIABLE MECHANISME DU CALENDRIER
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -59,8 +67,9 @@ export default function DiyTourScreen() {
     hideDatePicker();
   };
 
+  //RECHERCHE LA VILLE VIA L'INPUT
   const getCityLocation = () => {
-    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}`)
+    fetch(`https://api-adresse.data.gouv.fr/search/?q=${searchCity}&type='city `)
       .then((response) => response.json())
       .then((data) => {
         if (data.features.length === 0) {
@@ -86,6 +95,19 @@ export default function DiyTourScreen() {
     );
   }
 
+  //RECHERCHE ET AFFICHE LES HOTES DISPONIBLE 
+  function displayAvailableHost() {
+
+    fetch(`http://${FRONT_IP}:3000/authUsers/announces`)
+      .then(response => response.json())
+      .then(data => {
+        const hostsAvailable = data.filter(elem => elem.availableDates.startDateAt < date && elem.availableDates.endDateAt > date)
+        setHosts(hostsAvailable)
+      })
+  }
+
+
+
   return (
     <View style={styles.container}>
       <MapView
@@ -108,17 +130,31 @@ export default function DiyTourScreen() {
           onFocus={() => setIsOpen(true)}
         />
 
-        <DateTimePicker
-          value={date}
-          mode="date"
-          display="default"
-          onChange={handleConfirm}
-          style={styles.calendar}
-        />
+        {Platform.OS === 'ios' ? (
+          <DateTimePicker
+            value={date}
+            mode="date"
+            display="default"
+            onChange={handleConfirm}
+            style={styles.calendar}
+            isVisible={isDatePickerVisible}
+          />
+        ) : (
+          <>
+            <TouchableOpacity style={styles.btnSearch} onPress={showDatePicker}>
+              <Text>{formattedDate}</Text>
+            </TouchableOpacity>
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={handleConfirm}
+              style={styles.calendar}
+              isVisible={isDatePickerVisible}
+            />
+          </>
 
-
-
-
+        )}
 
         <TouchableOpacity
           style={styles.btnSearch}
@@ -141,6 +177,9 @@ export default function DiyTourScreen() {
   );
 }
 
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -158,6 +197,7 @@ const styles = StyleSheet.create({
     top: 40,
     width: "80%",
     marginLeft: "15%",
+
     height: 50,
     borderColor: "black",
     borderWidth: 1,
@@ -249,4 +289,6 @@ const styles = StyleSheet.create({
 
   }
 });
+
+
 
