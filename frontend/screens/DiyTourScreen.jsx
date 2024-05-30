@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -108,13 +109,31 @@ export default function DiyTourScreen() {
           onFocus={() => setIsOpen(true)}
         />
 
-        <DateTimePicker
-          value={date}
-          mode="date"
-          display="default"
-          onChange={handleConfirm}
-          style={styles.calendar}
-        />
+        {Platform.OS === 'ios' ? (
+          <DateTimePicker
+            value={date}
+            mode="date"
+            display="default"
+            onChange={handleConfirm}
+            style={styles.calendar}
+            isVisible={isDatePickerVisible}
+          />
+        ) : (
+          <>
+            <TouchableOpacity style={styles.btnSearch} onPress={showDatePicker}>
+              <Text>{date}</Text>
+            </TouchableOpacity>
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={handleConfirm}
+              style={styles.calendar}
+              isVisible={isDatePickerVisible}
+            />
+          </>
+
+        )}
 
 
 
@@ -249,4 +268,6 @@ const styles = StyleSheet.create({
 
   }
 });
+
+
 
