@@ -175,10 +175,10 @@ export default function Step2(props) {
         </View>
 
         {/*Ajout de photos via la galerie du téléphone*/}
-        <View style={styles.block_container}>
-          <Text style={styles.title}>Ajoutez une image à profil :</Text>
-          <TouchableOpacity style={styles.button} title="Choisir mon image" onPress={pickImageAsync}>
-            <Text style={styles.button_text}>Choisir</Text>
+        <View>
+          <Text style={styles.label}>Ajoutez une image à profil :</Text>
+          <TouchableOpacity style={styles.btn} title="Choisir mon image" onPress={pickImageAsync}>
+            <Text style={styles.textBtn}>Choisir image</Text>
           </TouchableOpacity>
         </View>
 
