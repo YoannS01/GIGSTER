@@ -15,13 +15,17 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import profilePic from "../assets/Shulk.png";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const EMAIL_REGEX =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export default function ProfileScreen() {
     const [image, setImage] = useState(null);
+
+    const user = useSelector(state => state.user.value)
+
+    console.log(user.isArtist)
 
     const galleryData = [
         require("../assets/Gallery1.png"),
@@ -68,8 +72,8 @@ export default function ProfileScreen() {
                         />
                         <View style={styles.profileDesc}>
                             <View style={styles.infosContainer}>
-                                <Text style={styles.username}>JustneedVic</Text>
-                                <Text>Versailles</Text>
+                                <Text style={styles.username}>{user.isArtist ? user.artist.artistname : user.username}</Text>
+                                <Text>{user.isArtist ? user.artist.placeOrigin : user.address.city}</Text>
                             </View>
                         </View>
                     </ImageBackground>

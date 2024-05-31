@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
+import LikedHostsScreen from "./screens/LikedHostsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import AddScreen from "./screens/AddScreen";
 
@@ -87,6 +88,7 @@ export default function App() {
       <NavigationContainer style={styles.container}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="LikedHostsScreen" component={LikedHostsScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
         <StatusBar style="auto" />

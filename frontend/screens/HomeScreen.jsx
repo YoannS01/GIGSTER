@@ -11,8 +11,8 @@ import TopCard from '../components/TopCard'
 
 import ProfileScreen from "./ProfileScreen";
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { addLikedHost, removeLikedHosts } from '../reducers/user';
 
 
 
@@ -21,58 +21,60 @@ export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalDisplay, setModalDisplay] = useState(0);
-    const [cardsLiked, setCardsLiked] = useState([]);
     const [styleLike, setStyleLike] = useState({})
     const [searching, setSearching] = useState(false)
     const navigation = useNavigation()
 
+    const dispatch = useDispatch();
+
     const user = useSelector(state => state.user.value)
 
+    const cardsLiked = useSelector(state => state.user.value.likedHosts)
     console.log(cardsLiked)
 
     const [modalContent, setModalContent] = useState({
-        image: require("../assets/Felicita.png"),
-        title: 'La Felicita',
-        location: 'Paris 13',
-        availability: '06 Juin - 17 Juin',
-        note: '4.5'
+        image: '',
+        title: '',
+        location: '',
+        availability: '',
+        note: ''
     })
 
     const cardsData = [
         {
-            image: require("../assets/Felicita.png"),
-            title: 'La Felicita',
-            location: 'Paris 13',
+            image: require("../assets/Card1.png"),
+            title: 'L\'auberge du chat perché',
+            location: 'Bordeaux',
             availability: '06 Juin - 17 Juin',
             note: '4.5'
         },
         {
-            image: require("../assets/Jardin.png"),
-            title: `Jardin d'Arcachon`,
-            location: 'Archachon',
+            image: require("../assets/Card2.png"),
+            title: `Skyline Bar`,
+            location: 'Paris La Défense',
             availability: '27 Mai - 02 Juin',
-            note: '4.5'
+            note: '4.9'
         },
         {
-            image: require("../assets/Lyon.png"),
-            title: 'Batiment au nom bien long',
-            location: 'Lyon',
+            image: require("../assets/Card3.png"),
+            title: 'Chez George & Patricia',
+            location: 'Woippy',
             availability: '25 Mai - 13 Juillet',
-            note: '4.3'
+            note: '3.4'
         },
         {
-            image: require("../assets/Daddoo.png"),
-            title: 'Dortoir du Seigneur',
+            image: require("../assets/Card4.png"),
+            title: 'Darwin',
             location: 'Bordeaux',
             availability: '25 Mai - 31 Mai',
-            note: '2.4'
+            note: '4.2'
         },
         {
-            image: require("../assets/Matelas.png"),
-            title: 'Déchetterie (chez moi)',
-            location: 'Tokyo',
+            image: require("../assets/Card5.png"),
+            title: 'Long Story',
+            location: 'Versailles',
             availability: '24 Juillet - 23 Janvier',
-            note: '1.2'
+            note: '5.0'
         },
     ]
 
@@ -127,23 +129,43 @@ export default function HomeScreen() {
     const topData = [
         {
             image: require("../assets/PP1.png"),
-            name: 'Galaxy Brain'
+            name: 'Taylor Swift'
         },
         {
             image: require("../assets/PP2.png"),
-            name: 'Antistar'
+            name: 'The Weeknd'
         },
         {
             image: require("../assets/PP3.png"),
-            name: 'Domo Arigato'
+            name: 'Travis Scott'
         },
         {
             image: require("../assets/PP4.png"),
-            name: 'Meuf Manga'
+            name: 'Owl City'
         },
         {
             image: require("../assets/PP5.png"),
-            name: 'SupraDarky'
+            name: 'Jul'
+        },
+        {
+            image: require("../assets/PP6.png"),
+            name: 'Daft Punk'
+        },
+        {
+            image: require("../assets/PP7.png"),
+            name: 'PNL'
+        },
+        {
+            image: require("../assets/PP8.png"),
+            name: 'Blackpink'
+        },
+        {
+            image: require("../assets/PP9.png"),
+            name: 'Mylène Farmer'
+        },
+        {
+            image: require("../assets/PP10.png"),
+            name: 'Franky Vincent'
         },
     ]
 
@@ -160,15 +182,20 @@ export default function HomeScreen() {
         setModalVisible(!modalVisible)
     }
 
+    function navigateLikedHosts() {
+        navigation.navigate("LikedHostsScreen");
+        setModalVisible(!modalVisible)
+    }
+
     function logout() {
         navigation.navigate("LoginScreen");
     }
 
-    function handleLike(title) {
-        if (!cardsLiked.some(e => e === title)) {
-            setCardsLiked([...cardsLiked, title])
+    function handleLike(card) {
+        if (!cardsLiked.some(e => e.title === card.title)) {
+            dispatch(addLikedHost(card))
         } else {
-            setCardsLiked(cardsLiked.filter(e => e !== title))
+            dispatch(removeLikedHosts(card))
         }
     }
 
@@ -204,33 +231,35 @@ export default function HomeScreen() {
                     <View style={styles.modalNav}>
                         <TouchableOpacity onPress={() => navigateModal()}>
                             <View style={styles.modalSection}>
-                                <FontAwesome name='user' size={35} />
+                                <FontAwesome name='user' size={35} style={styles.iconModal} />
                                 <View style={styles.modalAlign}>
                                     <Text style={styles.modalText}  >Profile</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
                         <View style={styles.modalSection}>
-                            <FontAwesome name={user.isArtist ? 'globe' : 'music'} size={35} />
+                            <FontAwesome name={user.isArtist ? 'globe' : 'music'} size={35} style={styles.iconModal} />
                             <View style={styles.modalAlign}>
                                 <Text style={styles.modalText}>{user.isArtist ? 'My tours' : 'My bookings'}</Text>
                             </View>
                         </View>
-                        <View style={styles.modalSection}>
-                            <FontAwesome name='heart' size={28} />
-                            <View style={styles.modalAlign}>
-                                <Text style={styles.modalText}>{user.isArtist ? 'Liked hosts' : 'Liked artists'}</Text>
+                        <TouchableOpacity onPress={() => navigateLikedHosts()}>
+                            <View style={styles.modalSection}>
+                                <FontAwesome name='heart' size={28} style={styles.iconModal} />
+                                <View style={styles.modalAlign}>
+                                    <Text style={styles.modalText}>{user.isArtist ? 'Liked hosts' : 'Liked artists'}</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.modalSection}>
-                            <FontAwesome name='star' size={30} />
+                            <FontAwesome name='star' size={30} style={styles.iconModal} />
                             <View style={styles.modalAlign}>
                                 <Text style={styles.modalText}>Preferences</Text>
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => logout()}>
                             <View style={styles.lastModalSection}>
-                                <FontAwesome name='close' size={30} />
+                                <FontAwesome name='close' size={30} style={styles.iconModal} />
                                 <View style={styles.modalAlign}>
                                     <Text style={styles.modalText}>Log out</Text>
                                 </View>
@@ -239,7 +268,7 @@ export default function HomeScreen() {
                     </View>
                 </View>
                 <View style={styles.settings}>
-                    <FontAwesome name='gear' size={50} />
+                    <FontAwesome name='gear' size={40} />
                     <View style={styles.modalAlign}>
                         <Text style={styles.settingText}>Settings</Text>
                     </View>
@@ -278,8 +307,8 @@ export default function HomeScreen() {
                             <FontAwesome name='star' size={40} color={'#d4a60f'} />
                             <Text style={{ fontSize: 25, fontWeight: 'bold' }} >{modalContent.note}</Text>
                         </View>
-                        <FontAwesome name='heart' size={35} onPress={() => handleLike(modalContent.title)}
-                            style={cardsLiked.includes(modalContent.title) && { color: 'red' }} />
+                        <FontAwesome name='heart' size={35} onPress={() => handleLike(modalContent)}
+                            style={cardsLiked.some(e => e.title === modalContent.title) && { color: 'red' }} />
                     </View>
                     <View style={styles.infoDesc}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{modalContent.location}</Text>
@@ -478,7 +507,6 @@ const styles = StyleSheet.create({
         borderTopWidth: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 15
     },
     lastModalSection: {
         flexDirection: 'row',
@@ -488,12 +516,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 15
+    },
+    iconModal: {
+        width: '15%',
+        textAlign: 'center'
     },
     modalText: {
-        fontSize: 20,
+        fontSize: 17,
         fontWeight: 'bold',
-        marginLeft: 20
+        marginLeft: 10
     },
     modalAlign: {
         width: 250
@@ -509,7 +540,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     settingText: {
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: 'bold',
         marginLeft: 20
     },
