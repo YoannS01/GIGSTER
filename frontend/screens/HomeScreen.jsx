@@ -11,8 +11,8 @@ import TopCard from '../components/TopCard'
 
 import ProfileScreen from "./ProfileScreen";
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { addLikedHost, removeLikedHosts } from '../reducers/user';
 
 
 
@@ -21,13 +21,15 @@ export default function HomeScreen() {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalDisplay, setModalDisplay] = useState(0);
-    const [cardsLiked, setCardsLiked] = useState([]);
     const [styleLike, setStyleLike] = useState({})
     const [searching, setSearching] = useState(false)
     const navigation = useNavigation()
 
+    const dispatch = useDispatch();
+
     const user = useSelector(state => state.user.value)
 
+    const cardsLiked = useSelector(state => state.user.value.likedHosts)
     console.log(cardsLiked)
 
     const [modalContent, setModalContent] = useState({
@@ -180,15 +182,20 @@ export default function HomeScreen() {
         setModalVisible(!modalVisible)
     }
 
+    function navigateLikedHosts() {
+        navigation.navigate("LikedHostsScreen");
+        setModalVisible(!modalVisible)
+    }
+
     function logout() {
         navigation.navigate("LoginScreen");
     }
 
-    function handleLike(title) {
-        if (!cardsLiked.some(e => e === title)) {
-            setCardsLiked([...cardsLiked, title])
+    function handleLike(card) {
+        if (!cardsLiked.some(e => e.title === card.title)) {
+            dispatch(addLikedHost(card))
         } else {
-            setCardsLiked(cardsLiked.filter(e => e !== title))
+            dispatch(removeLikedHosts(card))
         }
     }
 
@@ -236,12 +243,14 @@ export default function HomeScreen() {
                                 <Text style={styles.modalText}>{user.isArtist ? 'My tours' : 'My bookings'}</Text>
                             </View>
                         </View>
-                        <View style={styles.modalSection}>
-                            <FontAwesome name='heart' size={28} style={styles.iconModal} />
-                            <View style={styles.modalAlign}>
-                                <Text style={styles.modalText}>{user.isArtist ? 'Liked hosts' : 'Liked artists'}</Text>
+                        <TouchableOpacity onPress={() => navigateLikedHosts()}>
+                            <View style={styles.modalSection}>
+                                <FontAwesome name='heart' size={28} style={styles.iconModal} />
+                                <View style={styles.modalAlign}>
+                                    <Text style={styles.modalText}>{user.isArtist ? 'Liked hosts' : 'Liked artists'}</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.modalSection}>
                             <FontAwesome name='star' size={30} style={styles.iconModal} />
                             <View style={styles.modalAlign}>
@@ -298,8 +307,8 @@ export default function HomeScreen() {
                             <FontAwesome name='star' size={40} color={'#d4a60f'} />
                             <Text style={{ fontSize: 25, fontWeight: 'bold' }} >{modalContent.note}</Text>
                         </View>
-                        <FontAwesome name='heart' size={35} onPress={() => handleLike(modalContent.title)}
-                            style={cardsLiked.includes(modalContent.title) && { color: 'red' }} />
+                        <FontAwesome name='heart' size={35} onPress={() => handleLike(modalContent)}
+                            style={cardsLiked.some(e => e.title === modalContent.title) && { color: 'red' }} />
                     </View>
                     <View style={styles.infoDesc}>
                         <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{modalContent.location}</Text>
