@@ -27,7 +27,7 @@ router.post("/signup", (req, res) => {
                 expiresIn: '30m',
                 algorithm: 'HS256'
             };
-
+            console.log("BODY", req.body)
             const hash = bcrypt.hashSync(req.body.password, 10);
             const token = jwt.sign(payload, secretKey, options);
             const newUser = new User({
@@ -41,39 +41,15 @@ router.post("/signup", (req, res) => {
                 isArtist: req.body.isArtist,
                 isHost: req.body.isHost,
                 token,
-                addresses: [],
-                artist: {},
-                host: {}
+                addresses: [req.body.addresses],
+                artist: req.body.artist,
+                host: req.body.host
             });
 
-            const newAddress = {
-                street: req.body.street,
-                city: req.body.city,
-                zipcode: req.body.zipcode
-            };
 
-            const newArtist = {
-                genres: req.body.genres,
-                members: req.body.members,
-                artistName: req.body.artistName,
-                placeOrigin: req.body.placeOrigin,
-                artistRanking: 5
-            }
 
-            const newHost = {
-                description: req.body.description,
-                favoriteGenres: req.body.favoriteGenres,
-                hostRanking: 5
-            }
 
-            newUser.addresses.push(newAddress);
 
-            if (req.body.isArtist) {
-                newUser.artist = newArtist;
-            }
-            if (req.body.isHost) {
-                newUser.host = newHost;
-            }
 
             newUser.save().then(newDoc => {
                 res.json({ result: true, token: newDoc.token, data: newDoc });

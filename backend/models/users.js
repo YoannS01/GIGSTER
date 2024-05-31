@@ -15,7 +15,7 @@ const hostSchema = mongoose.Schema({
 });
 
 const artistSchema = mongoose.Schema({
-  artistName: { type: String, required: true },
+  artistname: { type: String, required: true },
   genres: { type: [String], required: true },
   members: { type: Number, default: 1 },
   //medias: [String],
