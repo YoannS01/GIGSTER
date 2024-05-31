@@ -49,7 +49,7 @@ router.post("/signup", (req, res) => {
             const newAddress = {
                 street: req.body.street,
                 city: req.body.city,
-                zipcode: req.body.zipCode
+                zipcode: req.body.zipcode
             };
 
             const newArtist = {
@@ -67,6 +67,7 @@ router.post("/signup", (req, res) => {
             }
 
             newUser.addresses.push(newAddress);
+
             if (req.body.isArtist) {
                 newUser.artist = newArtist;
             }
