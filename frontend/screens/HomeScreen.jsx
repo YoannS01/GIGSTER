@@ -204,33 +204,33 @@ export default function HomeScreen() {
                     <View style={styles.modalNav}>
                         <TouchableOpacity onPress={() => navigateModal()}>
                             <View style={styles.modalSection}>
-                                <FontAwesome name='user' size={35} />
+                                <FontAwesome name='user' size={35} style={styles.iconModal} />
                                 <View style={styles.modalAlign}>
                                     <Text style={styles.modalText}  >Profile</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
                         <View style={styles.modalSection}>
-                            <FontAwesome name={user.isArtist ? 'globe' : 'music'} size={35} />
+                            <FontAwesome name={user.isArtist ? 'globe' : 'music'} size={35} style={styles.iconModal} />
                             <View style={styles.modalAlign}>
                                 <Text style={styles.modalText}>{user.isArtist ? 'My tours' : 'My bookings'}</Text>
                             </View>
                         </View>
                         <View style={styles.modalSection}>
-                            <FontAwesome name='heart' size={28} />
+                            <FontAwesome name='heart' size={28} style={styles.iconModal} />
                             <View style={styles.modalAlign}>
                                 <Text style={styles.modalText}>{user.isArtist ? 'Liked hosts' : 'Liked artists'}</Text>
                             </View>
                         </View>
                         <View style={styles.modalSection}>
-                            <FontAwesome name='star' size={30} />
+                            <FontAwesome name='star' size={30} style={styles.iconModal} />
                             <View style={styles.modalAlign}>
                                 <Text style={styles.modalText}>Preferences</Text>
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => logout()}>
                             <View style={styles.lastModalSection}>
-                                <FontAwesome name='close' size={30} />
+                                <FontAwesome name='close' size={30} style={styles.iconModal} />
                                 <View style={styles.modalAlign}>
                                     <Text style={styles.modalText}>Log out</Text>
                                 </View>
@@ -239,7 +239,7 @@ export default function HomeScreen() {
                     </View>
                 </View>
                 <View style={styles.settings}>
-                    <FontAwesome name='gear' size={50} />
+                    <FontAwesome name='gear' size={40} />
                     <View style={styles.modalAlign}>
                         <Text style={styles.settingText}>Settings</Text>
                     </View>
@@ -478,7 +478,6 @@ const styles = StyleSheet.create({
         borderTopWidth: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 15
     },
     lastModalSection: {
         flexDirection: 'row',
@@ -488,12 +487,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 15
+    },
+    iconModal: {
+        width: '15%',
+        textAlign: 'center'
     },
     modalText: {
-        fontSize: 20,
+        fontSize: 17,
         fontWeight: 'bold',
-        marginLeft: 20
+        marginLeft: 10
     },
     modalAlign: {
         width: 250
@@ -509,7 +511,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     settingText: {
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: 'bold',
         marginLeft: 20
     },
