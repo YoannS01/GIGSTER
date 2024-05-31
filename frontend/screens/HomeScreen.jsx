@@ -127,23 +127,43 @@ export default function HomeScreen() {
     const topData = [
         {
             image: require("../assets/PP1.png"),
-            name: 'Galaxy Brain'
+            name: 'Taylor Swift'
         },
         {
             image: require("../assets/PP2.png"),
-            name: 'Antistar'
+            name: 'The Weeknd'
         },
         {
             image: require("../assets/PP3.png"),
-            name: 'Domo Arigato'
+            name: 'Travis Scott'
         },
         {
             image: require("../assets/PP4.png"),
-            name: 'Meuf Manga'
+            name: 'Owl City'
         },
         {
             image: require("../assets/PP5.png"),
-            name: 'SupraDarky'
+            name: 'Jul'
+        },
+        {
+            image: require("../assets/PP6.png"),
+            name: 'Daft Punk'
+        },
+        {
+            image: require("../assets/PP7.png"),
+            name: 'PNL'
+        },
+        {
+            image: require("../assets/PP8.png"),
+            name: 'Blackpink'
+        },
+        {
+            image: require("../assets/PP9.png"),
+            name: 'Mylène Farmer'
+        },
+        {
+            image: require("../assets/PP10.png"),
+            name: 'Franky Vincent'
         },
     ]
 
