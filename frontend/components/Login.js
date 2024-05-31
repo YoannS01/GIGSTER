@@ -399,6 +399,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderBottomWidth: 3,
     borderRightWidth: 3,
+    overflow: 'hidden'
   },
   text_signup: {
     color: "#FFFFFF",
@@ -413,6 +414,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     marginTop: 20,
     marginBottom: 10,
+    overflow: 'hidden'
   },
   input_signup_button: {
     height: 50,
