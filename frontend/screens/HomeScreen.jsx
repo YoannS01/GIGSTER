@@ -31,48 +31,48 @@ export default function HomeScreen() {
     console.log(cardsLiked)
 
     const [modalContent, setModalContent] = useState({
-        image: require("../assets/Felicita.png"),
-        title: 'La Felicita',
-        location: 'Paris 13',
-        availability: '06 Juin - 17 Juin',
-        note: '4.5'
+        image: '',
+        title: '',
+        location: '',
+        availability: '',
+        note: ''
     })
 
     const cardsData = [
         {
-            image: require("../assets/Felicita.png"),
-            title: 'La Felicita',
-            location: 'Paris 13',
+            image: require("../assets/Card1.png"),
+            title: 'L\'auberge du chat perché',
+            location: 'Bordeaux',
             availability: '06 Juin - 17 Juin',
             note: '4.5'
         },
         {
-            image: require("../assets/Jardin.png"),
-            title: `Jardin d'Arcachon`,
-            location: 'Archachon',
+            image: require("../assets/Card2.png"),
+            title: `Skyline Bar`,
+            location: 'Paris La Défense',
             availability: '27 Mai - 02 Juin',
-            note: '4.5'
+            note: '4.9'
         },
         {
-            image: require("../assets/Lyon.png"),
-            title: 'Batiment au nom bien long',
-            location: 'Lyon',
+            image: require("../assets/Card3.png"),
+            title: 'Chez George & Patricia',
+            location: 'Woippy',
             availability: '25 Mai - 13 Juillet',
-            note: '4.3'
+            note: '3.4'
         },
         {
-            image: require("../assets/Daddoo.png"),
-            title: 'Dortoir du Seigneur',
+            image: require("../assets/Card4.png"),
+            title: 'Darwin',
             location: 'Bordeaux',
             availability: '25 Mai - 31 Mai',
-            note: '2.4'
+            note: '4.2'
         },
         {
-            image: require("../assets/Matelas.png"),
-            title: 'Déchetterie (chez moi)',
-            location: 'Tokyo',
+            image: require("../assets/Card5.png"),
+            title: 'Long Story',
+            location: 'Versailles',
             availability: '24 Juillet - 23 Janvier',
-            note: '1.2'
+            note: '5.0'
         },
     ]
 
