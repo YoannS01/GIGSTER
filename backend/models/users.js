@@ -10,13 +10,13 @@ const hostSchema = mongoose.Schema({
   hostRanking: { type: Number, default: 5 },
   description: String,
   announces: [{ type: mongoose.Schema.Types.ObjectId, ref: "Announce" }],
-  favoritesGenres: { type: [String], required: true },
+  favoritesGenres: { type: [String], required: false },
   hostedArtists: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const artistSchema = mongoose.Schema({
-  artistname: { type: String, required: true },
-  genres: { type: [String], required: true },
+  artistname: { type: String, required: false },
+  genres: { type: [String], required: false },
   members: { type: Number, default: 1 },
   //medias: [String],
   description: String,
