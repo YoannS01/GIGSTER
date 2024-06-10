@@ -28,7 +28,7 @@ export default function StatusScreen(props) {
     return (
         <View>
             <View style={styles.mainSelect}>
-                <Text>Quel profil es tu ?</Text>
+                <Text style={styles.title}>Quel profil es tu ?</Text >
                 <TouchableOpacity style={styles.statusBtn} onPress={() => handleArtist()}>
                     <Text style={styles.text} >Artiste</Text>
                 </TouchableOpacity>
@@ -54,7 +54,11 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
     text: {
-        color: 'black'
+        color: 'white',
+        fontSize: '20px'
+    },
+    title: {
+        fontSize: '25px',
     },
     statusBtn: {
         backgroundColor: '#5100FF',
@@ -62,12 +66,16 @@ const styles = StyleSheet.create({
         paddingBottom: 6,
         paddingLeft: 10,
         paddingRight: 10,
-
         borderRadius: 8,
         borderWidth: 1,
         borderBottomWidth: 3,
         borderRightWidth: 3,
-        marginTop: 5
+        marginTop: 5,
+        width: '50%',
+        height: '10%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
 
     }
 });

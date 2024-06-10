@@ -57,7 +57,7 @@ export default function DiyTourScreen() {
   // Affichge de tout les Markers de la map à l'initialisation de la map
   useEffect(() => {
 
-    fetch(`http://${FRONT_IP}:3000/allAnnounces`)
+    fetch(`http://192.168.1.95:3000/allAnnounces`)
       .then(response => response.json())
       .then(data => {
         for (let elem of data.announces) {
@@ -164,8 +164,8 @@ export default function DiyTourScreen() {
 
       return (
 
-        <TouchableOpacity style={styles.date} key={i}>
-          <Text style={styles.dateTxt}>{formattedDate}</Text>
+        <TouchableOpacity style={styles.date} >
+          <Text key={i} style={styles.dateTxt}>{formattedDate}</Text>
           <Text>{elem.name}</Text>
           <TouchableOpacity
             style={styles.btnDate}
