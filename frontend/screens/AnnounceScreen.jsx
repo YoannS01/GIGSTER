@@ -254,7 +254,7 @@ export default function AnnounceScreen() {
 
   // fetch vers la DB pour envoyer les données des inputs
   const handleSubmit = () => {
-    fetch(`http://192.168.1.95:3000/announces`, {
+    fetch(`http://${FRONT_IP}:3000/announces`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
