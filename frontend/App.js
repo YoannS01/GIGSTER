@@ -1,4 +1,4 @@
-import "react-native-reanimated" 
+import "react-native-reanimated";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -45,26 +45,27 @@ const TabNavigator = () => {
         tabBarInactiveTintColor: "#335561",
         tabBarShowLabel: false,
         tabBarStyle: {
+          alignSelf: "center",
           position: "absolute",
           height: 60,
-          width: "90%",
+          width: "60%",
           borderColor: "black",
           borderRadius: 15,
           borderWidth: 2,
           borderTopWidth: 2,
           borderTopColor: "black",
-          borderBottomWidth: 4,
-          borderRightWidth: 4,
           marginBottom: "3%",
-          marginLeft: "5%",
+          marginLeft: "20%",
+          // Pour Android
+          elevation: 5,
+          // Pour iOS
           shadowColor: "#000",
           shadowOffset: {
-            width: 0,
-            height: 3,
+            width: 3,
+            height: 4,
           },
-          shadowOpacity: 0.25,
-          shadowRadius: 6,
-          elevation: 6,
+          shadowOpacity: 1,
+          shadowRadius: 0,
         },
         tabBarItemStyle: {
           ...Platform.select({
@@ -84,7 +85,6 @@ const TabNavigator = () => {
 };
 
 export default function App() {
-
   return (
     <Provider store={store}>
       <NavigationContainer style={styles.container}>
